@@ -1,6 +1,15 @@
 import { COMPANY } from "@/constants/company";
 
-export const SITE_URL = "https://vaishnaviconsultants.in";
+/**
+ * Canonical production URL — the value that drives every sitemap entry,
+ * canonical tag, OG URL and JSON-LD `@id`. **Must** exactly match the
+ * verified Search Console property, or sitemap URLs will be rejected.
+ *
+ * Override per-environment via `NEXT_PUBLIC_SITE_URL` (set in Vercel
+ * Project Settings → Environment Variables) without touching code.
+ */
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.vaishnaviconsultant.com";
 
 /* ────────────────────────────────────────────────
    Generic structured-data shape

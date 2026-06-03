@@ -14,8 +14,8 @@ export const COMPANY = {
   contact: {
     phone: "+91 80 4123 8800",
     altPhone: "+91 98450 21121",
-    email: "connect@vaishnaviconsultants.in",
-    supportEmail: "support@vaishnaviconsultants.in",
+    email: "connect@vaishnaviconsultant.com",
+    supportEmail: "support@vaishnaviconsultant.com",
     address: {
       line1: "12th Floor, Prestige Trade Tower",
       line2: "Palace Road, Vasanth Nagar",

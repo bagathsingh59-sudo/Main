@@ -185,7 +185,7 @@ export default async function OG() {
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: "rgba(255,255,255,0.85)" }}>
-              vaishnaviconsultants.in
+              vaishnaviconsultant.com
             </div>
             <div
               style={{

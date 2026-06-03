@@ -149,7 +149,7 @@ export function BookConsultation() {
                   <Icon name="Phone" size={18} className="text-teal-300" /> +91 80 4123 8800
                 </li>
                 <li className="flex items-center gap-3">
-                  <Icon name="Mail" size={18} className="text-teal-300" /> connect@vaishnaviconsultants.in
+                  <Icon name="Mail" size={18} className="text-teal-300" /> connect@vaishnaviconsultant.com
                 </li>
               </ul>
             </div>

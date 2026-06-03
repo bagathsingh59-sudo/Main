@@ -1,0 +1,95 @@
+import type { Resource, RegulatoryUpdate } from "@/types";
+
+export const RESOURCES: Resource[] = [
+  {
+    id: "r1",
+    category: "Payroll",
+    title: "The 2026 Payroll Compliance Checklist for Indian Businesses",
+    excerpt: "A printable 38-point checklist covering PF, ESI, PT, LWF, TDS, and bonus calculations for every state.",
+    readTime: "8 min read",
+    date: "May 2026",
+  },
+  {
+    id: "r2",
+    category: "GST",
+    title: "Reading GSTR-2B vs 2A: The Reconciliation Mistakes Costing You ITC",
+    excerpt: "Why 60% of mid-market businesses lose ITC every quarter, and the 5 checks that eliminate it.",
+    readTime: "12 min read",
+    date: "Apr 2026",
+  },
+  {
+    id: "r3",
+    category: "Income Tax",
+    title: "Section 43B(h) MSME Payments: A Complete Implementation Guide",
+    excerpt: "Treasury, AP, and tax-team workflows that keep you fully compliant with the 45-day payment mandate.",
+    readTime: "10 min read",
+    date: "Apr 2026",
+  },
+  {
+    id: "r4",
+    category: "Labour Law",
+    title: "Wage Code 2025: What Changes for Payroll, PF, and Gratuity",
+    excerpt: "How the consolidated wage code reshapes your salary structure, PF base, and gratuity provisions.",
+    readTime: "14 min read",
+    date: "Mar 2026",
+  },
+  {
+    id: "r5",
+    category: "CFO",
+    title: "Building a Fund-Raise Ready Data Room in 21 Days",
+    excerpt: "The exact 9-folder template our CFO practice uses for every Series A through C engagement.",
+    readTime: "9 min read",
+    date: "Mar 2026",
+  },
+  {
+    id: "r6",
+    category: "RegTech",
+    title: "When to Replace Your Compliance Spreadsheet with a Platform",
+    excerpt: "Five tipping-point signals — and the 30-day migration framework we use with new clients.",
+    readTime: "7 min read",
+    date: "Feb 2026",
+  },
+];
+
+export const REGULATORY_UPDATES: RegulatoryUpdate[] = [
+  {
+    id: "u1",
+    date: "28 May 2026",
+    tag: "GST",
+    title: "GSTR-1A re-introduced for May 2026 return period",
+    summary: "CBIC notifies amendment window for outward supplies before GSTR-3B is filed.",
+    severity: "high",
+  },
+  {
+    id: "u2",
+    date: "22 May 2026",
+    tag: "EPF",
+    title: "EPFO raises wage ceiling to ₹21,000 — effective July 1",
+    summary: "Higher contribution thresholds; existing employee structures need re-calibration.",
+    severity: "high",
+  },
+  {
+    id: "u3",
+    date: "14 May 2026",
+    tag: "Income Tax",
+    title: "ITR forms for AY 2026-27 notified with expanded crypto reporting",
+    summary: "Schedule VDA expanded; foreign asset disclosure threshold lowered.",
+    severity: "medium",
+  },
+  {
+    id: "u4",
+    date: "06 May 2026",
+    tag: "Labour Law",
+    title: "Karnataka revises minimum wages across 83 scheduled employments",
+    summary: "Effective April 2026; arrears applicable for the prior quarter.",
+    severity: "medium",
+  },
+  {
+    id: "u5",
+    date: "29 Apr 2026",
+    tag: "TDS",
+    title: "New TDS section 194T on partner remuneration",
+    summary: "10% TDS on payments to partners exceeding ₹20,000 in aggregate.",
+    severity: "high",
+  },
+];

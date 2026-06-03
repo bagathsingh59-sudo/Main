@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vaishnaviconsultants.in/sitemap.xml

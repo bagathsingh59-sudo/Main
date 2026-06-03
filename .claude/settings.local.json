@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/Users/ankush/Downloads/Sri venkateshwara /Main\" && rm src/components/shared/ScrollHint.tsx)",
+      "Bash(cd \"/Users/ankush/Downloads/Sri venkateshwara /Main\" && rm src/sections/Testimonials.tsx src/hooks/usePointerSpotlight.ts)"
+    ]
+  }
+}

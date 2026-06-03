@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" width="240" height="64" role="img" aria-label="Vaishnavi Consultants">
+  <defs>
+    <linearGradient id="vcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a56db"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <filter id="vcShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dy="2" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.35"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- VC monogram tile -->
+  <g filter="url(#vcShadow)">
+    <rect x="0" y="0" width="64" height="64" rx="14" ry="14" fill="url(#vcGrad)"/>
+    <!-- V (geometric path, vector — independent of installed fonts) -->
+    <path d="M11 16 L20 16 L26 38 L32 16 L32 16 L32 16 L24 42 L17 42 Z" fill="#ffffff"/>
+    <!-- C (open partial ring) -->
+    <path d="M50 24 a10 10 0 1 0 0 16 l-3 -5 a6 6 0 1 1 0 -6 Z" fill="#ffffff"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g fill="#0b1f3a" font-family="'Inter','Segoe UI','Helvetica Neue',Arial,sans-serif" font-weight="700">
+    <text x="80" y="28" font-size="20" letter-spacing="-0.5">Vaishnavi</text>
+    <text x="80" y="50" font-size="12" letter-spacing="2" fill="#0891b2" font-weight="600">CONSULTANTS</text>
+  </g>
+</svg>

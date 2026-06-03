@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShieldCore — Tax & Compliance Consulting</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #0b1f3a;
+            --blue: #1a56db;
+            --teal: #0891b2;
+            --light: #f0f4ff;
+            --glass: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.75);
+            --shadow: 0 8px 40px rgba(11, 31, 58, 0.10);
+            --shadow-lg: 0 20px 60px rgba(11, 31, 58, 0.18);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #eef2ff;
+            color: var(--navy);
+            overflow-x: hidden;
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e0e7ff;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--blue);
+            border-radius: 4px;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 48px;
+            background: rgba(238, 242, 255, 0.75);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: .85rem;
+            font-weight: 500;
+            color: var(--navy);
+            text-decoration: none;
+            opacity: .7;
+            transition: opacity .2s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .nav-cta {
+            padding: 9px 22px;
+            border-radius: 50px;
+            background: var(--blue);
+            color: #fff;
+            font-size: .82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+            box-shadow: 0 4px 14px rgba(26, 86, 219, .35);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(26, 86, 219, .45);
+        }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 24px 80px;
+            background: linear-gradient(165deg, #dce8ff 0%, #eef2ff 45%, #e0f7fa 100%);
+        }
+
+        #hero-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 760px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--blue);
+            margin-bottom: 28px;
+            letter-spacing: .5px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--teal);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: .5;
+                transform: scale(1.3)
+            }
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+            line-height: 1.12;
+            letter-spacing: -1px;
+            color: var(--navy);
+            margin-bottom: 20px;
+        }
+
+        h1 em {
+            font-style: italic;
+            color: var(--blue);
+        }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: #4a5a7a;
+            line-height: 1.7;
+            max-width: 580px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 14px 34px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            color: #fff;
+            font-weight: 700;
+            font-size: .92rem;
+            text-decoration: none;
+            transition: all .25s;
+            box-shadow: 0 6px 24px rgba(26, 86, 219, .4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(26, 86, 219, .5);
+        }
+
+        .btn-ghost {
+            padding: 14px 34px;
+            border-radius: 50px;
+            background: var(--glass);
+            border: 1.5px solid var(--glass-border);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: .92rem;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all .25s;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, .85);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 56px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 20px;
+            padding: 20px 28px;
+            min-width: 130px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: floatCard 4s ease-in-out infinite;
+        }
+
+        .stat:nth-child(2) {
+            animation-delay: 1.3s;
+        }
+
+        .stat:nth-child(3) {
+            animation-delay: 2.6s;
+        }
+
+        @keyframes floatCard {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-7px)
+            }
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--blue);
+        }
+
+        .stat-label {
+            font-size: .75rem;
+            color: #5a6a8a;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* ── SHIELD 3D CANVAS (sticky section) ── */
+        #shield-section {
+            position: relative;
+            height: 500vh;
+        }
+
+        #shield-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(165deg, #dce8ff 0%, #eef2ff 50%, #e0f7fa 100%);
+        }
+
+        #shield-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shield-overlay {
+            position: absolute;
+            z-index: 2;
+            pointer-events: none;
+            max-width: 500px;
+            text-align: center;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .shield-label {
+            font-size: .82rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 10px;
+            opacity: 0;
+            transition: opacity .5s;
+        }
+
+        .shield-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: var(--navy);
+            opacity: 0;
+            transition: opacity .5s .1s;
+        }
+
+        /* ── SECTION BASE ── */
+        section {
+            padding: 100px 24px;
+            position: relative;
+        }
+
+        .section-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 14px;
+        }
+
+        h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            line-height: 1.18;
+            color: var(--navy);
+            margin-bottom: 18px;
+        }
+
+        .lead {
+            font-size: 1.05rem;
+            color: #4a5a7a;
+            line-height: 1.75;
+            max-width: 600px;
+        }
+
+        /* ── SERVICES ── */
+        #services {
+            background: #f5f8ff;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px;
+            margin-top: 56px;
+        }
+
+        .service-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            transition: transform .3s, box-shadow .3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -40px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(26, 86, 219, .08) 0%, transparent 70%);
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 22px;
+            box-shadow: 0 6px 18px rgba(26, 86, 219, .35);
+        }
+
+        .service-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            font-size: .88rem;
+            color: #5a6a8a;
+            line-height: 1.7;
+        }
+
+        /* ── PROCESS ── */
+        #process {
+            background: linear-gradient(160deg, #eef2ff 0%, #e0f7fa 100%);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0;
+            margin-top: 60px;
+            position: relative;
+        }
+
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 36px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blue), var(--teal));
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 0 16px;
+        }
+
+        .step-num {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 6px 20px rgba(26, 86, 219, .35);
+            border: 4px solid #fff;
+        }
+
+        .step h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: .84rem;
+            color: #5a6a8a;
+            line-height: 1.65;
+        }
+
+        /* ── PAYROLL DASHBOARD ── */
+        #payroll {
+            background: var(--navy);
+            color: #e8eeff;
+        }
+
+        #payroll .section-tag {
+            color: #60c0e0;
+        }
+
+        #payroll h2 {
+            color: #fff;
+        }
+
+        #payroll .lead {
+            color: #8899bb;
+        }
+
+        .payroll-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 56px;
+        }
+
+        @media(max-width:768px) {
+            .payroll-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pay-card {
+            background: rgba(255, 255, 255, .06);
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 22px;
+            padding: 28px;
+            backdrop-filter: blur(12px);
+        }
+
+        .pay-card h4 {
+            font-size: .9rem;
+            font-weight: 600;
+            color: #8899cc;
+            margin-bottom: 18px;
+            letter-spacing: .5px;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .bar-label {
+            font-size: .82rem;
+            color: #aabbdd;
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .bar-bg {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, .08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 1.5s ease;
+        }
+
+        .bar-val {
+            font-size: .8rem;
+            color: #8899cc;
+            width: 40px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .donut-wrap {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .donut-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .82rem;
+            color: #aabbdd;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ── ABOUT ── */
+        #about {
+            background: #f5f8ff;
+        }
+
+        .about-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media(max-width:768px) {
+            .about-inner {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .about-visual {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+        }
+
+        #about-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .metric-badge {
+            position: absolute;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 16px;
+            padding: 14px 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .metric-badge.b1 {
+            top: 20px;
+            right: 20px;
+        }
+
+        .metric-badge.b2 {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .metric-badge .mn {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--blue);
+        }
+
+        .metric-badge .ml {
+            font-size: .76rem;
+            color: #5a6a8a;
+            font-weight: 500;
+        }
+
+        .about-text p {
+            font-size: .95rem;
+            color: #4a5a7a;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .check-list {
+            list-style: none;
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .check-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: .9rem;
+            color: var(--navy);
+            font-weight: 500;
+        }
+
+        .check-list li::before {
+            content: '✓';
+            color: var(--teal);
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        /* ── COMPLIANCE DOCS ── */
+        #docs {
+            background: linear-gradient(165deg, #eef2ff 0%, #e8f5ff 100%);
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 50px;
+        }
+
+        .doc-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            cursor: default;
+            transition: transform .3s, box-shadow .3s;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-4px) rotate(-1deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .doc-icon {
+            font-size: 2rem;
+            margin-bottom: 14px;
+        }
+
+        .doc-card h4 {
+            font-size: .95rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .doc-card p {
+            font-size: .8rem;
+            color: #5a6a8a;
+        }
+
+        .doc-badge {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: .72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 50px;
+            background: rgba(8, 145, 178, .12);
+            color: var(--teal);
+        }
+
+        /* ── INDUSTRIES ── */
+        #industries {
+            background: #f5f8ff;
+        }
+
+        .industries-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .industry-chip {
+            padding: 10px 22px;
+            border-radius: 50px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            font-size: .88rem;
+            font-weight: 600;
+            color: var(--navy);
+            box-shadow: var(--shadow);
+            cursor: default;
+            transition: all .25s;
+        }
+
+        .industry-chip:hover {
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            color: #fff;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(26, 86, 219, .35);
+        }
+
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .industry-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(14px);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .industry-emoji {
+            font-size: 2.2rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .industry-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .industry-card p {
+            font-size: .83rem;
+            color: #5a6a8a;
+            line-height: 1.65;
+        }
+
+        /* ── TESTIMONIALS ── */
+        #testimonials {
+            background: linear-gradient(160deg, #0b1f3a 0%, #0d2d55 100%);
+            color: #fff;
+        }
+
+        #testimonials .section-tag {
+            color: #60c0e0;
+        }
+
+        #testimonials h2 {
+            color: #fff;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 22px;
+            margin-top: 50px;
+        }
+
+        .tcard {
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .13);
+            backdrop-filter: blur(12px);
+            border-radius: 22px;
+            padding: 30px;
+        }
+
+        .tcard-stars {
+            color: #fbbf24;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        .tcard-text {
+            font-size: .92rem;
+            color: #c8d8f0;
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .tcard-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tcard-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #fff;
+            font-size: .95rem;
+        }
+
+        .tcard-name {
+            font-size: .9rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .tcard-role {
+            font-size: .78rem;
+            color: #8899bb;
+        }
+
+        /* ── CTA ── */
+        #cta {
+            background: linear-gradient(135deg, var(--blue) 0%, var(--teal) 100%);
+            text-align: center;
+            padding: 120px 24px;
+        }
+
+        #cta h2 {
+            color: #fff;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+        }
+
+        #cta p {
+            color: rgba(255, 255, 255, .82);
+            font-size: 1.05rem;
+            margin: 16px auto 40px;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        .btn-white {
+            padding: 16px 40px;
+            border-radius: 50px;
+            background: #fff;
+            color: var(--blue);
+            font-weight: 700;
+            font-size: .95rem;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, .2);
+            transition: all .25s;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, .28);
+        }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: #f5f8ff;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-top: 50px;
+            align-items: start;
+        }
+
+        @media(max-width:768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .ci-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .ci-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(26, 86, 219, .3);
+        }
+
+        .ci-item strong {
+            font-size: .95rem;
+            color: var(--navy);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .ci-item span {
+            font-size: .85rem;
+            color: #5a6a8a;
+        }
+
+        .contact-form {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(18px);
+            border-radius: 26px;
+            padding: 36px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media(max-width:500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 6px;
+            letter-spacing: .3px;
+        }
+
+        input,
+        textarea,
+        select {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(200, 210, 240, .6);
+            background: rgba(255, 255, 255, .7);
+            font-family: 'Inter', sans-serif;
+            font-size: .88rem;
+            color: var(--navy);
+            transition: border-color .2s;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--blue);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--blue), var(--teal));
+            color: #fff;
+            font-weight: 700;
+            font-size: .95rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(26, 86, 219, .4);
+            transition: all .25s;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(26, 86, 219, .5);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--navy);
+            color: #8899bb;
+            padding: 60px 48px 30px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        @media(max-width:768px) {
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .footer-brand .logo {
+            font-size: 1.4rem;
+        }
+
+        .footer-brand p {
+            margin-top: 14px;
+            font-size: .85rem;
+            line-height: 1.7;
+            max-width: 260px;
+            color: #6677aa;
+        }
+
+        .footer-col h5 {
+            font-size: .85rem;
+            font-weight: 700;
+            color: #c8d8f0;
+            margin-bottom: 16px;
+            letter-spacing: .5px;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: .83rem;
+            color: #6677aa;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: color .2s;
+        }
+
+        .footer-col a:hover {
+            color: #c8d8f0;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, .07);
+            padding-top: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-bottom span {
+            font-size: .8rem;
+        }
+
+        #footer-logo-canvas {
+            width: 100px;
+            height: 60px;
+        }
+
+        /* ── FLOATING ELEMENTS ── */
+        .floating-doc {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity .5s;
+        }
+
+        /* ── REDUCED MOTION ── */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <span class="logo">⬡ ShieldCore</span>
+        <div class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#process">Process</a>
+            <a href="#payroll">Payroll</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <a href="#contact" class="nav-cta">Get Started</a>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+            <div class="hero-badge"><span class="dot"></span> Trusted by 500+ Companies</div>
+            <h1>Your <em>Compliance</em><br />Shield, Built to Last</h1>
+            <p class="hero-sub">End-to-end Tax, Payroll & Regulatory Compliance consulting that scales with your
+                business — backed by 20 years of enterprise expertise.</p>
+            <div class="hero-btns">
+                <a href="#contact" class="btn-primary">Book Free Consultation</a>
+                <a href="#services" class="btn-ghost">Explore Services</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-num">500+</div>
+                    <div class="stat-label">Clients Protected</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">₹0</div>
+                    <div class="stat-label">Penalty Rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">20yr</div>
+                    <div class="stat-label">Industry Track</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHIELD EVOLUTION -->
+    <div id="shield-section">
+        <div id="shield-sticky">
+            <canvas id="shield-canvas"></canvas>
+            <div class="shield-overlay" id="shieldOverlay">
+                <div class="shield-label" id="shieldLabel">Phase 01</div>
+                <div class="shield-title" id="shieldTitle">Building Your Compliance Foundation</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="section-inner">
+            <div class="section-tag">What We Do</div>
+            <h2>Comprehensive<br />Compliance Services</h2>
+            <p class="lead">From payroll filings to GST audits, we handle every compliance obligation — so you can focus
+                on growth.</p>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <div class="service-icon">📊</div>
+                    <h3>Payroll Management</h3>
+                    <p>Automated payroll processing, salary structuring, EPF/ESI contributions, and Form 16 generation
+                        for your entire workforce.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">🛡️</div>
+                    <h3>GST Compliance</h3>
+                    <p>Monthly GSTR-1, GSTR-3B filings, annual returns, reconciliations, and GST audit support with zero
+                        penalties.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">📋</div>
+                    <h3>Income Tax Advisory</h3>
+                    <p>Corporate tax planning, advance tax computation, TDS management, and ITR filing for companies and
+                        HNIs.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">🏛️</div>
+                    <h3>Labour Law Compliance</h3>
+                    <p>PF, ESI, Professional Tax, Shops & Establishment registrations, and ongoing statutory compliance
+                        management.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">📈</div>
+                    <h3>CFO Advisory</h3>
+                    <p>Virtual CFO services including MIS reporting, financial planning, board presentations, and
+                        fund-raise compliance.</p>
+                </div>
+                <div class="service-card reveal">
+                    <div class="service-icon">🔍</div>
+                    <h3>Audit & Assurance</h3>
+                    <p>Statutory audits, internal audits, tax audits, and due diligence reviews aligned with the latest
+                        regulatory standards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section id="process">
+        <div class="section-inner">
+            <div class="section-tag">How It Works</div>
+            <h2>Our 5-Step Compliance<br />Protection Process</h2>
+            <p class="lead">A battle-tested methodology that transforms complex compliance into a seamless, protected
+                pipeline.</p>
+            <div class="process-steps reveal">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h4>Discovery Audit</h4>
+                    <p>Full compliance health-check of your current status, gaps, and risk exposure</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h4>Strategy Design</h4>
+                    <p>Customized compliance roadmap aligned with your industry and growth stage</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h4>System Setup</h4>
+                    <p>Configure automated workflows, integrations, and real-time compliance dashboards</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <h4>Ongoing Filing</h4>
+                    <p>Timely filing of all returns with tracker alerts and zero-penalty guarantees</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <h4>Annual Review</h4>
+                    <p>Year-end strategy optimization, savings identification, and next-year planning</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAYROLL DASHBOARD -->
+    <section id="payroll">
+        <div class="section-inner">
+            <div class="section-tag">Payroll Intelligence</div>
+            <h2 style="color:#fff">Real-time Payroll &<br />Statutory Dashboards</h2>
+            <p class="lead" style="color:#8899bb">Visualize your payroll components, deductions, and compliance status
+                with live analytics.</p>
+            <div class="payroll-grid">
+                <div class="pay-card reveal">
+                    <h4>SALARY BREAKDOWN — Q3 2026</h4>
+                    <div class="bar-row">
+                        <span class="bar-label">Basic</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width:65%;background:linear-gradient(90deg,#1a56db,#0891b2)">
+                            </div>
+                        </div>
+                        <span class="bar-val">65%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">HRA</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width:30%;background:linear-gradient(90deg,#0891b2,#06b6d4)">
+                            </div>
+                        </div>
+                        <span class="bar-val">30%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Special</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width:20%;background:linear-gradient(90deg,#7c3aed,#a855f7)">
+                            </div>
+                        </div>
+                        <span class="bar-val">20%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">PF (Emp)</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width:12%;background:linear-gradient(90deg,#059669,#10b981)">
+                            </div>
+                        </div>
+                        <span class="bar-val">12%</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">ESI</span>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width:0.75%;background:linear-gradient(90deg,#f59e0b,#fbbf24)">
+                            </div>
+                        </div>
+                        <span class="bar-val">0.75%</span>
+                    </div>
+                </div>
+                <div class="pay-card reveal">
+                    <h4>COMPLIANCE STATUS — ACTIVE</h4>
+                    <div class="donut-wrap">
+                        <canvas id="donut-canvas" width="140" height="140"></canvas>
+                        <div class="donut-legend">
+                            <div class="legend-item"><span class="legend-dot" style="background:#1a56db"></span>PF Filed
+                                — 100%</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:#0891b2"></span>ESI
+                                Filed — 100%</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:#7c3aed"></span>TDS
+                                Filed — 98%</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:#059669"></span>GST
+                                Filed — 100%</div>
+                            <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Pending
+                                — 2%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pay-card reveal" style="grid-column: span 2;">
+                    <h4>MONTHLY FILING CALENDAR — 2026</h4>
+                    <div id="cal-grid"
+                        style="display:grid;grid-template-columns:repeat(12,1fr);gap:8px;margin-top:12px"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="section-inner about-inner">
+            <div class="about-visual">
+                <canvas id="about-canvas"></canvas>
+                <div class="metric-badge b1">
+                    <div class="mn">₹2B+</div>
+                    <div class="ml">Tax Savings Delivered</div>
+                </div>
+                <div class="metric-badge b2">
+                    <div class="mn">99.8%</div>
+                    <div class="ml">On-time Filing Rate</div>
+                </div>
+            </div>
+            <div class="about-text reveal">
+                <div class="section-tag">About ShieldCore</div>
+                <h2>Two Decades of<br />Trusted Compliance</h2>
+                <p>Founded in 2004, ShieldCore has grown from a boutique CA firm into India's premier compliance
+                    consultancy, trusted by startups, SMEs, and Fortune 500 subsidiaries alike.</p>
+                <p>Our team of 80+ chartered accountants, tax lawyers, and compliance specialists forms your compliance
+                    command center — proactively managing risk before it becomes a liability.</p>
+                <ul class="check-list">
+                    <li>ICAI-registered firm with Big-4 alumni leadership</li>
+                    <li>ISO 27001 certified data security practices</li>
+                    <li>Dedicated relationship manager for every client</li>
+                    <li>24-hour SLA on all compliance queries</li>
+                    <li>Zero penalty guarantee on timely filings</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPLIANCE DOCS -->
+    <section id="docs">
+        <div class="section-inner">
+            <div class="section-tag">Document Universe</div>
+            <h2>Every Filing,<br />Every Deadline — Covered</h2>
+            <p class="lead">Our compliance calendar spans 40+ mandatory filings annually. We handle each one with
+                precision.</p>
+            <div class="docs-grid">
+                <div class="doc-card reveal">
+                    <div class="doc-icon">📑</div>
+                    <h4>GSTR-1 & 3B</h4>
+                    <p>Monthly outward/net GST returns with auto-reconciliation</p><span
+                        class="doc-badge">Monthly</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-icon">💼</div>
+                    <h4>PF ECR</h4>
+                    <p>Electronic Challan cum Return for provident fund contributions</p><span
+                        class="doc-badge">Monthly</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-icon">🏥</div>
+                    <h4>ESI Return</h4>
+                    <p>Employees' State Insurance half-yearly contribution return</p><span
+                        class="doc-badge">Bi-Annual</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-icon">📊</div>
+                    <h4>TDS Returns</h4>
+                    <p>Quarterly 24Q, 26Q filing with Form 16/16A issuance</p><span class="doc-badge">Quarterly</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-icon">🏛️</div>
+                    <h4>Income Tax Return</h4>
+                    <p>Corporate ITR-6 filing with tax audit and Form 3CA/3CD</p><span class="doc-badge">Annual</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-icon">📋</div>
+                    <h4>ROC Filings</h4>
+                    <p>MCA annual returns, AOC-4, MGT-7 compliance management</p><span class="doc-badge">Annual</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-icon">⚖️</div>
+                    <h4>PT Returns</h4>
+                    <p>State Professional Tax registration and monthly/annual returns</p><span
+                        class="doc-badge">Monthly</span>
+                </div>
+                <div class="doc-card reveal">
+                    <div class="doc-icon">🔐</div>
+                    <h4>GSTR-9 Annual</h4>
+                    <p>Comprehensive annual GST return with 9C reconciliation statement</p><span
+                        class="doc-badge">Annual</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INDUSTRIES -->
+    <section id="industries">
+        <div class="section-inner">
+            <div class="section-tag">Industries We Serve</div>
+            <h2>Compliance Expertise<br />Across Every Sector</h2>
+            <p class="lead">Each industry has unique compliance challenges. Our sector-specialist teams know yours
+                inside out.</p>
+            <div class="industry-grid">
+                <div class="industry-card reveal"><span class="industry-emoji">💻</span>
+                    <div>
+                        <h4>Technology & SaaS</h4>
+                        <p>ESOP compliance, cross-border GST, R&D tax credits, transfer pricing</p>
+                    </div>
+                </div>
+                <div class="industry-card reveal"><span class="industry-emoji">🏭</span>
+                    <div>
+                        <h4>Manufacturing</h4>
+                        <p>Input credit optimization, factory act compliance, excise duty transitions</p>
+                    </div>
+                </div>
+                <div class="industry-card reveal"><span class="industry-emoji">🏥</span>
+                    <div>
+                        <h4>Healthcare</h4>
+                        <p>GST exemptions, pharmacy licensing, CGHS billing compliance</p>
+                    </div>
+                </div>
+                <div class="industry-card reveal"><span class="industry-emoji">🛒</span>
+                    <div>
+                        <h4>E-Commerce</h4>
+                        <p>TCS under GST, marketplace compliance, multi-state registration</p>
+                    </div>
+                </div>
+                <div class="industry-card reveal"><span class="industry-emoji">🏗️</span>
+                    <div>
+                        <h4>Real Estate</h4>
+                        <p>RERA compliance, JDA tax treatment, under-construction GST structuring</p>
+                    </div>
+                </div>
+                <div class="industry-card reveal"><span class="industry-emoji">🎓</span>
+                    <div>
+                        <h4>Education</h4>
+                        <p>Trust compliance, 80G/12A registrations, GST on education services</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="section-inner">
+            <div class="section-tag">Client Stories</div>
+            <h2>Trusted by Leaders<br />Across India</h2>
+            <div class="testimonials-grid">
+                <div class="tcard reveal">
+                    <div class="tcard-stars">★★★★★</div>
+                    <p class="tcard-text">"ShieldCore saved us from a ₹45L GST penalty by catching a reconciliation
+                        mismatch 3 days before the deadline. Their proactive approach is unmatched."</p>
+                    <div class="tcard-author">
+                        <div class="tcard-avatar">RK</div>
+                        <div>
+                            <div class="tcard-name">Rahul Kapoor</div>
+                            <div class="tcard-role">CFO, TechSurge Pvt. Ltd.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tcard reveal">
+                    <div class="tcard-stars">★★★★★</div>
+                    <p class="tcard-text">"We scaled from 50 to 400 employees without payroll compliance breaking a
+                        sweat. The automated dashboard gives us real-time visibility we never had before."</p>
+                    <div class="tcard-author">
+                        <div class="tcard-avatar">PP</div>
+                        <div>
+                            <div class="tcard-name">Priya Patel</div>
+                            <div class="tcard-role">COO, Greenfab Industries</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tcard reveal">
+                    <div class="tcard-stars">★★★★★</div>
+                    <p class="tcard-text">"As a foreign subsidiary entering India, compliance was our biggest worry.
+                        ShieldCore handled everything from incorporation to first-year audit seamlessly."</p>
+                    <div class="tcard-author">
+                        <div class="tcard-avatar">MH</div>
+                        <div>
+                            <div class="tcard-name">Marcus Henning</div>
+                            <div class="tcard-role">Country Head, VantaLogix India</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta">
+        <div class="section-inner" style="text-align:center">
+            <div class="section-tag" style="color:rgba(255,255,255,.7)">Ready to Begin?</div>
+            <h2>Shield Your Business<br />Starting Today</h2>
+            <p>Get a free 45-minute compliance audit worth ₹15,000 — no strings attached. Identify your risks and
+                opportunities before they find you.</p>
+            <a href="#contact" class="btn-white">Claim Your Free Audit</a>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="section-inner">
+            <div class="section-tag">Get In Touch</div>
+            <h2>Start Your Compliance<br />Conversation</h2>
+            <div class="contact-grid">
+                <div class="contact-info reveal">
+                    <div class="ci-item">
+                        <div class="ci-icon">📍</div>
+                        <div><strong>Head Office</strong><span>Level 12, One BKC, Mumbai 400051</span></div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon">📞</div>
+                        <div><strong>Phone</strong><span>+91 22 6789 4500</span></div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon">✉️</div>
+                        <div><strong>Email</strong><span>consult@shieldcore.in</span></div>
+                    </div>
+                    <div class="ci-item">
+                        <div class="ci-icon">🕐</div>
+                        <div><strong>Working Hours</strong><span>Mon–Sat, 9:00 AM – 7:00 PM IST</span></div>
+                    </div>
+                </div>
+                <div class="contact-form reveal">
+                    <div class="form-row">
+                        <div class="form-group"><label>First Name</label><input type="text" placeholder="Rahul" /></div>
+                        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Sharma" /></div>
+                    </div>
+                    <div class="form-group"><label>Business Email</label><input type="email"
+                            placeholder="rahul@company.com" /></div>
+                    <div class="form-group"><label>Company Size</label>
+                        <select>
+                            <option>1–10 employees</option>
+                            <option>11–50 employees</option>
+                            <option>51–250 employees</option>
+                            <option>250+ employees</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Service Needed</label>
+                        <select>
+                            <option>Payroll & Statutory Compliance</option>
+                            <option>GST Compliance</option>
+                            <option>Income Tax Advisory</option>
+                            <option>Labour Law Compliance</option>
+                            <option>CFO Advisory</option>
+                            <option>Full Compliance Suite</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Message</label><textarea
+                            placeholder="Tell us about your compliance needs..."></textarea></div>
+                    <button class="form-submit" onclick="handleSubmit(event)">Send Message →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <span class="logo">⬡ ShieldCore</span>
+                <p>India's most trusted compliance consulting firm, protecting businesses since 2004 with zero-penalty
+                    excellence.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Services</h5>
+                <a href="#">Payroll Management</a>
+                <a href="#">GST Compliance</a>
+                <a href="#">Income Tax</a>
+                <a href="#">Labour Laws</a>
+                <a href="#">CFO Advisory</a>
+            </div>
+            <div class="footer-col">
+                <h5>Company</h5>
+                <a href="#">About Us</a>
+                <a href="#">Our Team</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Blog</a>
+            </div>
+            <div class="footer-col">
+                <h5>Legal</h5>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+                <a href="#">Disclaimer</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 ShieldCore Compliance Consulting LLP. All rights reserved.</span>
+            <canvas id="footer-logo-canvas"></canvas>
+            <span>ICAI Reg: 123456W | CIN: U74999MH2004LLP123456</span>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        /* ═══════════════════════════════════════════
+           HERO CANVAS — floating particles + glow
+        ═══════════════════════════════════════════ */
+        (function () {
+            const canvas = document.getElementById('hero-canvas');
+            const ctx = canvas.getContext('2d');
+            let W, H, particles = [], animId;
+            function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * W; this.y = Math.random() * H;
+                    this.r = Math.random() * 3 + 1;
+                    this.vx = (Math.random() - .5) * .4; this.vy = (Math.random() - .5) * .4;
+                    this.alpha = Math.random() * .5 + .1;
+                    this.hue = Math.random() > 0.5 ? 220 : 185;
+                }
+                update() {
+                    this.x += this.vx; this.y += this.vy;
+                    if (this.x < 0 || this.x > W) this.vx *= -1;
+                    if (this.y < 0 || this.y > H) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue},80%,60%,${this.alpha})`; ctx.fill();
+                }
+            }
+            function init() { particles = []; for (let i = 0; i < 80; i++) particles.push(new Particle()); }
+            function drawConnections() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+                        const d = Math.sqrt(dx * dx + dy * dy);
+                        if (d < 120) {
+                            ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(26,86,219,${.15 * (1 - d / 120)})`; ctx.lineWidth = .8; ctx.stroke();
+                        }
+                    }
+                }
+            }
+            function loop() {
+                ctx.clearRect(0, 0, W, H);
+                drawConnections();
+                particles.forEach(p => { p.update(); p.draw(); });
+                animId = requestAnimationFrame(loop);
+            }
+            resize(); init(); loop();
+            window.addEventListener('resize', () => { resize(); init(); });
+        })();
+
+        /* ═══════════════════════════════════════════
+           COMPLIANCE SHIELD — Three.js scroll scene
+        ═══════════════════════════════════════════ */
+        (function () {
+            const canvas = document.getElementById('shield-canvas');
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0);
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+            camera.position.set(0, 0, 5);
+
+            // Lights
+            const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambient);
+            const dir1 = new THREE.DirectionalLight(0x4488ff, 1.2);
+            dir1.position.set(3, 4, 3); scene.add(dir1);
+            const dir2 = new THREE.DirectionalLight(0x00ccdd, 0.8);
+            dir2.position.set(-3, -2, 2); scene.add(dir2);
+            const pLight = new THREE.PointLight(0x1a56db, 2, 10);
+            pLight.position.set(0, 0, 3); scene.add(pLight);
+
+            // Shield shape (pentagon-like)
+            function createShieldGeometry(scale = 1, segments = 48) {
+                const shape = new THREE.Shape();
+                const pts = [];
+                for (let i = 0; i < segments; i++) {
+                    const t = i / segments;
+                    let a = t * Math.PI * 2 - Math.PI / 2;
+                    // Shield distortion
+                    let r = scale * (1 + 0.15 * Math.cos(5 * a) + (a > Math.PI * 0.3 && a < Math.PI * 0.7 ? -0.3 * (a - Math.PI * 0.3) / (Math.PI * 0.4) : 0));
+                    pts.push(new THREE.Vector2(Math.cos(a) * r, Math.sin(a) * r));
+                }
+                shape.setFromPoints(pts);
+                return new THREE.ShapeGeometry(shape);
+            }
+
+            // Main shield mesh
+            const shieldGeo = new THREE.IcosahedronGeometry(1.6, 4);
+            const shieldMat = new THREE.MeshPhongMaterial({
+                color: 0x1a56db, emissive: 0x0a2060, shininess: 120,
+                transparent: true, opacity: 0.92,
+                wireframe: false
+            });
+            const shield = new THREE.Mesh(shieldGeo, shieldMat);
+            scene.add(shield);
+
+            // Wireframe overlay
+            const wireMat = new THREE.MeshBasicMaterial({ color: 0x60a0ff, wireframe: true, transparent: true, opacity: 0.12 });
+            const wire = new THREE.Mesh(shieldGeo, wireMat);
+            scene.add(wire);
+
+            // Inner glowing core
+            const coreGeo = new THREE.IcosahedronGeometry(0.9, 2);
+            const coreMat = new THREE.MeshPhongMaterial({ color: 0x0891b2, emissive: 0x004466, transparent: true, opacity: 0.7 });
+            const core = new THREE.Mesh(coreGeo, coreMat);
+            scene.add(core);
+
+            // Orbiting particles
+            const orbitGroup = new THREE.Group(); scene.add(orbitGroup);
+            const orbGeo = new THREE.SphereGeometry(0.06, 8, 8);
+            const orbColors = [0x1a56db, 0x0891b2, 0x7c3aed, 0x059669, 0xf59e0b];
+            const orbiters = [];
+            for (let i = 0; i < 18; i++) {
+                const mat = new THREE.MeshBasicMaterial({ color: orbColors[i % 5] });
+                const m = new THREE.Mesh(orbGeo, mat);
+                const phi = Math.acos(-1 + 2 * i / 18), theta = Math.sqrt(18 * Math.PI) * phi;
+                const r = 2.4 + Math.random() * 0.5;
+                m.userData = { phi, theta, r, speed: 0.3 + Math.random() * 0.4, phase: Math.random() * Math.PI * 2 };
+                orbitGroup.add(m);
+                orbiters.push(m);
+            }
+
+            // Floating document planes
+            const docGroup = new THREE.Group(); scene.add(docGroup);
+            const docGeo = new THREE.PlaneGeometry(0.7, 0.9);
+            const docColors = [0xffffff, 0xe8f0fe, 0xdbeafe];
+            const docs = [];
+            for (let i = 0; i < 6; i++) {
+                const mat = new THREE.MeshBasicMaterial({ color: docColors[i % 3], transparent: true, opacity: 0.7, side: THREE.DoubleSide });
+                const m = new THREE.Mesh(docGeo, mat);
+                const angle = (i / 6) * Math.PI * 2;
+                m.position.set(Math.cos(angle) * 3.2, Math.sin(angle) * 1.8, Math.random() * 0.5);
+                m.rotation.z = angle + Math.PI * 0.1;
+                m.userData = { angle, speed: 0.008, baseY: m.position.y, phase: i * Math.PI / 3 };
+                docGroup.add(m);
+                docs.push(m);
+            }
+            docGroup.visible = false;
+
+            // Data flow lines
+            const dataGroup = new THREE.Group(); scene.add(dataGroup);
+            const dataLines = [];
+            for (let i = 0; i < 8; i++) {
+                const points = [];
+                const angle = (i / 8) * Math.PI * 2;
+                const x0 = Math.cos(angle) * 4, y0 = Math.sin(angle) * 3;
+                for (let j = 0; j <= 20; j++) {
+                    const t = j / 20;
+                    points.push(new THREE.Vector3(x0 * (1 - t), y0 * (1 - t), (Math.random() - .5) * 0.5));
+                }
+                const geo = new THREE.BufferGeometry().setFromPoints(points);
+                const mat = new THREE.LineBasicMaterial({ color: 0x0891b2, transparent: true, opacity: 0.3 });
+                const line = new THREE.Line(geo, mat);
+                dataGroup.add(line);
+                dataLines.push({ line, alpha: 0, targetAlpha: 0.3, offset: i * 0.15 });
+            }
+            dataGroup.visible = false;
+
+            // Shield phase labels
+            const phases = [
+                { label: 'Phase 01', title: 'Building Your Compliance Foundation' },
+                { label: 'Phase 02', title: 'Activating Payroll Protection Layer' },
+                { label: 'Phase 03', title: 'Integrating Tax Compliance Network' },
+                { label: 'Phase 04', title: 'Full Compliance Shield Deployed' },
+                { label: 'Phase 05', title: 'Your Business: Fully Protected' },
+            ];
+
+            function resize() {
+                const el = canvas.parentElement;
+                renderer.setSize(el.offsetWidth, el.offsetHeight);
+                camera.aspect = el.offsetWidth / el.offsetHeight;
+                camera.updateProjectionMatrix();
+            }
+
+            let scrollProgress = 0, lastPhase = -1;
+            function updateFromScroll() {
+                const section = document.getElementById('shield-section');
+                const rect = section.getBoundingClientRect();
+                const total = section.offsetHeight - window.innerHeight;
+                const scrolled = -rect.top;
+                scrollProgress = Math.max(0, Math.min(1, scrolled / total));
+
+                const p = scrollProgress;
+
+                // Phase transitions (5 phases over scroll)
+                const phaseIdx = Math.min(4, Math.floor(p * 5));
+                if (phaseIdx !== lastPhase) {
+                    lastPhase = phaseIdx;
+                    const lbl = document.getElementById('shieldLabel');
+                    const ttl = document.getElementById('shieldTitle');
+                    lbl.style.opacity = '0'; ttl.style.opacity = '0';
+                    setTimeout(() => {
+                        lbl.textContent = phases[phaseIdx].label;
+                        ttl.textContent = phases[phaseIdx].title;
+                        lbl.style.opacity = '1'; ttl.style.opacity = '1';
+                    }, 300);
+                }
+
+                // Shield scale & rotation
+                const targetScale = 0.6 + p * 1.2;
+                shield.scale.setScalar(targetScale);
+                wire.scale.setScalar(targetScale);
+                shield.rotation.y = p * Math.PI * 3;
+                shield.rotation.x = Math.sin(p * Math.PI) * 0.5;
+
+                // Color shift
+                const blueToTeal = p;
+                shieldMat.color.setRGB(
+                    0.1 - blueToTeal * 0.05,
+                    0.33 + blueToTeal * 0.22,
+                    0.85 - blueToTeal * 0.17
+                );
+                shieldMat.emissive.setRGB(0.04 + blueToTeal * 0.01, 0.1 + blueToTeal * 0.1, 0.25);
+
+                // Core pulse
+                const coreScale = 0.5 + p * 0.6 + Math.sin(Date.now() * .002) * 0.05;
+                core.scale.setScalar(coreScale);
+
+                // Docs appear after phase 1
+                docGroup.visible = p > 0.2;
+                if (p > 0.2) {
+                    const docAlpha = Math.min(1, (p - 0.2) * 4);
+                    docs.forEach(d => { d.material.opacity = 0.7 * docAlpha; });
+                }
+
+                // Data lines appear after phase 2
+                dataGroup.visible = p > 0.4;
+                if (p > 0.4) {
+                    const dataAlpha = Math.min(1, (p - 0.4) * 4);
+                    dataLines.forEach(dl => { dl.line.material.opacity = 0.35 * dataAlpha; });
+                }
+
+                // Camera zoom
+                camera.position.z = 5 - p * 1.5;
+            }
+
+            let t = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                t += 0.01;
+                updateFromScroll();
+
+                // Orbit animation
+                orbiters.forEach((orb, i) => {
+                    const d = orb.userData;
+                    const angle = t * d.speed + d.phase;
+                    const r = d.r;
+                    orb.position.set(
+                        Math.cos(angle) * r * Math.cos(d.phi),
+                        Math.sin(angle) * r,
+                        Math.sin(angle) * r * Math.sin(d.phi)
+                    );
+                });
+
+                // Floating docs
+                docs.forEach((d, i) => {
+                    const ud = d.userData;
+                    ud.angle += ud.speed;
+                    d.position.x = Math.cos(ud.angle) * 3.2;
+                    d.position.y = ud.baseY + Math.sin(t + ud.phase) * 0.3;
+                    d.rotation.z = ud.angle + 0.1;
+                });
+
+                // Shield pulse
+                const pulse = 1 + Math.sin(t * 1.5) * 0.02;
+                pLight.intensity = 1.8 + Math.sin(t * 2) * 0.4;
+                pLight.position.set(Math.cos(t) * 2, Math.sin(t * .7) * 1.5, 3);
+
+                // Orbit group rotation
+                orbitGroup.rotation.y = t * 0.2;
+                orbitGroup.rotation.x = t * 0.08;
+
+                renderer.render(scene, camera);
+            }
+
+            resize(); animate();
+            window.addEventListener('resize', resize);
+            window.addEventListener('scroll', updateFromScroll, { passive: true });
+        })();
+
+        /* ═══════════════════════════════════════════
+           ABOUT CANVAS — animated compliance rings
+        ═══════════════════════════════════════════ */
+        (function () {
+            const canvas = document.getElementById('about-canvas');
+            if (!canvas) return;
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+            renderer.setClearColor(0x1a56db, 1);
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0b1f3a);
+            const camera = new THREE.PerspectiveCamera(60, 4 / 3, 0.1, 100);
+            camera.position.z = 5;
+
+            const ambient = new THREE.AmbientLight(0xffffff, 0.4); scene.add(ambient);
+            const d1 = new THREE.DirectionalLight(0x4488ff, 1.5); d1.position.set(2, 3, 2); scene.add(d1);
+            const d2 = new THREE.DirectionalLight(0x00ccdd, 0.8); d2.position.set(-2, -1, 1); scene.add(d2);
+
+            // Torus rings
+            const rings = [];
+            const ringColors = [0x1a56db, 0x0891b2, 0x7c3aed, 0x059669];
+            for (let i = 0; i < 4; i++) {
+                const geo = new THREE.TorusGeometry(1 + i * 0.5, 0.06, 12, 80);
+                const mat = new THREE.MeshPhongMaterial({ color: ringColors[i], emissive: ringColors[i], emissiveIntensity: 0.3, transparent: true, opacity: 0.75 - i * 0.1 });
+                const m = new THREE.Mesh(geo, mat);
+                m.rotation.x = i * 0.4; m.rotation.z = i * 0.3;
+                scene.add(m);
+                rings.push({ mesh: m, rx: i * 0.4, rz: i * 0.3, speed: 0.008 + i * 0.003 });
+            }
+
+            // Center shield icon
+            const shGeo = new THREE.OctahedronGeometry(0.7, 1);
+            const shMat = new THREE.MeshPhongMaterial({ color: 0x1a56db, emissive: 0x0a2060, shininess: 180 });
+            const shMesh = new THREE.Mesh(shGeo, shMat); scene.add(shMesh);
+
+            function resize() {
+                const el = canvas.parentElement;
+                renderer.setSize(el.offsetWidth, el.offsetHeight);
+                camera.aspect = el.offsetWidth / el.offsetHeight;
+                camera.updateProjectionMatrix();
+            }
+            let t = 0;
+            function animate() {
+                requestAnimationFrame(animate); t += 0.01;
+                rings.forEach((r, i) => { r.mesh.rotation.y += r.speed; r.mesh.rotation.x = r.rx + Math.sin(t + i) * 0.2; });
+                shMesh.rotation.y = t * 0.5; shMesh.rotation.x = Math.sin(t * 0.7) * 0.3;
+                renderer.render(scene, camera);
+            }
+            resize(); animate();
+            window.addEventListener('resize', resize);
+        })();
+
+        /* ═══════════════════════════════════════════
+           FOOTER LOGO CANVAS
+        ═══════════════════════════════════════════ */
+        (function () {
+            const canvas = document.getElementById('footer-logo-canvas');
+            if (!canvas) return;
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 0);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, 100 / 60, 0.1, 10);
+            camera.position.z = 2.2;
+            const ambient = new THREE.AmbientLight(0xffffff, 0.5); scene.add(ambient);
+            const d1 = new THREE.DirectionalLight(0x4488ff, 1.5); d1.position.set(1, 2, 2); scene.add(d1);
+            const geo = new THREE.IcosahedronGeometry(0.7, 2);
+            const mat = new THREE.MeshPhongMaterial({ color: 0x1a56db, emissive: 0x082050, shininess: 160 });
+            const m = new THREE.Mesh(geo, mat); scene.add(m);
+            renderer.setSize(100, 60);
+            function loop() { requestAnimationFrame(loop); m.rotation.y += 0.02; m.rotation.x += 0.008; renderer.render(scene, camera); }
+            loop();
+        })();
+
+        /* ═══════════════════════════════════════════
+           DONUT CHART CANVAS
+        ═══════════════════════════════════════════ */
+        (function () {
+            const c = document.getElementById('donut-canvas');
+            if (!c) return;
+            const ctx = c.getContext('2d');
+            const data = [
+                { val: 100, color: '#1a56db' },
+                { val: 100, color: '#0891b2' },
+                { val: 98, color: '#7c3aed' },
+                { val: 100, color: '#059669' },
+                { val: 2, color: '#f59e0b' },
+            ];
+            const total = data.reduce((a, d) => a + d.val, 0);
+            let start = -Math.PI / 2;
+            const cx = 70, cy = 70, r = 55, inner = 35;
+            data.forEach(d => {
+                const sweep = (d.val / total) * Math.PI * 2;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, r, start, start + sweep);
+                ctx.closePath();
+                ctx.fillStyle = d.color;
+                ctx.fill();
+                start += sweep;
+            });
+            // Inner hole
+            ctx.beginPath(); ctx.arc(cx, cy, inner, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(11,31,58,1)'; ctx.fill();
+            // Center text
+            ctx.fillStyle = '#fff'; ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('99.6%', cx, cy);
+        })();
+
+        /* ═══════════════════════════════════════════
+           FILING CALENDAR
+        ═══════════════════════════════════════════ */
+        (function () {
+            const grid = document.getElementById('cal-grid');
+            if (!grid) return;
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const status = ['filed', 'filed', 'filed', 'filed', 'filed', 'filed', 'filed', 'filed', 'pending', 'upcoming', 'upcoming', 'upcoming'];
+            const colors = { filed: '#059669', pending: '#f59e0b', upcoming: 'rgba(255,255,255,0.15)' };
+            months.forEach((m, i) => {
+                const cell = document.createElement('div');
+                cell.style.cssText = `background:${colors[status[i]]};border-radius:8px;padding:8px 4px;text-align:center;font-size:.72rem;color:${status[i] === 'upcoming' ? '#8899cc' : '#fff'};font-weight:600;`;
+                cell.innerHTML = `<div>${m}</div><div style="font-size:.65rem;margin-top:3px;opacity:.8">${status[i]}</div>`;
+                grid.appendChild(cell);
+            });
+        })();
+
+        /* ═══════════════════════════════════════════
+           SCROLL REVEAL
+        ═══════════════════════════════════════════ */
+        const revealEls = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+        }, { threshold: 0.1 });
+        revealEls.forEach(el => revealObserver.observe(el));
+
+        /* ═══════════════════════════════════════════
+           FORM SUBMIT
+        ═══════════════════════════════════════════ */
+        function handleSubmit(e) {
+            e.preventDefault();
+            const btn = e.target;
+            btn.textContent = '✓ Message Sent!';
+            btn.style.background = 'linear-gradient(135deg,#059669,#10b981)';
+            setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+        }
+
+        /* ═══════════════════════════════════════════
+           SMOOTH SCROLL FOR NAV LINKS
+        ═══════════════════════════════════════════ */
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+
+</html>

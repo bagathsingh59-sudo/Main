@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Vaishnavi Consultants — VC monogram">
+  <defs>
+    <linearGradient id="vcSqGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a56db"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="64" height="64" rx="14" ry="14" fill="url(#vcSqGrad)"/>
+  <!-- V — geometric path, vector regardless of installed fonts -->
+  <path d="M11 16 L20 16 L26 38 L32 16 L41 16 L33 44 L19 44 Z" fill="#ffffff"/>
+  <!-- C — open partial ring -->
+  <path d="M53 24 a10 10 0 1 0 0 16 l-3 -5 a6 6 0 1 1 0 -6 Z" fill="#ffffff"/>
+</svg>

@@ -1,0 +1,68 @@
+import type { Service } from "@/types";
+
+export const SERVICES: Service[] = [
+  {
+    id: "payroll",
+    icon: "Wallet",
+    title: "Payroll Management",
+    summary: "End-to-end payroll, salary structuring, payslips, and Form 16 generation for your entire workforce.",
+    points: ["Automated salary runs", "Reimbursement & arrears", "Payslip portal", "Form 16 & 24Q"],
+    accent: "from-navy-600 to-teal-600",
+  },
+  {
+    id: "epf-esi",
+    icon: "ShieldCheck",
+    title: "EPF & ESI Compliance",
+    summary: "PF ECR, ESI returns, KYC seeding, UAN linking, and inspection support — owned end-to-end.",
+    points: ["Monthly ECR upload", "ESI half-yearly returns", "UAN / KYC handling", "Audit & inspection support"],
+    accent: "from-teal-600 to-teal-400",
+  },
+  {
+    id: "labour-law",
+    icon: "Scale",
+    title: "Labour Law Compliance",
+    summary: "S&E, PT, LWF, Contract Labour, Bonus & Gratuity — pan-India statutory compliance, one dashboard.",
+    points: ["Multi-state registrations", "Returns & renewals", "Notice handling", "Audit-ready records"],
+    accent: "from-navy-500 to-navy-700",
+  },
+  {
+    id: "gst",
+    icon: "Receipt",
+    title: "GST Compliance",
+    summary: "GSTR-1, 3B, 9 & 9C filings with reconciliation, ITC optimisation, and refund handling.",
+    points: ["Auto reconciliation", "GSTR-9 / 9C", "Refund & LUT", "Notice response"],
+    accent: "from-teal-600 to-navy-600",
+  },
+  {
+    id: "income-tax",
+    icon: "FileText",
+    title: "Income Tax Advisory",
+    summary: "Corporate ITR, TDS, advance tax, transfer pricing, and tax planning for SMEs and corporates.",
+    points: ["ITR-6 / Tax Audit", "TDS & TCS", "Advance tax", "Transfer pricing"],
+    accent: "from-navy-700 to-teal-500",
+  },
+  {
+    id: "cfo",
+    icon: "LineChart",
+    title: "Virtual CFO Advisory",
+    summary: "Strategic finance, MIS, board-pack design, cap-table, and fund-raise readiness — on tap.",
+    points: ["Monthly MIS", "Board pack", "Cash-flow modelling", "Fund-raise diligence"],
+    accent: "from-teal-500 to-navy-600",
+  },
+  {
+    id: "audit",
+    icon: "ClipboardCheck",
+    title: "Audit & Assurance",
+    summary: "Statutory, internal, tax, and due-diligence audits aligned with the latest regulatory standards.",
+    points: ["Statutory audit", "Internal audit", "Tax audit", "Due diligence"],
+    accent: "from-navy-600 to-teal-400",
+  },
+  {
+    id: "roc",
+    icon: "Building2",
+    title: "ROC & Secretarial",
+    summary: "MCA annual filings, board resolutions, charge & DIN management, plus secretarial audits.",
+    points: ["AOC-4 / MGT-7", "Board resolutions", "DIN / DSC", "Secretarial audit"],
+    accent: "from-teal-700 to-navy-700",
+  },
+];

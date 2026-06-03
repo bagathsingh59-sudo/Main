@@ -6,18 +6,13 @@ import { motion } from "framer-motion";
  * SVG/CSS mock of the Vaishnavi Dashboard — gives the hero a real product visual
  * without shipping any binary assets.
  *
- * The figures and labels are intentionally generic-but-Indian (₹ amounts in lakhs,
- * GSTR / PF / ESI status tiles) so the imagery does the work of saying "this is a
- * tax / compliance product".
+ * The outer wrapper renders visible at SSR (no opacity:0 initial state). The
+ * inner bars / tiles / calendar still animate in via Framer because they are
+ * decorative and don't affect LCP — the dashboard frame is already painted.
  */
 export function HeroDashboard({ className }: { className?: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24, rotate: -1 }}
-      animate={{ opacity: 1, y: 0, rotate: 0 }}
-      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-      className={`relative ${className ?? ""}`}
-    >
+    <div className={`relative ${className ?? ""}`}>
       {/* Soft platform shadow */}
       <div
         aria-hidden="true"
@@ -167,7 +162,7 @@ export function HeroDashboard({ className }: { className?: string }) {
         </div>
         <div className="mt-0.5 text-sm font-bold text-navy-900">4 years running</div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 

@@ -7,17 +7,22 @@ import { organizationSchema, websiteSchema } from "@/utils/jsonLd";
 import { JsonLd } from "@/components/shared/JsonLd";
 import "./globals.css";
 
+// Only the weights actually used in the codebase — drops ~80 KB of font bytes
+// vs. shipping the full 300-900 range. `font-light` (300) and `font-black`
+// (900) are not referenced anywhere.
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-inter",
   display: "swap",
 });
 
+// Every `<em>` in the codebase has `not-italic` applied, so DM Serif's italic
+// variant is never rendered — shipping only the normal style.
 const display = DM_Serif_Display({
   subsets: ["latin"],
   weight: ["400"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   variable: "--font-display",
   display: "swap",
 });

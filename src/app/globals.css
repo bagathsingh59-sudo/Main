@@ -77,6 +77,30 @@
 }
 
 /* ────────────────────────────────────────────────
+   CSS-only entrance animations for above-the-fold content
+   (no JS hydration required — keeps LCP fast)
+   ──────────────────────────────────────────────── */
+@layer components {
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translate3d(0, 18px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  .hero-fade {
+    animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-fade-d1 { animation-delay: 0.06s; }
+  .hero-fade-d2 { animation-delay: 0.14s; }
+  .hero-fade-d3 { animation-delay: 0.22s; }
+  .hero-fade-d4 { animation-delay: 0.30s; }
+  .hero-fade-d5 { animation-delay: 0.40s; }
+  .hero-fade-d6 { animation-delay: 0.48s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fade { animation: none; }
+  }
+}
+
+/* ────────────────────────────────────────────────
    Utilities — non-Tailwind tweaks
    ──────────────────────────────────────────────── */
 @layer utilities {

@@ -1,0 +1,27 @@
+{
+  "name": "Vaishnavi Consultants",
+  "short_name": "Vaishnavi",
+  "description": "Tax & Compliance consulting — EPF, ESI, Payroll, GST, Labour Law & Statutory Filings for Indian businesses.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0b1f3a",
+  "background_color": "#eef2ff",
+  "lang": "en-IN",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "/icon",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-icon",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

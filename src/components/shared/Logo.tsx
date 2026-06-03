@@ -1,13 +1,21 @@
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/utils/cn";
 
 interface LogoProps {
   className?: string;
   tone?: "light" | "dark";
   withWordmark?: boolean;
+  /** Visual size of the mark in px (height). Defaults to 36. */
+  size?: number;
 }
 
-export function Logo({ className, tone = "light", withWordmark = true }: LogoProps) {
+/**
+ * Brand logo — uses the supplied raster mark from /public/brand/logo.png
+ * (extracted from the original Logo-svg.svg the user provided). Falls back
+ * to the inline VC monogram if the image is unavailable.
+ */
+export function Logo({ className, tone = "light", withWordmark = true, size = 36 }: LogoProps) {
   return (
     <Link
       href="/"
@@ -15,15 +23,17 @@ export function Logo({ className, tone = "light", withWordmark = true }: LogoPro
       className={cn("group inline-flex items-center gap-2.5", className)}
     >
       <span
-        className={cn(
-          "relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-brand shadow-glow",
-          "transition-transform duration-300 group-hover:scale-105",
-        )}
+        className="relative flex flex-shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-105"
+        style={{ width: size, height: size }}
       >
-        <svg viewBox="0 0 24 24" className="h-5 w-5 text-white" fill="none" stroke="currentColor" strokeWidth={2.2}>
-          <path d="M4 4 12 2l8 2v7c0 5-3.5 8.6-8 10-4.5-1.4-8-5-8-10V4Z" strokeLinejoin="round" />
-          <path d="m8.5 12 2.5 2.5L16 9.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <Image
+          src="/brand/logo.png"
+          alt=""
+          width={size * 2}
+          height={size * 2}
+          priority
+          className="h-full w-auto object-contain"
+        />
       </span>
       {withWordmark && (
         <span

@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(cd \"/Users/ankush/Downloads/Sri venkateshwara /Main\" && rm src/components/shared/ScrollHint.tsx)",
-      "Bash(cd \"/Users/ankush/Downloads/Sri venkateshwara /Main\" && rm src/sections/Testimonials.tsx src/hooks/usePointerSpotlight.ts)"
+      "Bash(cd \"/Users/ankush/Downloads/Sri venkateshwara /Main\" && rm src/sections/Testimonials.tsx src/hooks/usePointerSpotlight.ts)",
+      "Read(//Users/ankush/Downloads/**)",
+      "Bash(cp \"/Users/ankush/Downloads/Logo-svg.svg\" \"/Users/ankush/Downloads/Sri venkateshwara /Main/public/brand/logo-source.svg\")",
+      "Bash(mkdir -p \"/Users/ankush/Downloads/Sri venkateshwara /Main/public/brand\")",
+      "Bash(node -e ' *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)"
     ]
   }
 }

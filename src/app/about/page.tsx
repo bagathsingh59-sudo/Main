@@ -13,12 +13,20 @@ import { TrustSecurity } from "@/sections/TrustSecurity";
 import { Partners } from "@/sections/Partners";
 import { ClientMetrics } from "@/sections/ClientMetrics";
 import { CTABanner } from "@/sections/CTABanner";
+import { JsonLd } from "@/components/shared/JsonLd";
+import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
+import { buildPageMetadata } from "@/utils/seo";
 
-export const metadata: Metadata = {
-  title: "About Us — 15 Years of Trusted Compliance",
-  description:
-    "From a 3-person Bengaluru practice to India's most trusted compliance partner. Founder, team, journey, certifications.",
-};
+const PAGE_TITLE = "About Us — 15 Years of Trusted Compliance";
+const PAGE_DESC =
+  "From a 3-person Bengaluru CA practice to India's most trusted compliance partner. Founder's note, our journey, leadership team, certifications, awards, and security.";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESC,
+  path: "/about",
+  keywords: ["compliance consulting Bengaluru", "ICAI registered firm", "ISO 27001 compliance partner"],
+});
 
 const DOTS = [
   { id: "about", label: "About" },
@@ -33,6 +41,15 @@ const DOTS = [
 export default function AboutPage() {
   return (
     <MainLayout>
+      <JsonLd
+        data={[
+          webPageSchema({ path: "/about", title: PAGE_TITLE, description: PAGE_DESC }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+        ]}
+      />
       <SectionDots dots={DOTS} />
 
       <PageHero

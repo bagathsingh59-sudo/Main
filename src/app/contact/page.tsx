@@ -5,12 +5,20 @@ import { SectionDots } from "@/components/shared/SectionDots";
 import { ImageBanner } from "@/components/shared/ImageBanner";
 import { BookConsultation } from "@/sections/BookConsultation";
 import { Contact } from "@/sections/Contact";
+import { JsonLd } from "@/components/shared/JsonLd";
+import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
+import { buildPageMetadata } from "@/utils/seo";
 
-export const metadata: Metadata = {
-  title: "Contact — Book a Free 45-Minute Consultation",
-  description:
-    "Reach Vaishnavi Consultants — head office in Bengaluru, with five branches across India. Book your free consultation.",
-};
+const PAGE_TITLE = "Contact — Book a Free 45-Minute Consultation";
+const PAGE_DESC =
+  "Reach Vaishnavi Consultants — head office in Bengaluru, with five branches across India. Senior CA replies within one working day.";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESC,
+  path: "/contact",
+  keywords: ["compliance consultant Bengaluru", "tax CA contact", "EPF consultant phone"],
+});
 
 const DOTS = [
   { id: "book", label: "Book" },
@@ -20,6 +28,15 @@ const DOTS = [
 export default function ContactPage() {
   return (
     <MainLayout>
+      <JsonLd
+        data={[
+          webPageSchema({ path: "/contact", title: PAGE_TITLE, description: PAGE_DESC }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+        ]}
+      />
       <SectionDots dots={DOTS} />
 
       <PageHero

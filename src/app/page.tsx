@@ -6,10 +6,25 @@ import { ServicesPreview } from "@/sections/ServicesPreview";
 import { TestimonialsCarousel } from "@/sections/TestimonialsCarousel";
 import { ImageBanner } from "@/components/shared/ImageBanner";
 import { CTABanner } from "@/sections/CTABanner";
+import { JsonLd } from "@/components/shared/JsonLd";
+import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
+import { SERVICES } from "@/constants/services";
 
 export default function HomePage() {
   return (
     <MainLayout>
+      <JsonLd
+        data={[
+          webPageSchema({
+            path: "/",
+            title: "Vaishnavi Consultants — Tax & Compliance Consulting",
+            description:
+              "EPF, ESI, Payroll, GST, TDS and Labour Law compliance for Indian businesses. Zero-penalty track record across 850+ clients.",
+          }),
+          breadcrumbSchema([{ name: "Home", path: "/" }]),
+          serviceListSchema(SERVICES.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
+        ]}
+      />
       {/* Header section — untouched */}
       <Hero />
 

@@ -7,12 +7,21 @@ import { Resources } from "@/sections/Resources";
 import { Updates } from "@/sections/Updates";
 import { FAQ } from "@/sections/FAQ";
 import { CTABanner } from "@/sections/CTABanner";
+import { JsonLd } from "@/components/shared/JsonLd";
+import { breadcrumbSchema, faqSchema, webPageSchema } from "@/utils/jsonLd";
+import { buildPageMetadata } from "@/utils/seo";
+import { FAQS } from "@/constants/faq";
 
-export const metadata: Metadata = {
-  title: "Insights — Compliance Briefings, Updates & FAQs",
-  description:
-    "Curated regulatory updates, in-depth compliance briefings, and answers to the questions CFOs ask first.",
-};
+const PAGE_TITLE = "Insights — Compliance Briefings, Updates & FAQs";
+const PAGE_DESC =
+  "Curated regulatory updates, in-depth compliance briefings, and answers to the questions CFOs ask first.";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESC,
+  path: "/insights",
+  keywords: ["GST updates", "EPF circular", "ESI notification", "compliance blog India"],
+});
 
 const DOTS = [
   { id: "resources", label: "Briefings" },
@@ -23,6 +32,16 @@ const DOTS = [
 export default function InsightsPage() {
   return (
     <MainLayout>
+      <JsonLd
+        data={[
+          webPageSchema({ path: "/insights", title: PAGE_TITLE, description: PAGE_DESC }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/insights" },
+          ]),
+          faqSchema(FAQS.map((f) => ({ question: f.question, answer: f.answer }))),
+        ]}
+      />
       <SectionDots dots={DOTS} />
 
       <PageHero

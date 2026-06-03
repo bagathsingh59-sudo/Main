@@ -7,12 +7,20 @@ import { Industries } from "@/sections/Industries";
 import { DashboardShowcase } from "@/sections/DashboardShowcase";
 import { CaseStudies } from "@/sections/CaseStudies";
 import { CTABanner } from "@/sections/CTABanner";
+import { JsonLd } from "@/components/shared/JsonLd";
+import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
+import { buildPageMetadata } from "@/utils/seo";
 
-export const metadata: Metadata = {
-  title: "Industries — SaaS, Manufacturing, Healthcare, E-Com & More",
-  description:
-    "Compliance expertise across the sectors we serve, with live case studies and the Vaishnavi Dashboard in action.",
-};
+const PAGE_TITLE = "Industries — SaaS, Manufacturing, Healthcare, E-Com & More";
+const PAGE_DESC =
+  "Compliance expertise across the sectors we serve. Industry-specialist teams, live case studies, and the Vaishnavi Dashboard in action.";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESC,
+  path: "/industries",
+  keywords: ["SaaS compliance India", "manufacturing payroll", "healthcare GST", "ecommerce TCS"],
+});
 
 const DOTS = [
   { id: "industries", label: "Industries" },
@@ -23,6 +31,15 @@ const DOTS = [
 export default function IndustriesPage() {
   return (
     <MainLayout>
+      <JsonLd
+        data={[
+          webPageSchema({ path: "/industries", title: PAGE_TITLE, description: PAGE_DESC }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Industries", path: "/industries" },
+          ]),
+        ]}
+      />
       <SectionDots dots={DOTS} />
 
       <PageHero

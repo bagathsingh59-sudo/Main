@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, DM_Serif_Display } from "next/font/google";
-import { siteMetadata, organizationJsonLd } from "@/utils/seo";
+import { siteMetadata } from "@/utils/seo";
+import { organizationSchema, websiteSchema } from "@/utils/jsonLd";
+import { JsonLd } from "@/components/shared/JsonLd";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,20 +23,27 @@ const display = DM_Serif_Display({
 export const metadata: Metadata = siteMetadata;
 
 export const viewport: Viewport = {
-  themeColor: "#0b1f3a",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#eef2ff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1f3a" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" className={`${inter.variable} ${display.variable}`}>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+        {/* Performance hints */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+        {/* Site-wide structured data */}
+        <JsonLd data={[organizationSchema(), websiteSchema()]} />
       </head>
       <body>
         <a

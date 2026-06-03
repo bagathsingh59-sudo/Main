@@ -1,15 +1,29 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/utils/jsonLd";
 
-const SITE_URL = "https://vaishnaviconsultants.in";
-
+/**
+ * Sitemap consumed by Google Search Console + other crawlers.
+ * Served at /sitemap.xml automatically by Next.js.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+  const make = (
+    path: string,
+    priority: number,
+    changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
+  ) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: now,
+    changeFrequency,
+    priority,
+  });
+
   return [
-    { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
-    { url: `${SITE_URL}/#services`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${SITE_URL}/#industries`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/#about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${SITE_URL}/#resources`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${SITE_URL}/#contact`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    make("/", 1.0, "weekly"),
+    make("/services", 0.9, "monthly"),
+    make("/industries", 0.85, "monthly"),
+    make("/about", 0.8, "monthly"),
+    make("/insights", 0.75, "weekly"),
+    make("/contact", 0.9, "monthly"),
   ];
 }

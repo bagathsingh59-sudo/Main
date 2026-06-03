@@ -87,7 +87,7 @@ export const siteMetadata: Metadata = {
   icons: {
     icon: [
       { url: "/icon", type: "image/png", sizes: "32x32" },
-      { url: "/brand/logo.png", type: "image/png", sizes: "256x256" },
+      { url: "/brand/logo.png", type: "image/png", sizes: "1600x1444" },
     ],
     apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
     shortcut: ["/icon"],

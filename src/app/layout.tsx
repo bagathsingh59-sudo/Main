@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, DM_Serif_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteMetadata } from "@/utils/seo";
 import { organizationSchema, websiteSchema } from "@/utils/jsonLd";
 import { JsonLd } from "@/components/shared/JsonLd";
@@ -54,8 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         {children}
-        {/* Vercel Web Analytics — auto-tracks pageviews in production */}
+        {/* Vercel — Web Analytics (pageviews) + Speed Insights (Core Web Vitals) */}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

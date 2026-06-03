@@ -1,12 +1,17 @@
 import { ImageResponse } from "next/og";
+import { getLogoDataUrl } from "@/utils/brandAsset";
 
 /**
  * Apple touch icon — used when users add the site to iOS home screen.
+ * Embeds the user's actual brand logo so the home-screen shortcut shows the
+ * Vaishnavi mark instead of a screenshot of the page.
  */
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-export default function AppleIcon() {
+export default async function AppleIcon() {
+  const logo = await getLogoDataUrl();
+
   return new ImageResponse(
     (
       <div
@@ -16,15 +21,17 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #1a56db 0%, #0891b2 100%)",
-          color: "#ffffff",
-          fontSize: 90,
-          fontWeight: 900,
-          letterSpacing: "-6px",
-          fontFamily: "system-ui, -apple-system, sans-serif",
+          backgroundColor: "#ffffff",
         }}
       >
-        VC
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={logo}
+          alt=""
+          width={150}
+          height={150}
+          style={{ objectFit: "contain" }}
+        />
       </div>
     ),
     { ...size },

@@ -1,13 +1,16 @@
 import { ImageResponse } from "next/og";
+import { getLogoDataUrl } from "@/utils/brandAsset";
 
 /**
- * Dynamic 32x32 favicon — Next.js convention.
+ * Dynamic favicon — 32x32 PNG that wraps the user-supplied brand logo.
  * Auto-injected into <head> as <link rel="icon">.
  */
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-export default function Icon() {
+export default async function Icon() {
+  const logo = await getLogoDataUrl();
+
   return new ImageResponse(
     (
       <div
@@ -17,16 +20,18 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #1a56db 0%, #0891b2 100%)",
-          borderRadius: 7,
-          color: "#ffffff",
-          fontSize: 15,
-          fontWeight: 900,
-          letterSpacing: "-1px",
-          fontFamily: "system-ui, -apple-system, sans-serif",
+          backgroundColor: "#ffffff",
+          borderRadius: 6,
         }}
       >
-        VC
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={logo}
+          alt=""
+          width={28}
+          height={28}
+          style={{ objectFit: "contain" }}
+        />
       </div>
     ),
     { ...size },

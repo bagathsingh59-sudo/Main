@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { getLogoDataUrl } from "@/utils/brandAsset";
 
 /**
  * Default Open Graph share image (1200×630) — Next.js convention.
@@ -8,12 +9,16 @@ import { ImageResponse } from "next/og";
  *   - We avoid comma-stacked radial gradients (Satori parses single gradients).
  *   - We avoid non-ASCII glyphs (₹ etc.) so Satori doesn't try to dynamically
  *     fetch a font for them — we use "Rs " in their place instead.
+ *   - The brand mark is embedded as a base64 PNG so the actual Vaishnavi logo
+ *     appears in every social share preview.
  */
 export const alt = "Vaishnavi Consultants — Tax & Compliance Consulting";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OG() {
+export default async function OG() {
+  const logo = await getLogoDataUrl();
+
   return new ImageResponse(
     (
       <div
@@ -57,34 +62,33 @@ export default function OG() {
           }}
         />
 
-        {/* Top: monogram + wordmark */}
-        <div style={{ display: "flex", alignItems: "center", gap: 22, position: "relative" }}>
+        {/* Top: real logo + wordmark */}
+        <div style={{ display: "flex", alignItems: "center", gap: 24, position: "relative" }}>
           <div
             style={{
-              width: 84,
-              height: 84,
-              borderRadius: 20,
+              width: 96,
+              height: 96,
+              borderRadius: 22,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundImage: "linear-gradient(135deg, #3a64f5 0%, #22d3ee 100%)",
-              boxShadow: "0 14px 44px rgba(58,100,245,0.45)",
-              fontSize: 42,
-              fontWeight: 900,
-              letterSpacing: "-3px",
+              backgroundColor: "#ffffff",
+              boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
+              padding: 10,
             }}
           >
-            VC
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logo} alt="" width={76} height={76} style={{ objectFit: "contain" }} />
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-0.5px" }}>
+            <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.5px" }}>
               Vaishnavi Consultants
             </div>
             <div
               style={{
                 fontSize: 16,
                 color: "rgba(255,255,255,0.7)",
-                marginTop: 4,
+                marginTop: 6,
                 letterSpacing: 2,
                 textTransform: "uppercase",
               }}

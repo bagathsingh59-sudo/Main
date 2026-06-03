@@ -8,7 +8,12 @@
       "Bash(mkdir -p \"/Users/ankush/Downloads/Sri venkateshwara /Main/public/brand\")",
       "Bash(node -e ' *)",
       "Bash(npx tsc *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(node scripts/process-logo.mjs)"
     ]
   }
 }

@@ -2,19 +2,24 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 /**
- * Reads the user-supplied brand logo from disk at build time and returns a
- * data-URL suitable for embedding inside `<img>` tags inside `next/og`
- * `ImageResponse` templates.
+ * Reads a pre-rendered transparent variant of the brand logo from disk at
+ * build time and returns a data-URL suitable for `<img>` tags inside
+ * `next/og` `ImageResponse` templates.
  *
- * `process.cwd()` resolves to the project root during build / SSR — the
- * `public/` directory is part of the source tree (it is *not* served from the
- * function runtime, but the file IS readable from disk during render).
+ * The variants are produced by `scripts/process-logo.mjs` — drop a fresh
+ * `public/brand/logo-raw.png` and re-run the script to refresh every size.
  */
-let cached: string | null = null;
+export type LogoSize = 32 | 64 | 128 | 180 | 256 | 512 | "full";
 
-export async function getLogoDataUrl(): Promise<string> {
+const cache = new Map<LogoSize, string>();
+
+export async function getLogoDataUrl(size: LogoSize = "full"): Promise<string> {
+  const cached = cache.get(size);
   if (cached) return cached;
-  const buffer = await readFile(join(process.cwd(), "public/brand/logo.png"));
-  cached = `data:image/png;base64,${buffer.toString("base64")}`;
-  return cached;
+
+  const filename = size === "full" ? "logo.png" : `logo-${size}.png`;
+  const buffer = await readFile(join(process.cwd(), "public", "brand", filename));
+  const url = `data:image/png;base64,${buffer.toString("base64")}`;
+  cache.set(size, url);
+  return url;
 }

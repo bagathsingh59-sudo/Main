@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "logo:process": "node scripts/process-logo.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.0",
@@ -35,6 +36,7 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.18",
     "postcss": "^8.4.49",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   }

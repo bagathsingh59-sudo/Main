@@ -17,7 +17,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OG() {
-  const logo = await getLogoDataUrl();
+  const logo = await getLogoDataUrl(256);
 
   return new ImageResponse(
     (

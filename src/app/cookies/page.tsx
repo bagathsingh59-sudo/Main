@@ -39,7 +39,7 @@ export default function CookiesPage() {
           {
             heading: "Analytics",
             body:
-              "Vercel Web Analytics and Google Analytics 4 set cookies to count visits, identify popular pages and measure performance. The data is aggregated and never used to identify individual visitors.",
+              "Vercel Web Analytics, Vercel Speed Insights and Google Analytics 4 (Measurement ID G-G7S430DQW4) set cookies to count visits, identify popular pages and measure performance. The data is aggregated and never used to identify individual visitors. You can opt out of Google Analytics via the official browser add-on at tools.google.com/dlpage/gaoptout.",
           },
           {
             heading: "Marketing",

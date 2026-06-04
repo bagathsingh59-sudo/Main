@@ -2,10 +2,18 @@ import type { Metadata, Viewport } from "next";
 import { Inter, DM_Serif_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteMetadata } from "@/utils/seo";
 import { organizationSchema, websiteSchema } from "@/utils/jsonLd";
 import { JsonLd } from "@/components/shared/JsonLd";
 import "./globals.css";
+
+/**
+ * GA4 Measurement ID. Defaults to the production property
+ * `G-G7S430DQW4` but can be overridden per-environment via
+ * `NEXT_PUBLIC_GA_ID` (e.g. a staging measurement ID in Preview deploys).
+ */
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-G7S430DQW4";
 
 // Only the weights actually used in the codebase — drops ~80 KB of font bytes
 // vs. shipping the full 300-900 range. `font-light` (300) and `font-black`
@@ -63,6 +71,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Vercel — Web Analytics (pageviews) + Speed Insights (Core Web Vitals) */}
         <Analytics />
         <SpeedInsights />
+        {/* Google Analytics 4 — Search-Console-associable property. The
+            @next/third-parties wrapper defers the gtag script until after
+            hydration so LCP / first paint are not impacted. */}
+        {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   );

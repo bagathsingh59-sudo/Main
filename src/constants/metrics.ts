@@ -1,19 +1,19 @@
 import type { Metric, ProcessStep, WhyReason } from "@/types";
 
 export const HERO_STATS: Metric[] = [
-  { value: "850+", label: "Clients Protected" },
-  { value: "₹0", label: "Penalty Rate" },
-  { value: "15+", label: "Years of Practice" },
-  { value: "18", label: "Indian Cities" },
+  { value: "250+", label: "Clients served" },
+  { value: "₹0", label: "Penalty rate" },
+  { value: "25+", label: "Years of practice" },
+  { value: "3", label: "Cities served" },
 ];
 
 export const CLIENT_METRICS: Metric[] = [
-  { value: "₹4,200Cr+", label: "Tax savings delivered" },
-  { value: "99.8%", label: "On-time filing rate" },
-  { value: "42,000+", label: "Filings completed" },
-  { value: "120+", label: "Senior professionals" },
-  { value: "0", label: "Penalty incidents in 4 yrs" },
-  { value: "4.9/5", label: "Avg. client rating" },
+  { value: "250+", label: "Active clients" },
+  { value: "25+", label: "Years of practice" },
+  { value: "12,000+", label: "Filings completed" },
+  { value: "10+", label: "In-house professionals" },
+  { value: "0", label: "Penalty incidents" },
+  { value: "24h", label: "Query response SLA" },
 ];
 
 export const WHY_REASONS: WhyReason[] = [
@@ -21,31 +21,31 @@ export const WHY_REASONS: WhyReason[] = [
     id: "w1",
     icon: "ShieldCheck",
     title: "Zero-Penalty Guarantee",
-    description: "If a filing penalty occurs due to our oversight, we cover it. 0 incidents in the last 4 years.",
+    description: "If a filing penalty occurs due to our oversight, we cover it. Track record speaks for itself.",
   },
   {
     id: "w2",
     icon: "Users",
     title: "Dedicated Compliance Manager",
-    description: "Every client gets a named CA backed by a 4-eye review system. Not a ticket queue.",
+    description: "Every client gets a named consultant backed by a four-eye review system. Not a ticket queue.",
   },
   {
     id: "w3",
     icon: "Activity",
-    title: "Real-time Compliance Dashboard",
+    title: "Real-time Status Dashboard",
     description: "Live status of every filing, every deadline, every entity — visible to your CXO team 24/7.",
   },
   {
     id: "w4",
     icon: "Lock",
     title: "Bank-grade Data Security",
-    description: "ISO 27001:2022 certified. AES-256 encryption at rest, TLS 1.3 in transit, full audit trail.",
+    description: "AES-256 encryption at rest, TLS 1.3 in transit, full audit trail on every change.",
   },
   {
     id: "w5",
     icon: "Globe",
     title: "Pan-India Coverage",
-    description: "28 states. 8 UTs. Single point of accountability, regardless of where your business operates.",
+    description: "Headquartered in Kalaburagi, serving businesses across Karnataka, Telangana and beyond — single point of accountability.",
   },
   {
     id: "w6",

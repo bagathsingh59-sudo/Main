@@ -34,7 +34,7 @@ export const organizationSchema = (): JsonLdSchema => ({
   email: COMPANY.contact.email,
   foundingDate: String(COMPANY.foundedYear),
   slogan: COMPANY.tagline,
-  numberOfEmployees: { "@type": "QuantitativeValue", value: 120, unitText: "people" },
+  numberOfEmployees: { "@type": "QuantitativeValue", minValue: 10, unitText: "people" },
   knowsAbout: [
     "Tax compliance",
     "Payroll management",
@@ -62,14 +62,14 @@ export const organizationSchema = (): JsonLdSchema => ({
       telephone: COMPANY.contact.phone,
       contactType: "customer service",
       areaServed: "IN",
-      availableLanguage: ["en", "hi", "kn", "ta", "te"],
+      availableLanguage: ["en", "hi", "kn", "te"],
     },
     {
       "@type": "ContactPoint",
       telephone: COMPANY.contact.altPhone,
       contactType: "sales",
       areaServed: "IN",
-      availableLanguage: ["en", "hi"],
+      availableLanguage: ["en", "hi", "kn"],
     },
   ],
   openingHoursSpecification: {
@@ -79,12 +79,6 @@ export const organizationSchema = (): JsonLdSchema => ({
     closes: "19:00",
   },
   sameAs: Object.values(COMPANY.social),
-  award: ["Compliance Firm of the Year — South India, 2024", "Top 50 Tax Consulting Firms in India, 2024"],
-  hasCredential: [
-    { "@type": "EducationalOccupationalCredential", name: "ICAI Registered Firm", credentialCategory: "Professional licence" },
-    { "@type": "EducationalOccupationalCredential", name: "ISO 27001:2022", credentialCategory: "Information security certification" },
-    { "@type": "EducationalOccupationalCredential", name: "ISO 9001:2015", credentialCategory: "Quality management certification" },
-  ],
 });
 
 /* ────────────────────────────────────────────────

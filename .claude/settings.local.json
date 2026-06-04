@@ -13,7 +13,19 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(node scripts/process-logo.mjs)"
+      "Bash(node scripts/process-logo.mjs)",
+      "Bash(curl -sIL \"https://www.vaishnaviconsultant.com/sitemap.xml\" -m 15)",
+      "Bash(curl -sIL \"https://vaishnaviconsultant.com/sitemap.xml\" -m 15)",
+      "Bash(curl -sL \"https://www.vaishnaviconsultant.com/sitemap.xml\" -m 15)",
+      "Bash(curl -s -o /dev/null -w 'HTTP %{http_code}  |  ttfb=%{time_starttransfer}s  |  size=%{size_download}b  |  type=%{content_type}\\\\n' -A 'Mozilla/5.0 \\(compatible; Googlebot/2.1; +http://www.google.com/bot.html\\)' -m 15 https://www.vaishnaviconsultant.com/sitemap.xml)",
+      "Bash(curl -s -m 10 \"https://www.vaishnaviconsultant.com/robots.txt\")",
+      "Bash(curl -s -o /dev/null -w 'HTTP %{http_code}  |  location=%{redirect_url}\\\\n' -A 'Mozilla/5.0 \\(compatible; Googlebot/2.1; +http://www.google.com/bot.html\\)' -m 15 https://vaishnaviconsultant.com/sitemap.xml)",
+      "Bash(extract-text \"/Users/ankush/Downloads/ExistingReplace.docx\")",
+      "Bash(pandoc \"/Users/ankush/Downloads/ExistingReplace.docx\" -t plain)",
+      "Bash(SKILL_DIR=\"/Users/ankush/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/eb7601fe-1c86-47a5-9986-e0b32da88433/626cb949-9b11-432f-829d-7a5bb64db759/skills/docx\" *)",
+      "Bash(python3 -c ' *)",
+      "Read(//private/tmp/existing-replace-unpacked/**)",
+      "Bash(grep -n \"Vaishnavi Consultants\\\\|Consultants$\" src/app/opengraph-image.tsx)"
     ]
   }
 }

@@ -67,18 +67,18 @@ export function FounderMessage() {
             className="mt-6 space-y-5 text-[1rem] leading-[1.85] text-navy-900/70"
           >
             <p>
-              When we started Vaishnavi in 2009, every client we onboarded had the same quiet anxiety —
-              <em className="not-italic"> "What am I missing?"</em> A notice. A penalty. A small filing slip that
-              would surface six quarters later.
+              When we started Vaishnavi in Kalaburagi back in 2018, every client we onboarded had the same
+              quiet anxiety — <em className="not-italic">"What am I missing?"</em> A notice. A penalty. A
+              small filing slip that would surface six quarters later.
             </p>
             <p>
-              Fifteen years and 850+ clients on, that anxiety is exactly what we were built to remove.
-              Every dashboard, SLA, and four-eye review we operate is engineered to answer that question
-              before it ever has to be asked.
+              Drawing on more than 25 years of combined practitioner experience, that anxiety is exactly
+              what we were built to remove. Every dashboard, SLA, and four-eye review we operate is
+              engineered to answer that question before it ever has to be asked.
             </p>
             <p>
-              We do not chase volume. We chase trust. And we measure ourselves not by how many filings we send out,
-              but by how predictable, calm, and audit-ready our clients' compliance becomes.
+              We do not chase volume. We chase trust. And we measure ourselves not by how many filings we
+              send out, but by how predictable, calm, and audit-ready our 250+ clients' compliance becomes.
             </p>
           </motion.div>
           <motion.div

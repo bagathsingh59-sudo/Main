@@ -40,20 +40,21 @@ export function Hero() {
         <div className="text-center lg:text-left">
           <div className="hero-fade">
             <Badge dot tone="brand">
-              Trusted by 850+ Indian businesses
+              Trusted by 250+ Indian businesses · 25+ years of practice
             </Badge>
           </div>
 
           <h1 className="hero-fade hero-fade-d1 mt-6 font-display text-display-xl text-navy-900 text-balance">
             <em className="not-italic bg-gradient-brand bg-clip-text text-transparent">
-              EPF, ESI &amp; Tax
+              Payroll, EPF, ESIC &amp; GST
             </em>{" "}
-            compliance — on autopilot.
+            compliance, done right.
           </h1>
 
-          <p className="hero-fade hero-fade-d2 mx-auto mt-5 max-w-xl text-base leading-[1.75] text-navy-900/65 sm:text-lg lg:mx-0">
-            End-to-end Payroll, EPF, ESI, GST, TDS and Statutory Compliance for ambitious Indian businesses —
-            backed by 15+ years of practice and a zero-penalty track record across 850+ clients.
+          <p className="hero-fade hero-fade-d2 mx-auto mt-5 max-w-2xl text-base leading-[1.75] text-navy-900/65 sm:text-lg lg:mx-0">
+            Supporting businesses with accurate and professional Payroll, EPF, ESIC, GST and Labour Compliance
+            services that help minimise risk, maintain accuracy, reduce administrative burden, and ensure
+            complete compliance and operational peace of mind.
           </p>
 
           <div className="hero-fade hero-fade-d3 mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">

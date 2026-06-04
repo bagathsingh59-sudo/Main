@@ -12,7 +12,7 @@ import { getLogoDataUrl } from "@/utils/brandAsset";
  *   - The brand mark is embedded as a base64 PNG so the actual Vaishnavi logo
  *     appears in every social share preview.
  */
-export const alt = "Vaishnavi Consultants — Tax & Compliance Consulting";
+export const alt = "Vaishnavi Consultant — Payroll, EPF, ESIC, GST & Labour Compliance";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -82,7 +82,7 @@ export default async function OG() {
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: "-0.5px" }}>
-              Vaishnavi Consultants
+              Vaishnavi Consultant
             </div>
             <div
               style={{
@@ -118,17 +118,17 @@ export default async function OG() {
               color: "#ffffff",
             }}
           >
-            EPF, ESI &amp; Tax compliance — on autopilot.
+            Payroll, EPF, ESIC &amp; GST compliance, done right.
           </div>
           <div
             style={{
               fontSize: 22,
               color: "rgba(255,255,255,0.78)",
-              maxWidth: 860,
+              maxWidth: 880,
               marginTop: 18,
             }}
           >
-            850+ Indian businesses · 15+ years of practice · zero-penalty track record.
+            250+ Indian businesses · 25+ years of practice · zero-penalty track record.
           </div>
         </div>
 
@@ -143,10 +143,10 @@ export default async function OG() {
         >
           <div style={{ display: "flex", gap: 22 }}>
             {[
-              { v: "850+", l: "Clients" },
-              { v: "Rs 4,200Cr+", l: "Saved" },
+              { v: "250+", l: "Clients" },
+              { v: "25+", l: "Years" },
               { v: "0", l: "Penalties" },
-              { v: "18", l: "Cities" },
+              { v: "3", l: "Cities" },
             ].map((s) => (
               <div
                 key={s.l}
@@ -196,7 +196,7 @@ export default async function OG() {
                 marginTop: 4,
               }}
             >
-              ICAI 010742S · ISO 27001:2022
+              Kalaburagi · Karnataka · India
             </div>
           </div>
         </div>

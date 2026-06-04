@@ -11,11 +11,11 @@ import { clamp } from "@/utils/format";
 import { COMPLIANCE_CARDS, makeCardTexture, makeShieldTexture } from "./complianceCards";
 
 const PHASES = [
-  { label: "Phase 01", title: "Discovery & Compliance Audit", caption: "Health-check of PF, ESI, GST, TDS and statutory hygiene." },
-  { label: "Phase 02", title: "EPF & ESI Activation", caption: "Multi-state PF, ESI, PT and LWF — onboarded under one dashboard." },
+  { label: "Phase 01", title: "Discovery & Compliance Audit", caption: "Health-check of your Payroll, EPF, ESIC, GST and statutory hygiene." },
+  { label: "Phase 02", title: "EPF & ESIC Activation", caption: "Multi-state PF, ESIC, PT and LWF — onboarded under one dashboard." },
   { label: "Phase 03", title: "Tax & GST Integration", caption: "GST, TDS, advance tax — synchronised filings and reconciliations." },
   { label: "Phase 04", title: "Zero-Penalty Shield Deployed", caption: "Real-time alerts, four-eye reviews, board-ready MIS." },
-  { label: "Phase 05", title: "Business Fully Protected", caption: "Predictable compliance economics. Zero penalties, four years running." },
+  { label: "Phase 05", title: "Business Fully Protected", caption: "Predictable compliance economics. 250+ businesses already trust us." },
 ];
 
 /* ──────────────────────────────────────────────────────────
@@ -165,7 +165,7 @@ export function ComplianceShield() {
       id="shield-story"
       aria-label="The Vaishnavi Compliance Shield — evolves as you scroll"
       className="relative"
-      style={{ height: "420vh" }}
+      style={{ height: "560vh" }}
     >
       <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden bg-gradient-mist">
         {/* Decorative wash */}
@@ -207,10 +207,10 @@ export function ComplianceShield() {
           <AnimatePresence mode="wait">
             <motion.div
               key={phaseIdx}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               className="rounded-2xl border border-white/70 bg-white/65 px-6 py-5 shadow-soft backdrop-blur-md"
             >
               <div className="text-[0.74rem] font-bold uppercase tracking-[0.28em] text-teal-700 mb-2">

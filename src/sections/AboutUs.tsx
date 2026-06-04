@@ -9,8 +9,8 @@ import { fadeUp, slideInLeft, slideInRight, viewportOnce } from "@/animations/va
 import { COMPANY } from "@/constants/company";
 
 const HIGHLIGHTS = [
-  "ICAI-registered firm with Big-4 alumni leadership",
-  "ISO 27001:2022 certified data-security practices",
+  "Headquartered in Kalaburagi · serving clients pan-India",
+  "Led by chartered accountants with 25+ years of practice",
   "Dedicated relationship manager for every client",
   "24-hour SLA on all compliance queries",
   "Zero-penalty guarantee on timely filings",
@@ -46,8 +46,8 @@ export function AboutUs() {
               custom={2}
               className="absolute right-5 top-5 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-soft backdrop-blur-xl"
             >
-              <div className="text-xl font-extrabold text-navy-600">₹4,200Cr+</div>
-              <div className="text-[0.75rem] font-medium text-navy-900/55">Tax savings delivered</div>
+              <div className="text-xl font-extrabold text-navy-600">250+</div>
+              <div className="text-[0.75rem] font-medium text-navy-900/55">Businesses served</div>
             </motion.div>
             <motion.div
               variants={fadeUp}
@@ -61,7 +61,7 @@ export function AboutUs() {
               <div className="text-[0.75rem] font-medium text-navy-900/55">On-time filing rate</div>
             </motion.div>
             <div className="absolute bottom-5 right-5 rounded-full border border-white/40 bg-navy-900/40 px-3 py-1 text-[0.7rem] font-semibold text-white backdrop-blur-md">
-              Bengaluru · One BKC, Mumbai · Hyderabad
+              Kalaburagi (Gulbarga) · Bidar · Hyderabad
             </div>
           </div>
 
@@ -76,14 +76,15 @@ export function AboutUs() {
             eyebrow={`About ${COMPANY.name}`}
             title={
               <>
-                Fifteen years of <em className="not-italic text-navy-600">trusted compliance</em>.
+                25 years of <em className="not-italic text-navy-600">trust.</em> Countless businesses served.
               </>
             }
-            description={`Founded in ${COMPANY.foundedYear}, Vaishnavi has grown from a Bengaluru boutique CA practice into one of India's most trusted compliance consultancies — partnering with startups, mid-market, and Fortune 500 subsidiaries.`}
+            description={`Founded in ${COMPANY.foundedYear} in Kalaburagi (Gulbarga), Vaishnavi is a digital-first compliance practice serving 250+ businesses across Karnataka, Telangana and the rest of India.`}
           />
           <p className="mt-6 text-[0.95rem] leading-[1.85] text-navy-900/65">
-            Our 120+ chartered accountants, tax counsel, and compliance technologists form your compliance command centre —
-            proactively managing risk before it becomes a liability.
+            Delivering expert Payroll, EPF, ESIC, GST, TDS and Statutory Compliance services with the
+            accuracy, consistency and professionalism that businesses depend on — backed by 25+ years of
+            combined practitioner experience.
           </p>
           <ul className="mt-7 space-y-3">
             {HIGHLIGHTS.map((h, i) => (

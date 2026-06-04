@@ -16,11 +16,15 @@ export function Footer() {
             <p className="mt-5 max-w-sm text-[0.92rem] leading-[1.75] text-navy-100/55">
               {COMPANY.description}
             </p>
-            <div className="mt-7 flex flex-wrap items-center gap-4 text-[0.82rem] text-navy-100/55">
-              <span>{COMPANY.registration.icai}</span>
-              <span className="h-1 w-1 rounded-full bg-navy-100/30" />
-              <span>{COMPANY.registration.iso}</span>
-            </div>
+            {(COMPANY.registration.icai || COMPANY.registration.iso) && (
+              <div className="mt-7 flex flex-wrap items-center gap-4 text-[0.82rem] text-navy-100/55">
+                {COMPANY.registration.icai && <span>{COMPANY.registration.icai}</span>}
+                {COMPANY.registration.icai && COMPANY.registration.iso && (
+                  <span className="h-1 w-1 rounded-full bg-navy-100/30" />
+                )}
+                {COMPANY.registration.iso && <span>{COMPANY.registration.iso}</span>}
+              </div>
+            )}
           </div>
 
           {Object.entries(FOOTER_NAV).map(([heading, links]) => (
@@ -47,8 +51,12 @@ export function Footer() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.78rem] text-navy-100/45">
-            <span>{COMPANY.registration.cin}</span>
-            <span className="hidden md:inline-block h-1 w-1 rounded-full bg-navy-100/30" />
+            {COMPANY.registration.cin && (
+              <>
+                <span>{COMPANY.registration.cin}</span>
+                <span className="hidden md:inline-block h-1 w-1 rounded-full bg-navy-100/30" />
+              </>
+            )}
             <a href={`mailto:${COMPANY.contact.email}`} className="hover:text-white transition-colors">
               {COMPANY.contact.email}
             </a>

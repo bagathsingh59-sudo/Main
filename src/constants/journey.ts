@@ -1,44 +1,58 @@
 import type { JourneyEvent } from "@/types";
 
+/**
+ * Year-by-year milestones from the firm's founding in Kalaburagi (2018) through
+ * the present digital expansion. Practitioner experience predates the firm —
+ * we surface that in marketing copy ("25+ years of practice") but the timeline
+ * tracks the registered firm's history.
+ */
 export const JOURNEY: JourneyEvent[] = [
   {
-    year: "2009",
-    title: "Founded in Bengaluru",
-    description: "Started as a 3-person CA practice on Lavelle Road serving 12 SMEs.",
-  },
-  {
-    year: "2012",
-    title: "First 100 Clients",
-    description: "Crossed 100 active retainer clients and expanded into payroll & labour law.",
-  },
-  {
-    year: "2015",
-    title: "Multi-State Expansion",
-    description: "Opened Hyderabad & Chennai offices; began servicing 14-state PF/ESI mandates.",
-  },
-  {
-    year: "2017",
-    title: "GST Migration Specialists",
-    description: "Migrated 320+ clients from VAT/Service Tax to GST in 90 days. Zero penalties recorded.",
+    year: "2018",
+    title: "Founded in Kalaburagi",
+    description:
+      "Started in Kalaburagi (Gulbarga) with a focus on Payroll, EPF and ESIC compliance for local SMEs.",
   },
   {
     year: "2019",
-    title: "10th Anniversary · Mumbai Office",
-    description: "Crossed 500 clients, 60 team members. Mumbai BKC office opened.",
+    title: "First 50 Clients",
+    description:
+      "Onboarded 50 retainer clients across manufacturing, retail and education sectors.",
+  },
+  {
+    year: "2020",
+    title: "Pan-Karnataka Reach",
+    description:
+      "Extended servicing to Bidar and Yadgir clusters; navigated the GST and lockdown filing waves end-to-end for every client.",
   },
   {
     year: "2021",
-    title: "Compliance Tech Platform",
-    description: "Launched the Vaishnavi Dashboard — real-time compliance for every client.",
+    title: "Cross-Border into Telangana",
+    description:
+      "Opened service coverage into Hyderabad; began handling multi-state PF, ESIC and PT for distributed teams.",
+  },
+  {
+    year: "2022",
+    title: "Digital Compliance Workflows",
+    description:
+      "Moved every client off spreadsheets onto an internal dashboard for real-time filing status.",
   },
   {
     year: "2023",
-    title: "ISO 27001:2022 Certified",
-    description: "Full information-security certification; first compliance firm in S. India audited under the 2022 revision.",
+    title: "150+ Clients Milestone",
+    description:
+      "Crossed 150 active clients with zero penalty incidents for the year. Added Income Tax Advisory practice.",
   },
   {
-    year: "2025",
-    title: "850+ Clients · 18 Cities",
-    description: "Scaled to 120+ professionals and crossed ₹4,200Cr in tax savings delivered to clients.",
+    year: "2024",
+    title: "Virtual CFO Practice Launched",
+    description:
+      "Introduced fractional CFO services for growth-stage businesses across Karnataka and Telangana.",
+  },
+  {
+    year: "2026",
+    title: "Digital-First Expansion",
+    description:
+      "Crossed 250+ active clients across 3 cities. Launched online portal to begin serving businesses pan-India.",
   },
 ];

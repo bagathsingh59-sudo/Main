@@ -31,23 +31,23 @@ export default function HomePage() {
       {/* Scroll-driven 3D shield — untouched */}
       <ShieldStory />
 
-      {/* Visual break #1 — pan-India presence banner */}
+      {/* Visual break #1 — service footprint banner */}
       <ImageBanner
         src="https://images.unsplash.com/photo-1577086664693-894d8405334a?w=1800&q=80&auto=format&fit=crop"
-        alt="Compliance across India"
-        eyebrow="Pan-India practice"
+        alt="Compliance services across Karnataka, Telangana and beyond"
+        eyebrow="Headquartered in Kalaburagi"
         title={
           <>
-            Backed by <em className="not-italic">850+ businesses</em>,<br className="hidden sm:block" /> across
-            18 cities.
+            Backed by <em className="not-italic">250+ businesses</em>,<br className="hidden sm:block" /> across
+            3 cities.
           </>
         }
-        description="From Bengaluru to Mumbai, Hyderabad to Pune — one accountable team for every state of your operations."
+        description="From Kalaburagi (Gulbarga) and Bidar to Hyderabad — one accountable team for every filing your business needs."
         stats={[
-          { value: "850+", label: "Clients" },
-          { value: "18", label: "Cities" },
-          { value: "₹4,200Cr+", label: "Saved" },
-          { value: "0", label: "Penalties · 4 yrs" },
+          { value: "250+", label: "Clients" },
+          { value: "3", label: "Cities served" },
+          { value: "25+", label: "Years practice" },
+          { value: "0", label: "Penalties" },
         ]}
         height="md"
         overlay="navy"
@@ -72,8 +72,8 @@ export default function HomePage() {
         description="Real-time PF, ESI, GST, TDS status across every entity, every state — visible to your CXO team 24×7."
         stats={[
           { value: "99.8%", label: "On-time rate" },
-          { value: "42K+", label: "Filings done" },
-          { value: "4.9/5", label: "Client rating" },
+          { value: "12K+", label: "Filings done" },
+          { value: "250+", label: "Active clients" },
         ]}
         height="md"
         overlay="brand"

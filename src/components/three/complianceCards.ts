@@ -231,12 +231,12 @@ export function makeShieldTexture(): THREE.CanvasTexture {
   ctx.font = "700 13px system-ui, -apple-system, 'Segoe UI', sans-serif";
   ctx.textAlign = "left";
   ctx.textBaseline = "middle";
-  ctx.fillText("VAISHNAVI CONSULTANTS", 28, 36);
+  ctx.fillText("VAISHNAVI CONSULTANT", 28, 36);
 
   ctx.fillStyle = "#0891b2";
   ctx.textAlign = "right";
   ctx.font = "700 11px system-ui, -apple-system, 'Segoe UI', sans-serif";
-  ctx.fillText("ISO 27001:2022", w - 28, 36);
+  ctx.fillText("KALABURAGI · KARNATAKA", w - 28, 36);
 
   // Divider
   ctx.strokeStyle = "rgba(11,31,58,0.08)";
@@ -288,7 +288,7 @@ export function makeShieldTexture(): THREE.CanvasTexture {
   ctx.fill();
   ctx.fillStyle = "#0891b2";
   ctx.font = "700 11px system-ui, -apple-system, 'Segoe UI', sans-serif";
-  ctx.fillText("850+ businesses · 15+ years", cx, 337);
+  ctx.fillText("250+ businesses · 25+ years", cx, 337);
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.anisotropy = 4;

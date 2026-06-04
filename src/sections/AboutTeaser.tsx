@@ -15,11 +15,12 @@ export function AboutTeaser() {
         <motion.div variants={slideInLeft} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <Badge tone="brand">About Vaishnavi</Badge>
           <h2 className="mt-5 font-display text-display-lg text-navy-900 text-balance">
-            15 years of <em className="not-italic text-navy-600">trusted compliance</em> — quietly, consistently.
+            25 years of <em className="not-italic text-navy-600">trust.</em> Countless businesses served.
           </h2>
           <p className="mt-5 text-[1rem] leading-[1.85] text-navy-900/65">
-            From a 3-person CA practice in Bengaluru to India's most trusted compliance partner. 120+ professionals.
-            18 cities. Zero penalties, four years running.
+            Delivering expert Payroll, EPF, ESIC, GST, TDS and Statutory Compliance services with the
+            accuracy, consistency and professionalism that businesses depend on. Headquartered in
+            Kalaburagi, serving clients across Karnataka, Telangana and pan-India.
           </p>
 
           <motion.div
@@ -31,8 +32,8 @@ export function AboutTeaser() {
             className="mt-8 grid grid-cols-3 gap-4"
           >
             {[
-              { value: "850+", label: "Clients" },
-              { value: "₹4,200Cr+", label: "Saved" },
+              { value: "250+", label: "Clients" },
+              { value: "25+", label: "Yrs practice" },
               { value: "0", label: "Penalties" },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl border border-white/70 bg-white/65 px-4 py-4 text-center shadow-soft backdrop-blur-xl">

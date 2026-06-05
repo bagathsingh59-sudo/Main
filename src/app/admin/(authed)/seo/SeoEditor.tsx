@@ -102,7 +102,7 @@ export function SeoEditor() {
             <Textarea
               value={seo.defaultDescription}
               onChange={(e) => patchSeo({ defaultDescription: e.target.value })}
-              maxLength={200}
+              maxLength={320}
               rows={2}
             />
           </Field>
@@ -152,22 +152,22 @@ export function SeoEditor() {
           <div className="space-y-4">
             <Field
               label="Page title"
-              hint="50-60 chars ideal. This is the blue link Google shows."
+              hint="50-60 chars ideal for Google snippet. Up to 80 saved for OG/social previews."
             >
               <Input
                 value={currentPage.title}
                 onChange={(e) => patchPage(activeTab, { title: e.target.value })}
-                maxLength={70}
+                maxLength={80}
               />
             </Field>
             <Field
               label="Meta description"
-              hint="120-160 chars. The grey snippet under the title in search results."
+              hint="120-160 chars ideal for Google snippet. Up to 320 saved (extra used by social cards & rich results)."
             >
               <Textarea
                 value={currentPage.description}
                 onChange={(e) => patchPage(activeTab, { description: e.target.value })}
-                maxLength={200}
+                maxLength={320}
                 rows={3}
               />
             </Field>

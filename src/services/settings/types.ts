@@ -76,8 +76,13 @@ export const maintenanceSchema = z.object({
 /* ── SEO ─────────────────────────────────────────────────── */
 
 export const pageSeoSchema = z.object({
-  title: z.string().max(70),
-  description: z.string().max(200),
+  // Google typically truncates titles around 60 chars but accepts longer
+  // for OG/social previews. 80 gives room without becoming spam.
+  title: z.string().max(80),
+  // Google's snippet shows ~155 chars on desktop, but some contexts
+  // (FAQ rich results, news rich cards) use up to ~320. The longer
+  // version is also reused for OG description which can be longer.
+  description: z.string().max(320),
   // Per-page list can hold up to 50 keywords (long-tail + local-geo
   // mixes can run that deep before becoming meta-spam).
   keywords: z.array(z.string().min(1).max(60)).max(50),
@@ -87,7 +92,7 @@ export const pageSeoSchema = z.object({
 export const seoSchema = z.object({
   siteName: z.string().max(60),
   titleTemplate: z.string().max(80),
-  defaultDescription: z.string().max(200),
+  defaultDescription: z.string().max(320),
   // Site-wide defaults cap at 100 — bigger lists hit diminishing returns
   // and risk being treated as keyword stuffing.
   defaultKeywords: z.array(z.string().min(1).max(60)).max(100),

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { MainLayout } from "@/layouts/MainLayout";
 import { Hero } from "@/sections/Hero";
 import { ShieldStory } from "@/sections/ShieldStory";
@@ -8,7 +9,12 @@ import { ImageBanner } from "@/components/shared/ImageBanner";
 import { CTABanner } from "@/sections/CTABanner";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
+import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { SERVICES } from "@/constants/services";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadataFromSettings("home", "/");
+}
 
 export default function HomePage() {
   return (

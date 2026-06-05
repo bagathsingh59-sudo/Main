@@ -9,18 +9,15 @@ import { CaseStudies } from "@/sections/CaseStudies";
 import { CTABanner } from "@/sections/CTABanner";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
-import { buildPageMetadata } from "@/utils/seo";
+import { buildPageMetadataFromSettings } from "@/utils/seo";
 
 const PAGE_TITLE = "Industries — SaaS, Manufacturing, Healthcare, E-Com & More";
 const PAGE_DESC =
   "Compliance expertise across the sectors we serve. Industry-specialist teams, live case studies, and the Vaishnavi Dashboard in action.";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: PAGE_TITLE,
-  description: PAGE_DESC,
-  path: "/industries",
-  keywords: ["SaaS compliance India", "manufacturing payroll", "healthcare GST", "ecommerce TCS"],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadataFromSettings("industries", "/industries");
+}
 
 const DOTS = [
   { id: "industries", label: "Industries" },

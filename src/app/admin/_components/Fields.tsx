@@ -127,7 +127,7 @@ export function SaveBar({
   onReset: () => void;
 }) {
   return (
-    <div className="sticky bottom-4 mt-6 flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-lg shadow-slate-200/50">
+    <div className="sticky bottom-4 mt-6 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-lg shadow-slate-200/50 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
       <div className="text-[0.85rem]">
         {status.kind === "ok" && <span className="font-semibold text-emerald-600">✓ {status.message ?? "Saved"}</span>}
         {status.kind === "error" && <span className="font-semibold text-rose-600">✕ {status.message ?? "Save failed"}</span>}
@@ -140,7 +140,7 @@ export function SaveBar({
           type="button"
           onClick={onReset}
           disabled={!dirty || saving}
-          className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[0.85rem] font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-40"
+          className="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-2 text-[0.85rem] font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-40 sm:flex-none"
         >
           Discard
         </button>
@@ -148,7 +148,7 @@ export function SaveBar({
           type="button"
           onClick={onSave}
           disabled={!dirty || saving}
-          className="rounded-lg bg-navy-600 px-4 py-2 text-[0.85rem] font-semibold text-white hover:bg-navy-700 disabled:opacity-40"
+          className="flex-1 rounded-lg bg-navy-600 px-4 py-2 text-[0.85rem] font-semibold text-white hover:bg-navy-700 disabled:opacity-40 sm:flex-none"
         >
           {saving ? "Saving…" : "Save changes"}
         </button>

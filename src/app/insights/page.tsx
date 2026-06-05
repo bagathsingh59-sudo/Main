@@ -9,19 +9,16 @@ import { FAQ } from "@/sections/FAQ";
 import { CTABanner } from "@/sections/CTABanner";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, faqSchema, webPageSchema } from "@/utils/jsonLd";
-import { buildPageMetadata } from "@/utils/seo";
+import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { FAQS } from "@/constants/faq";
 
 const PAGE_TITLE = "Insights — Compliance Briefings, Updates & FAQs";
 const PAGE_DESC =
   "Curated regulatory updates, in-depth compliance briefings, and answers to the questions CFOs ask first.";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: PAGE_TITLE,
-  description: PAGE_DESC,
-  path: "/insights",
-  keywords: ["GST updates", "EPF circular", "ESI notification", "compliance blog India"],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadataFromSettings("insights", "/insights");
+}
 
 const DOTS = [
   { id: "resources", label: "Briefings" },

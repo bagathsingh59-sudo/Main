@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getLogoDataUrl } from "@/utils/brandAsset";
+import { getSiteSettings } from "@/services/settings";
 
 /**
  * Dynamic favicon — 32x32 PNG that wraps the user-supplied brand logo
@@ -10,7 +11,11 @@ export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
 export default async function Icon() {
-  const logo = await getLogoDataUrl(64);
+  const settings = await getSiteSettings();
+  // Admin-uploaded favicon takes precedence; falls back to bundled logo.
+  const logo = settings.branding.faviconUrl?.trim()
+    ? settings.branding.faviconUrl
+    : await getLogoDataUrl(64);
 
   return new ImageResponse(
     (

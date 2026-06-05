@@ -10,19 +10,16 @@ import { ComplianceCalculator } from "@/sections/ComplianceCalculator";
 import { CTABanner } from "@/sections/CTABanner";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
-import { buildPageMetadata } from "@/utils/seo";
+import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { SERVICES } from "@/constants/services";
 
 const PAGE_TITLE = "Services — EPF, ESI, GST, Payroll & Tax Compliance";
 const PAGE_DESC =
   "End-to-end Payroll, EPF, ESI, GST, TDS, Labour Law and Virtual CFO services for Indian businesses. Eight modules, one accountable team.";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: PAGE_TITLE,
-  description: PAGE_DESC,
-  path: "/services",
-  keywords: ["payroll outsourcing India", "EPF return filing", "ESI half-yearly return", "GSTR-1 GSTR-3B filing"],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadataFromSettings("services", "/services");
+}
 
 const DOTS = [
   { id: "services", label: "Services" },

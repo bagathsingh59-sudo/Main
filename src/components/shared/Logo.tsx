@@ -10,6 +10,8 @@ interface LogoProps {
   withWordmark?: boolean;
   /** Visual size of the mark in px (height). Defaults to 38. */
   size?: number;
+  /** Admin-uploaded logo URL. Falls back to the bundled brand asset. */
+  overrideSrc?: string;
 }
 
 /**
@@ -19,8 +21,16 @@ interface LogoProps {
  * On dark surfaces a soft white pill is added behind the mark so the navy
  * elements of the logo do not blend into the background.
  */
-export function Logo({ className, tone = "light", withWordmark = true, size = 38 }: LogoProps) {
+export function Logo({
+  className,
+  tone = "light",
+  withWordmark = true,
+  size = 38,
+  overrideSrc,
+}: LogoProps) {
   const isDark = tone === "dark";
+  const src = overrideSrc && overrideSrc.trim().length > 0 ? overrideSrc : "/brand/logo.png";
+  const isExternal = src.startsWith("http");
 
   return (
     <Link
@@ -35,14 +45,19 @@ export function Logo({ className, tone = "light", withWordmark = true, size = 38
         )}
         style={{ width: size, height: size }}
       >
-        <Image
-          src="/brand/logo.png"
-          alt=""
-          width={size * 2}
-          height={size * 2}
-          priority
-          className="h-full w-auto object-contain"
-        />
+        {isExternal ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={src} alt="" className="h-full w-auto object-contain" />
+        ) : (
+          <Image
+            src={src}
+            alt=""
+            width={size * 2}
+            height={size * 2}
+            priority
+            className="h-full w-auto object-contain"
+          />
+        )}
       </span>
       {withWordmark && (
         <span

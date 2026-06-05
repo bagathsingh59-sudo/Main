@@ -9,7 +9,17 @@ import { Button } from "@/components/ui/Button";
 import { Logo } from "./Logo";
 import { cn } from "@/utils/cn";
 
-export function Navbar() {
+interface NavbarProps {
+  /** Admin-editable nav links. Falls back to NAV_LINKS constant. */
+  links?: readonly { label: string; href: string; visible?: boolean }[];
+  /** Admin-uploaded logo URL. Falls back to bundled brand asset. */
+  logoUrl?: string;
+}
+
+export function Navbar({ links, logoUrl }: NavbarProps = {}) {
+  const source: ReadonlyArray<{ label: string; href: string; visible?: boolean }> =
+    links && links.length > 0 ? links : NAV_LINKS;
+  const navLinks = source.filter((l) => l.visible !== false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -47,10 +57,10 @@ export function Navbar() {
       )}
     >
       <nav className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Primary">
-        <Logo />
+        <Logo overrideSrc={logoUrl} />
 
         <div className="hidden lg:flex items-center gap-1">
-          {NAV_LINKS.map((l) => {
+          {navLinks.map((l) => {
             const active = isActive(l.href);
             return (
               <Link
@@ -103,7 +113,7 @@ export function Navbar() {
             className="lg:hidden mx-4 mb-4 rounded-2xl border border-white/70 bg-white/95 backdrop-blur-xl shadow-elevated"
           >
             <ul className="p-3">
-              {NAV_LINKS.map((l) => {
+              {navLinks.map((l) => {
                 const active = isActive(l.href);
                 return (
                   <li key={l.href}>

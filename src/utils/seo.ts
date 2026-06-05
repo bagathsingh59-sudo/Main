@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { COMPANY } from "@/constants/company";
+import { getSiteSettings, type SeoPageKey } from "@/services/settings";
 import { SITE_URL } from "./jsonLd";
 
 export { SITE_URL } from "./jsonLd";
@@ -129,5 +130,50 @@ export function buildPageMetadata({ title, description, path, keywords, imageAlt
       site: "@vaishnaviconsult",
     },
     other: imageAlt ? { "og:image:alt": imageAlt } : undefined,
+  };
+}
+
+/**
+ * Build metadata for a page driven by admin-editable settings. Each page
+ * calls this from its `generateMetadata()` function. Static fallbacks in
+ * `buildPageMetadata` remain available for pages that don't (yet) have
+ * an entry under `seo.pages`.
+ */
+export async function buildPageMetadataFromSettings(
+  pageKey: SeoPageKey,
+  path: string,
+): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const { seo } = settings;
+  const page = seo.pages[pageKey];
+
+  const title = page.title || seo.titleTemplate.replace("%s", pageKey);
+  const description = page.description || seo.defaultDescription;
+  const allKeywords = [...seo.defaultKeywords, ...page.keywords];
+  const ogImage = page.ogImage || seo.defaultOgImage;
+  const url = `${SITE_URL}${path}`;
+  const titleWithSite = title.includes(seo.siteName) ? title : `${title} · ${seo.siteName}`;
+
+  return {
+    title,
+    description,
+    keywords: allKeywords,
+    alternates: { canonical: path, languages: { "en-IN": path } },
+    openGraph: {
+      type: "website",
+      url,
+      siteName: seo.siteName,
+      title: titleWithSite,
+      description,
+      locale: "en_IN",
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630 }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: titleWithSite,
+      description,
+      site: seo.twitterHandle || "@vaishnaviconsult",
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
   };
 }

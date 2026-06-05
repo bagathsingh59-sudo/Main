@@ -7,19 +7,16 @@ import { BookConsultation } from "@/sections/BookConsultation";
 import { Contact } from "@/sections/Contact";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
-import { buildPageMetadata } from "@/utils/seo";
+import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { getSiteSettings } from "@/services/settings";
 
 const PAGE_TITLE = "Contact — Book a Free 45-Minute Consultation";
 const PAGE_DESC =
   "Reach Vaishnavi Consultants — head office in Bengaluru, with five branches across India. Senior CA replies within one working day.";
 
-export const metadata: Metadata = buildPageMetadata({
-  title: PAGE_TITLE,
-  description: PAGE_DESC,
-  path: "/contact",
-  keywords: ["compliance consultant Bengaluru", "tax CA contact", "EPF consultant phone"],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return buildPageMetadataFromSettings("contact", "/contact");
+}
 
 const DOTS = [
   { id: "book", label: "Book" },

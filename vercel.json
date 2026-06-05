@@ -5,6 +5,22 @@
     "src/app/api/contact/route.ts": {
       "memory": 512,
       "maxDuration": 10
+    },
+    "src/app/api/approve-reply/route.ts": {
+      "memory": 512,
+      "maxDuration": 10
+    },
+    "src/app/api/admin/login/route.ts": {
+      "memory": 256,
+      "maxDuration": 5
+    },
+    "src/app/api/admin/logout/route.ts": {
+      "memory": 256,
+      "maxDuration": 5
+    },
+    "src/app/api/admin/settings/route.ts": {
+      "memory": 256,
+      "maxDuration": 10
     }
   },
   "headers": [

@@ -1,22 +1,27 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionLayout } from "@/layouts/SectionLayout";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { COMPANY } from "@/constants/company";
 import { fadeUp, viewportOnce } from "@/animations/variants";
-import { submitBooking, type BookingInput } from "@/services/booking";
-import { APIError } from "@/services/api";
 
-const SLOTS_BY_DAY = [
-  { day: "Mon", slots: ["10:00", "11:30", "14:30", "16:00"] },
-  { day: "Tue", slots: ["10:00", "12:00", "15:00", "17:00"] },
-  { day: "Wed", slots: ["09:30", "11:00", "14:00", "16:30"] },
-  { day: "Thu", slots: ["10:30", "13:00", "15:30", "17:00"] },
-  { day: "Fri", slots: ["10:00", "11:30", "14:00", "16:00"] },
-];
+/**
+ * Bookings are powered by Google Appointment Schedules — it gives us:
+ *   • Real-time availability tied to harihar@'s calendar
+ *   • Atomic conflict prevention (no double-bookings)
+ *   • Automatic Google Meet links + email invites
+ *   • 24-hour and 1-hour reminders out of the box
+ *   • Reschedule & cancel links the client controls
+ *
+ * Configure `NEXT_PUBLIC_BOOKING_URL` to the Google booking page URL
+ * (looks like `https://calendar.app.google/<id>`). When unset, the CTA
+ * falls back to a phone-or-email message so the page never feels broken
+ * in preview / dev deployments.
+ */
+const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL;
 
 const PROMISES = [
   "45-minute call with a senior partner",
@@ -25,40 +30,13 @@ const PROMISES = [
   "No sales pitch. No follow-up unless you ask.",
 ];
 
-type Day = BookingInput["day"];
+const HOW_IT_WORKS = [
+  { step: "1", title: "Pick a slot", detail: "Live calendar — only times we're actually free show up." },
+  { step: "2", title: "Auto-confirmed", detail: "Google Meet invite hits your inbox the moment you click confirm." },
+  { step: "3", title: "We do the prep", detail: "A short questionnaire arrives so the call hits the ground running." },
+];
 
 export function BookConsultation() {
-  const [day, setDay] = useState<Day>(SLOTS_BY_DAY[0].day as Day);
-  const [slot, setSlot] = useState<string | null>(null);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [companyRole, setCompanyRole] = useState("");
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error" | "throttled">("idle");
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  const currentSlots = SLOTS_BY_DAY.find((d) => d.day === day)?.slots ?? [];
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!slot) return;
-    setStatus("submitting");
-    setErrorMsg(null);
-    try {
-      await submitBooking({ fullName, email, companyRole, day, time: slot });
-      setStatus("success");
-    } catch (err) {
-      if (err instanceof APIError && err.status === 429) {
-        setStatus("throttled");
-        setErrorMsg(err.message);
-      } else {
-        setStatus("error");
-        setErrorMsg(err instanceof Error ? err.message : "Couldn't reserve slot");
-      }
-    }
-  };
-
-  const submitted = status === "success";
-
   return (
     <SectionLayout id="book" className="bg-gradient-to-br from-navy-900 to-navy-800 text-white" tone="dark">
       <div aria-hidden="true" className="absolute inset-0 -z-0 opacity-20 bg-grid-light [background-size:48px_48px]" />
@@ -72,125 +50,77 @@ export function BookConsultation() {
               <br /> Worth ₹15,000.
             </>
           }
-          description="Pick a slot that suits you. You'll get a calendar invite and a short questionnaire so we make every minute count."
+          description="Pick a slot from our live calendar — Google handles the invite, the Meet link, and the reminders. You just show up."
         />
 
         <div className="mt-12 grid gap-7 lg:grid-cols-[1.1fr_1fr]">
+          {/* ─── primary CTA card ─── */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
-            className="rounded-3xl border border-white/10 bg-white/[0.05] p-7 backdrop-blur-md"
+            className="rounded-3xl border border-white/10 bg-white/[0.05] p-7 backdrop-blur-md sm:p-9"
           >
             <div className="text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-teal-300">
-              Step 1 — pick a day
+              How it works
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {SLOTS_BY_DAY.map((d) => (
-                <button
-                  key={d.day}
-                  type="button"
-                  onClick={() => {
-                    setDay(d.day as Day);
-                    setSlot(null);
-                  }}
-                  className={`rounded-xl px-4 py-2.5 text-[0.85rem] font-semibold transition-all ${
-                    day === d.day
-                      ? "bg-gradient-brand text-white shadow-glow"
-                      : "bg-white/5 text-navy-100/70 hover:bg-white/10"
-                  }`}
-                >
-                  {d.day}
-                </button>
+            <ol className="mt-5 space-y-4">
+              {HOW_IT_WORKS.map((s) => (
+                <li key={s.step} className="flex gap-4">
+                  <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-brand text-[0.85rem] font-bold text-white shadow-glow">
+                    {s.step}
+                  </span>
+                  <div>
+                    <div className="text-[0.98rem] font-bold text-white">{s.title}</div>
+                    <div className="mt-0.5 text-[0.88rem] leading-[1.55] text-navy-100/70">{s.detail}</div>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ol>
 
-            <div className="mt-7 text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-teal-300">
-              Step 2 — pick a time (IST)
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-              {currentSlots.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setSlot(s)}
-                  className={`rounded-xl border px-3 py-3 text-[0.9rem] font-semibold transition-all ${
-                    slot === s
-                      ? "border-transparent bg-gradient-brand text-white shadow-glow"
-                      : "border-white/10 bg-white/5 text-navy-100/70 hover:bg-white/10"
-                  }`}
+            <div className="mt-8">
+              {BOOKING_URL ? (
+                <Button
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="white"
+                  size="lg"
+                  className="w-full"
                 >
-                  {s}
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-7 text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-teal-300">
-              Step 3 — confirm
-            </div>
-            <form onSubmit={onSubmit} className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <input
-                className="dark-input"
-                placeholder="Full name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                disabled={submitted}
-              />
-              <input
-                className="dark-input"
-                placeholder="Work email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={submitted}
-              />
-              <input
-                className="dark-input sm:col-span-2"
-                placeholder="Company · Role"
-                value={companyRole}
-                onChange={(e) => setCompanyRole(e.target.value)}
-                disabled={submitted}
-              />
-              <Button
-                type="submit"
-                variant="white"
-                className="sm:col-span-2 w-full"
-                disabled={!slot || status === "submitting" || submitted}
-              >
-                {submitted
-                  ? "✓ Slot reserved — we'll send a calendar invite"
-                  : status === "submitting"
-                    ? "Reserving…"
-                    : slot
-                      ? `Reserve ${day} · ${slot} IST`
-                      : "Pick a slot first"}
-              </Button>
-              {status === "throttled" && errorMsg && (
-                <p className="sm:col-span-2 rounded-xl border border-amber-200/40 bg-amber-100/10 px-4 py-2.5 text-center text-[0.8rem] text-amber-100">
-                  {errorMsg}
-                </p>
+                  Open the booking calendar →
+                </Button>
+              ) : (
+                <div className="rounded-2xl border border-white/15 bg-white/[0.04] p-5 text-[0.9rem] text-navy-100/80">
+                  Booking calendar is being set up. In the meantime, reach us on{" "}
+                  <a href={`tel:${COMPANY.contact.phone.replace(/\s/g, "")}`} className="font-semibold text-teal-300 hover:text-teal-200">
+                    {COMPANY.contact.phone}
+                  </a>{" "}
+                  or{" "}
+                  <a href={`mailto:${COMPANY.contact.email}`} className="font-semibold text-teal-300 hover:text-teal-200">
+                    {COMPANY.contact.email}
+                  </a>
+                  .
+                </div>
               )}
-              {status === "error" && (
-                <p className="sm:col-span-2 text-center text-[0.8rem] text-rose-300">
-                  {errorMsg ?? "Couldn't reserve — please email connect@vaishnaviconsultant.com"}
-                </p>
-              )}
-            </form>
+              <p className="mt-3 text-center text-[0.78rem] text-navy-100/55">
+                Opens Google Calendar · {COMPANY.contact.hours}
+              </p>
+            </div>
           </motion.div>
 
+          {/* ─── what you'll get card ─── */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
             custom={1}
-            className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-md"
+            className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur-md sm:p-9"
           >
             <div className="text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-teal-300">
-              What you'll get
+              What you&apos;ll get
             </div>
             <ul className="mt-4 space-y-3">
               {PROMISES.map((p) => (
@@ -211,35 +141,16 @@ export function BookConsultation() {
               </div>
               <ul className="mt-3 space-y-2.5 text-[0.92rem] text-white/85">
                 <li className="flex items-center gap-3">
-                  <Icon name="Phone" size={18} className="text-teal-300" /> +91 80 4123 8800
+                  <Icon name="Phone" size={18} className="text-teal-300" /> {COMPANY.contact.phone}
                 </li>
                 <li className="flex items-center gap-3">
-                  <Icon name="Mail" size={18} className="text-teal-300" /> connect@vaishnaviconsultant.com
+                  <Icon name="Mail" size={18} className="text-teal-300" /> {COMPANY.contact.email}
                 </li>
               </ul>
             </div>
           </motion.div>
         </div>
       </div>
-
-      <style jsx>{`
-        :global(.dark-input) {
-          height: 46px;
-          border-radius: 12px;
-          padding: 0 14px;
-          background: rgba(255, 255, 255, 0.06);
-          border: 1.5px solid rgba(255, 255, 255, 0.1);
-          color: #fff;
-          font-size: 0.92rem;
-          outline: none;
-        }
-        :global(.dark-input::placeholder) {
-          color: rgba(255, 255, 255, 0.4);
-        }
-        :global(.dark-input:focus) {
-          border-color: #22d3ee;
-        }
-      `}</style>
     </SectionLayout>
   );
 }

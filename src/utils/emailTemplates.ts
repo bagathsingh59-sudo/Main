@@ -27,6 +27,13 @@ const SITE_URL = "https://www.vaishnaviconsultant.com";
 
 /* ─── shared chrome ─── */
 
+interface CTA {
+  label: string;
+  href: string;
+  /** Visual treatment — "primary" = navy/teal gradient, "approve" = green. */
+  tone?: "primary" | "approve";
+}
+
 interface ShellOpts {
   preheader: string;
   badge: string;
@@ -34,7 +41,9 @@ interface ShellOpts {
   /** Body HTML — composed from helpers below. */
   body: string;
   /** Optional primary CTA at the foot of the body. */
-  cta?: { label: string; href: string };
+  cta?: CTA;
+  /** Optional secondary CTA, rendered to the right of the primary. */
+  secondaryCta?: CTA;
 }
 
 function escape(s: string) {
@@ -46,7 +55,16 @@ function escape(s: string) {
     .replace(/'/g, "&#039;");
 }
 
-function shell({ preheader, badge, title, body, cta }: ShellOpts): string {
+function renderCta(c: CTA): string {
+  const bg =
+    c.tone === "approve"
+      ? "linear-gradient(135deg,#059669 0%,#10b981 100%)"
+      : `linear-gradient(135deg,${C.navy600} 0%,${C.teal600} 100%)`;
+  const shadow = c.tone === "approve" ? "0 8px 24px rgba(5,150,105,0.35)" : "0 8px 24px rgba(26,86,219,0.35)";
+  return `<a href="${escape(c.href)}" style="display:inline-block;background:${bg};color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:14px 22px;border-radius:12px;letter-spacing:0.2px;box-shadow:${shadow};margin:0 8px 8px 0;">${escape(c.label)}</a>`;
+}
+
+function shell({ preheader, badge, title, body, cta, secondaryCta }: ShellOpts): string {
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -108,13 +126,11 @@ function shell({ preheader, badge, title, body, cta }: ShellOpts): string {
             </tr>
 
             ${
-              cta
+              cta || secondaryCta
                 ? `
             <tr>
               <td class="px" align="left" style="padding:8px 36px 36px 36px;">
-                <a href="${escape(cta.href)}" style="display:inline-block;background:linear-gradient(135deg,${C.navy600} 0%,${C.teal600} 100%);color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:14px 24px;border-radius:12px;letter-spacing:0.2px;box-shadow:0 8px 24px rgba(26,86,219,0.35);">
-                  ${escape(cta.label)}
-                </a>
+                ${cta ? renderCta(cta) : ""}${secondaryCta ? renderCta(secondaryCta) : ""}
               </td>
             </tr>`
                 : ""
@@ -203,7 +219,7 @@ export interface ContactLeadEmail {
   leadId: string;
 }
 
-export function renderContactLeadEmail(d: ContactLeadEmail) {
+export function renderContactLeadEmail(d: ContactLeadEmail & { approveUrl?: string }) {
   const fullName = `${d.firstName} ${d.lastName}`.trim();
   return shell({
     preheader: `New enquiry from ${fullName} · ${d.service}`,
@@ -222,41 +238,78 @@ export function renderContactLeadEmail(d: ContactLeadEmail) {
       ])}
       <p style="margin:18px 0 6px 0;font-size:12px;font-weight:700;color:${C.textMuted};text-transform:uppercase;letter-spacing:1px;">Message</p>
       ${quoteBlock(d.message)}
+      ${
+        d.approveUrl
+          ? `<p style="margin:18px 0 12px 0;font-size:13px;color:${C.textMuted};line-height:1.55;">
+              Looks legitimate? Click the green button to send <strong>${escape(d.firstName)}</strong> a branded "thanks, we'll reply within one working day" auto-reply. Otherwise just reply directly or ignore.
+            </p>`
+          : ""
+      }
     `,
-    cta: { label: `Reply to ${d.firstName} →`, href: `mailto:${d.email}?subject=Re:%20Your%20enquiry%20with%20Vaishnavi%20Consultant` },
+    cta: { label: `Reply to ${d.firstName} →`, href: `mailto:${d.email}?subject=Re:%20Your%20enquiry%20with%20Vaishnavi%20Consultant`, tone: "primary" },
+    secondaryCta: d.approveUrl
+      ? { label: `✓ Approve & send auto-reply`, href: d.approveUrl, tone: "approve" }
+      : undefined,
   });
 }
 
-export interface BookingLeadEmail {
-  fullName: string;
-  email: string;
-  companyRole?: string;
-  day: string;
-  time: string;
-  bookingId: string;
+/* ─── auto-reply to the lead (sent after staff approval) ─── */
+
+export interface AutoReplyEmail {
+  firstName: string;
 }
 
-export function renderBookingLeadEmail(d: BookingLeadEmail) {
+export function renderAutoReplyEmail(d: AutoReplyEmail): string {
   return shell({
-    preheader: `${d.fullName} booked ${d.day} · ${d.time} IST`,
-    badge: "Consultation booked",
-    title: `${escape(d.fullName)} booked <span style="color:${C.teal600};">${escape(d.day)} · ${escape(d.time)} IST</span>.`,
+    preheader: `Thanks for reaching out, ${d.firstName} — we'll be in touch within 1 working day.`,
+    badge: "We received your message",
+    title: `Thanks for reaching out, <span style="color:${C.teal600};">${escape(d.firstName)}</span>.`,
     body: `
-      <p style="margin:0 0 16px 0;">A 45-minute consultation has been reserved. Send the calendar invite and questionnaire so we make every minute count.</p>
-      ${detailRows([
-        ["Name", d.fullName],
-        ["Email", d.email],
-        ["Company · Role", d.companyRole || "—"],
-        ["Preferred day", d.day],
-        ["Preferred time", `${d.time} IST`],
-        ["Booking ID", d.bookingId],
-      ])}
-      <p style="margin:14px 0 0 0;color:${C.textMuted};font-size:13px;">
-        Tip: confirm the slot within 4 hours — that's the unspoken benchmark clients judge us by.
+      <p style="margin:0 0 14px 0;">Your message landed safely with our team. A senior consultant has read it personally and will reply to you within <strong>one working day</strong> — that's a promise we honour for every enquiry.</p>
+      <p style="margin:0 0 14px 0;">In the meantime, here's what happens next:</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 8px 0;background:${C.cloud};border-radius:14px;overflow:hidden;border:1px solid ${C.border};">
+        <tr>
+          <td style="padding:14px 18px;font-size:14px;color:${C.navy900};">
+            <strong style="color:${C.teal600};">Within 24 hours</strong> · A senior consultant studies your context and emails you back with first thoughts.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:14px 18px;font-size:14px;color:${C.navy900};border-top:1px solid ${C.border};">
+            <strong style="color:${C.teal600};">Within 3 days</strong> · We schedule a free 45-minute compliance audit if it's a fit.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:14px 18px;font-size:14px;color:${C.navy900};border-top:1px solid ${C.border};">
+            <strong style="color:${C.teal600};">No pressure</strong> · No sales follow-up unless you ask for one. We mean it.
+          </td>
+        </tr>
+      </table>
+      <p style="margin:18px 0 0 0;color:${C.textMuted};font-size:13px;">
+        If you'd rather talk first, our partners are reachable directly on
+        <a href="tel:${escape(COMPANY.contact.phone.replace(/\s/g, ""))}" style="color:${C.navy700};text-decoration:none;font-weight:600;">${escape(COMPANY.contact.phone)}</a>,
+        Mon–Sat, 9:30 AM – 7:00 PM IST.
       </p>
     `,
-    cta: { label: `Send calendar invite to ${d.fullName.split(" ")[0]} →`, href: `mailto:${d.email}?subject=Your%20Vaishnavi%20consultation%20-%20${encodeURIComponent(`${d.day} ${d.time} IST`)}` },
   });
+}
+
+export function renderAutoReplyText(d: AutoReplyEmail): string {
+  return [
+    `Hi ${d.firstName},`,
+    "",
+    `Thanks for reaching out to ${COMPANY.name}. Your message landed safely with our team — a senior consultant has read it personally and will reply within one working day.`,
+    "",
+    "What happens next:",
+    "  • Within 24 hours — a senior consultant emails you back with first thoughts.",
+    "  • Within 3 days — we schedule a free 45-minute compliance audit if it's a fit.",
+    "  • No pressure — no sales follow-up unless you ask.",
+    "",
+    `If you'd rather talk first, reach us on ${COMPANY.contact.phone}, Mon-Sat 9:30 AM - 7:00 PM IST.`,
+    "",
+    "—",
+    `${COMPANY.legalName} · ${COMPANY.contact.address.city}`,
+    "vaishnaviconsultant.com",
+  ].join("\n");
 }
 
 /* ─── plain-text fallback (for clients that block HTML) ─── */
@@ -281,17 +334,3 @@ export function renderContactLeadText(d: ContactLeadEmail): string {
   ].join("\n");
 }
 
-export function renderBookingLeadText(d: BookingLeadEmail): string {
-  return [
-    `New consultation booking — ${COMPANY.name}`,
-    "",
-    `Name:         ${d.fullName}`,
-    `Email:        ${d.email}`,
-    `Company:      ${d.companyRole || "—"}`,
-    `Slot:         ${d.day} · ${d.time} IST`,
-    `Booking ID:   ${d.bookingId}`,
-    "",
-    "—",
-    `${COMPANY.legalName} · ${COMPANY.contact.address.city}`,
-  ].join("\n");
-}

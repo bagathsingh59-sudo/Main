@@ -2,9 +2,17 @@ import { NextResponse } from "next/server";
 import { contactSchema } from "@/services/contact";
 import { sendLeadEmail } from "@/services/mailer";
 import { checkRateLimit } from "@/services/rateLimit";
+import { signApproval } from "@/utils/approvalToken";
 import { renderContactLeadEmail, renderContactLeadText } from "@/utils/emailTemplates";
 
 export const runtime = "nodejs";
+
+function getSiteUrl(req: Request): string {
+  // Prefer the explicit env var, fall back to request origin for previews / dev.
+  const env = process.env.NEXT_PUBLIC_SITE_URL;
+  if (env) return env.replace(/\/$/, "");
+  return new URL(req.url).origin;
+}
 
 export async function POST(req: Request) {
   const limit = checkRateLimit(req);
@@ -28,6 +36,20 @@ export async function POST(req: Request) {
     const id = `lead_${Date.now().toString(36)}`;
     const d = parsed.data;
 
+    // Sign a one-click approval token so staff can authorise the
+    // auto-reply straight from the notification email. Returns null
+    // if APPROVAL_SECRET isn't configured — we degrade to a notify-
+    // only email without the green Approve button.
+    const token = signApproval({
+      email: d.email,
+      firstName: d.firstName,
+      leadId: id,
+      iat: Date.now(),
+    });
+    const approveUrl = token
+      ? `${getSiteUrl(req)}/api/approve-reply?token=${encodeURIComponent(token)}`
+      : undefined;
+
     const payload = {
       firstName: d.firstName,
       lastName: d.lastName,
@@ -38,6 +60,7 @@ export async function POST(req: Request) {
       service: d.service,
       message: d.message,
       leadId: id,
+      approveUrl,
     };
 
     const mail = await sendLeadEmail({

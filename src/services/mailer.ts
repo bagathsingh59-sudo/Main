@@ -53,6 +53,8 @@ export interface SendArgs {
   text: string;
   /** Lead's email — so a one-tap "Reply" in the inbox replies to the lead. */
   replyTo?: string;
+  /** Override the recipient. Defaults to LEAD_TO (internal notification). */
+  to?: string;
 }
 
 export interface SendResult {
@@ -77,7 +79,7 @@ export async function sendLeadEmail(args: SendArgs): Promise<SendResult> {
   try {
     const info = await getTransport(env).sendMail({
       from: `"${env.fromName}" <${env.fromAddress}>`,
-      to: env.leadTo,
+      to: args.to ?? env.leadTo,
       replyTo: args.replyTo,
       subject: args.subject,
       html: args.html,

@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { ADMIN_COOKIE, verifySession } from "@/services/adminAuth";
 import { getSiteSettings, updateSiteSettings, siteSettingsSchema } from "@/services/settings";
+import { pingIndexNow } from "@/services/indexnow";
 
 export const runtime = "nodejs";
 
@@ -54,5 +55,7 @@ export async function PUT(req: Request) {
       { status: result.reason === "not_configured" ? 503 : 502 },
     );
   }
+  // Fire-and-forget IndexNow ping — fast, doesn't block the admin save.
+  pingIndexNow().catch(() => {});
   return NextResponse.json({ ok: true, settings: parsed.data });
 }

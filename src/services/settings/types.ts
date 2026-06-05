@@ -9,7 +9,7 @@
 
 import { z } from "zod";
 
-export const CURRENT_VERSION = 2 as const;
+export const CURRENT_VERSION = 3 as const;
 
 /* ─────────────────────────  schemas  ─────────────────────── */
 
@@ -137,6 +137,43 @@ export const navigationSchema = z.object({
   socialLinks: z.array(socialLinkSchema).max(8),
 });
 
+/* ── Email templates (text content only) ─────────────────── */
+
+export const leadNotificationTemplateSchema = z.object({
+  /** Subject line. Tokens: {firstName}, {lastName}, {service}. */
+  subjectPattern: z.string().min(5).max(160),
+  /** Pill text at top of email. */
+  badge: z.string().min(2).max(40),
+  /** Title pattern. Tokens: {name}, {service}. */
+  titlePattern: z.string().min(5).max(180),
+  /** First paragraph below the title. */
+  intro: z.string().min(10).max(400),
+  /** Footer microcopy under the card. */
+  footerNote: z.string().min(10).max(280),
+});
+
+export const autoReplyTemplateSchema = z.object({
+  /** Subject. Tokens: {firstName}. */
+  subjectPattern: z.string().min(5).max(160),
+  badge: z.string().min(2).max(40),
+  /** Title pattern. Tokens: {firstName}. */
+  titlePattern: z.string().min(5).max(180),
+  /** First paragraph. */
+  intro: z.string().min(10).max(400),
+  /** Second paragraph. */
+  introSecondary: z.string().min(0).max(400),
+  /** Three "what happens next" rows. */
+  steps: z.array(z.object({ when: z.string().min(2).max(60), description: z.string().min(2).max(280) })).length(3),
+  /** Phone-fallback line. Tokens: {phone}, {hours}. */
+  phoneFallback: z.string().min(10).max(280),
+  footerNote: z.string().min(10).max(280),
+});
+
+export const emailTemplatesSchema = z.object({
+  leadNotification: leadNotificationTemplateSchema,
+  autoReply: autoReplyTemplateSchema,
+});
+
 export const siteSettingsSchema = z.object({
   version: z.literal(CURRENT_VERSION),
   automation: automationSchema,
@@ -148,6 +185,7 @@ export const siteSettingsSchema = z.object({
   seo: seoSchema,
   branding: brandingSchema,
   navigation: navigationSchema,
+  emailTemplates: emailTemplatesSchema,
 });
 
 /* ─────────────────────────  types  ───────────────────────── */
@@ -165,6 +203,9 @@ export type NavLink = z.infer<typeof navLinkSchema>;
 export type FooterColumn = z.infer<typeof footerColumnSchema>;
 export type SocialLink = z.infer<typeof socialLinkSchema>;
 export type Navigation = z.infer<typeof navigationSchema>;
+export type LeadNotificationTemplate = z.infer<typeof leadNotificationTemplateSchema>;
+export type AutoReplyTemplate = z.infer<typeof autoReplyTemplateSchema>;
+export type EmailTemplates = z.infer<typeof emailTemplatesSchema>;
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 
 /** Page keys we support per-page SEO for. */

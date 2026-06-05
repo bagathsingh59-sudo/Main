@@ -3,7 +3,6 @@ import { sendLeadEmail } from "@/services/mailer";
 import { getSiteSettings } from "@/services/settings";
 import { verifyApproval } from "@/utils/approvalToken";
 import { renderAutoReplyEmail, renderAutoReplyText } from "@/utils/emailTemplates";
-import { COMPANY } from "@/constants/company";
 
 export const runtime = "nodejs";
 
@@ -60,12 +59,18 @@ export async function GET(req: Request) {
 
   const { email, firstName } = result.payload;
   const settings = await getSiteSettings();
+  const autoTmpl = settings.emailTemplates.autoReply;
+  const subject = autoTmpl.subjectPattern.replace(/\{firstName\}/g, firstName);
 
   const mail = await sendLeadEmail({
     to: email,
-    subject: `Thanks for reaching out to ${COMPANY.name}, ${firstName}`,
-    html: renderAutoReplyEmail({ firstName }),
-    text: renderAutoReplyText({ firstName }),
+    subject,
+    html: renderAutoReplyEmail({
+      firstName,
+      contactInfo: settings.contactInfo,
+      template: autoTmpl,
+    }),
+    text: renderAutoReplyText({ firstName, contactInfo: settings.contactInfo }),
     fromName: settings.automation.fromName || undefined,
     fromAddress: settings.automation.fromAddress || undefined,
     // Replies to the auto-reply land on connect@ (default From), which

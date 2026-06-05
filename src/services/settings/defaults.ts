@@ -193,4 +193,32 @@ export const DEFAULT_SETTINGS: SiteSettings = {
       { platform: "youtube", url: COMPANY.social.youtube },
     ],
   },
+
+  emailTemplates: {
+    leadNotification: {
+      subjectPattern: "New enquiry · {firstName} {lastName} — {service}",
+      badge: "New website enquiry",
+      titlePattern: "{name} wants to talk about {service}.",
+      intro:
+        "A new enquiry just landed in your inbox. Reply within one working day to honour the site promise.",
+      footerNote: "This is an automated notification from the contact form on vaishnaviconsultant.com.",
+    },
+    autoReply: {
+      subjectPattern: `Thanks for reaching out to ${COMPANY.name}, {firstName}`,
+      badge: "We received your message",
+      titlePattern: "Thanks for reaching out, {firstName}.",
+      intro:
+        "Your message landed safely with our team. A senior consultant has read it personally and will reply to you within one working day — that's a promise we honour for every enquiry.",
+      introSecondary: "In the meantime, here's what happens next:",
+      steps: [
+        { when: "Within 24 hours", description: "A senior consultant studies your context and emails you back with first thoughts." },
+        { when: "Within 3 days", description: "We schedule a free 45-minute compliance audit if it's a fit." },
+        { when: "No pressure", description: "No sales follow-up unless you ask for one. We mean it." },
+      ],
+      phoneFallback:
+        "If you'd rather talk first, our partners are reachable directly on {phone}, {hours}.",
+      footerNote:
+        "You're receiving this because you sent us an enquiry through vaishnaviconsultant.com. We don't share your details with anyone outside our team.",
+    },
+  },
 };

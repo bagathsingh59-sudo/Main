@@ -4,8 +4,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteMetadata } from "@/utils/seo";
-import { organizationSchema, websiteSchema } from "@/utils/jsonLd";
+import { localBusinessSchema, organizationSchema, websiteSchema } from "@/utils/jsonLd";
 import { JsonLd } from "@/components/shared/JsonLd";
+import { getSiteSettings } from "@/services/settings";
 import "./globals.css";
 
 /**
@@ -48,7 +49,13 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+  const overrides = {
+    contactInfo: settings.contactInfo,
+    branding: settings.branding,
+    navigation: settings.navigation,
+  };
   return (
     <html lang="en-IN" className={`${inter.variable} ${display.variable}`}>
       <head>
@@ -57,8 +64,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-        {/* Site-wide structured data */}
-        <JsonLd data={[organizationSchema(), websiteSchema()]} />
+        {/* Site-wide structured data — Organization + LocalBusiness for rich
+            Google results (knowledge panel, local-pack), plus WebSite for
+            sitelinks-search. All driven by admin settings with COMPANY-
+            constant fallbacks. */}
+        <JsonLd data={[organizationSchema(overrides), localBusinessSchema(overrides), websiteSchema()]} />
       </head>
       <body>
         <a

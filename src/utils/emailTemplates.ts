@@ -7,6 +7,26 @@
  */
 
 import { COMPANY } from "@/constants/company";
+import type { AutoReplyTemplate, ContactInfo, LeadNotificationTemplate } from "@/services/settings";
+
+/** Replace {token} placeholders in a template string. */
+function fillTokens(template: string, tokens: Record<string, string>): string {
+  return template.replace(/\{(\w+)\}/g, (_, key) => tokens[key] ?? "");
+}
+
+/** Resolve display strings — prefer admin-edited settings, else fall back to COMPANY. */
+function resolve(ci?: ContactInfo) {
+  return {
+    phone: ci?.phone || COMPANY.contact.phone,
+    email: ci?.email || COMPANY.contact.email,
+    addressLine1: ci?.addressLine1 || COMPANY.contact.address.line1,
+    addressLine2: ci?.addressLine2 || COMPANY.contact.address.line2,
+    city: ci?.city || COMPANY.contact.address.city,
+    state: ci?.state || COMPANY.contact.address.state,
+    pin: ci?.pin || COMPANY.contact.address.pin,
+    hours: ci?.hours || COMPANY.contact.hours,
+  };
+}
 
 /* ─── design tokens (kept in sync with tailwind.config.ts) ─── */
 const C = {
@@ -46,6 +66,8 @@ interface ShellOpts {
   secondaryCta?: CTA;
   /** Legal microcopy under the card. Defaults to the staff-notification line. */
   footerNote?: string;
+  /** Admin-edited contact info for the footer block. */
+  contactInfo?: ContactInfo;
 }
 
 function escape(s: string) {
@@ -66,9 +88,10 @@ function renderCta(c: CTA): string {
   return `<a href="${escape(c.href)}" style="display:inline-block;background:${bg};color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:14px 22px;border-radius:12px;letter-spacing:0.2px;box-shadow:${shadow};margin:0 8px 8px 0;">${escape(c.label)}</a>`;
 }
 
-function shell({ preheader, badge, title, body, cta, secondaryCta, footerNote }: ShellOpts): string {
+function shell({ preheader, badge, title, body, cta, secondaryCta, footerNote, contactInfo }: ShellOpts): string {
   const microcopy =
     footerNote ?? `This is an automated notification from the contact form on vaishnaviconsultant.com.`;
+  const ci = resolve(contactInfo);
 
   return `<!doctype html>
 <html lang="en">
@@ -152,14 +175,14 @@ function shell({ preheader, badge, title, body, cta, secondaryCta, footerNote }:
                     <td class="stack" style="vertical-align:top;width:60%;">
                       <div style="font-weight:700;color:${C.navy900};font-size:13px;">${escape(COMPANY.legalName)}</div>
                       <div style="margin-top:6px;">
-                        ${escape(COMPANY.contact.address.line1)}<br/>
-                        ${escape(COMPANY.contact.address.line2)}<br/>
-                        ${escape(COMPANY.contact.address.city)}, ${escape(COMPANY.contact.address.state)} ${escape(COMPANY.contact.address.pin)}
+                        ${escape(ci.addressLine1)}<br/>
+                        ${escape(ci.addressLine2)}<br/>
+                        ${escape(ci.city)}, ${escape(ci.state)} ${escape(ci.pin)}
                       </div>
                     </td>
                     <td class="stack" align="right" style="vertical-align:top;width:40%;">
-                      <div><a href="tel:${escape(COMPANY.contact.phone.replace(/\s/g, ""))}" style="color:${C.navy700};text-decoration:none;font-weight:600;">${escape(COMPANY.contact.phone)}</a></div>
-                      <div style="margin-top:4px;"><a href="mailto:${escape(COMPANY.contact.email)}" style="color:${C.navy700};text-decoration:none;">${escape(COMPANY.contact.email)}</a></div>
+                      <div><a href="tel:${escape(ci.phone.replace(/\s/g, ""))}" style="color:${C.navy700};text-decoration:none;font-weight:600;">${escape(ci.phone)}</a></div>
+                      <div style="margin-top:4px;"><a href="mailto:${escape(ci.email)}" style="color:${C.navy700};text-decoration:none;">${escape(ci.email)}</a></div>
                       <div style="margin-top:4px;"><a href="${SITE_URL}" style="color:${C.navy700};text-decoration:none;">vaishnaviconsultant.com</a></div>
                     </td>
                   </tr>
@@ -171,7 +194,7 @@ function shell({ preheader, badge, title, body, cta, secondaryCta, footerNote }:
           <!-- legal microcopy -->
           <div style="max-width:600px;margin-top:16px;color:${C.textMuted};font-size:11px;line-height:1.5;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;">
             ${escape(microcopy)}<br/>
-            ${escape(COMPANY.contact.hours)}
+            ${escape(ci.hours)}
           </div>
         </td>
       </tr>
@@ -224,14 +247,38 @@ export interface ContactLeadEmail {
   leadId: string;
 }
 
-export function renderContactLeadEmail(d: ContactLeadEmail & { approveUrl?: string }) {
+export function renderContactLeadEmail(
+  d: ContactLeadEmail & {
+    approveUrl?: string;
+    contactInfo?: ContactInfo;
+    template?: LeadNotificationTemplate;
+  },
+) {
   const fullName = `${d.firstName} ${d.lastName}`.trim();
+  const tmpl = d.template;
+  const badge = tmpl?.badge || "New website enquiry";
+  const intro =
+    tmpl?.intro || "A new enquiry just landed in your inbox. Reply within one working day to honour the site promise.";
+  const titleFilled = tmpl
+    ? fillTokens(tmpl.titlePattern, { name: escape(fullName), service: escape(d.service) })
+    : `${escape(fullName)} wants to talk about ${escape(d.service)}.`;
+  // Wrap the service token in teal accent if present in the unfilled pattern.
+  const title = tmpl
+    ? fillTokens(tmpl.titlePattern, {
+        name: escape(fullName),
+        service: `<span style="color:${C.teal600};">${escape(d.service)}</span>`,
+      })
+    : `${escape(fullName)} wants to talk about <span style="color:${C.teal600};">${escape(d.service)}</span>.`;
+  void titleFilled;
+
   return shell({
     preheader: `New enquiry from ${fullName} · ${d.service}`,
-    badge: "New website enquiry",
-    title: `${escape(fullName)} wants to talk about <span style="color:${C.teal600};">${escape(d.service)}</span>.`,
+    badge,
+    title,
+    footerNote: tmpl?.footerNote,
+    contactInfo: d.contactInfo,
     body: `
-      <p style="margin:0 0 16px 0;">A new enquiry just landed in your inbox. Reply within one working day to honour the site promise.</p>
+      <p style="margin:0 0 16px 0;">${escape(intro)}</p>
       ${detailRows([
         ["Name", fullName],
         ["Email", d.email],
@@ -264,42 +311,65 @@ export interface AutoReplyEmail {
   firstName: string;
 }
 
-export function renderAutoReplyEmail(d: AutoReplyEmail): string {
+export function renderAutoReplyEmail(d: AutoReplyEmail & { contactInfo?: ContactInfo; template?: AutoReplyTemplate }): string {
+  const ci = resolve(d.contactInfo);
+  const tmpl = d.template;
+  const badge = tmpl?.badge || "We received your message";
+  const title = tmpl
+    ? fillTokens(tmpl.titlePattern, {
+        firstName: `<span style="color:${C.teal600};">${escape(d.firstName)}</span>`,
+      })
+    : `Thanks for reaching out, <span style="color:${C.teal600};">${escape(d.firstName)}</span>.`;
+  const intro =
+    tmpl?.intro ||
+    "Your message landed safely with our team. A senior consultant has read it personally and will reply to you within one working day — that's a promise we honour for every enquiry.";
+  const introSecondary = tmpl?.introSecondary || "In the meantime, here's what happens next:";
+  const steps = tmpl?.steps || [
+    { when: "Within 24 hours", description: "A senior consultant studies your context and emails you back with first thoughts." },
+    { when: "Within 3 days", description: "We schedule a free 45-minute compliance audit if it's a fit." },
+    { when: "No pressure", description: "No sales follow-up unless you ask for one. We mean it." },
+  ];
+  const phoneFallbackTpl =
+    tmpl?.phoneFallback || "If you'd rather talk first, our partners are reachable directly on {phone}, {hours}.";
+  const phoneFallback = fillTokens(phoneFallbackTpl, { phone: ci.phone, hours: ci.hours });
+  const footerNote =
+    tmpl?.footerNote ||
+    "You're receiving this because you sent us an enquiry through vaishnaviconsultant.com. We don't share your details with anyone outside our team.";
+
   return shell({
     preheader: `Thanks for reaching out, ${d.firstName} — we'll be in touch within 1 working day.`,
-    badge: "We received your message",
-    footerNote: "You're receiving this because you sent us an enquiry through vaishnaviconsultant.com. We don't share your details with anyone outside our team.",
-    title: `Thanks for reaching out, <span style="color:${C.teal600};">${escape(d.firstName)}</span>.`,
+    badge,
+    footerNote,
+    contactInfo: d.contactInfo,
+    title,
     body: `
-      <p style="margin:0 0 14px 0;">Your message landed safely with our team. A senior consultant has read it personally and will reply to you within <strong>one working day</strong> — that's a promise we honour for every enquiry.</p>
-      <p style="margin:0 0 14px 0;">In the meantime, here's what happens next:</p>
+      <p style="margin:0 0 14px 0;">${escape(intro)}</p>
+      ${introSecondary ? `<p style="margin:0 0 14px 0;">${escape(introSecondary)}</p>` : ""}
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 8px 0;background:${C.cloud};border-radius:14px;overflow:hidden;border:1px solid ${C.border};">
+        ${steps
+          .map(
+            (s, i) => `
         <tr>
-          <td style="padding:14px 18px;font-size:14px;color:${C.navy900};">
-            <strong style="color:${C.teal600};">Within 24 hours</strong> · A senior consultant studies your context and emails you back with first thoughts.
+          <td style="padding:14px 18px;font-size:14px;color:${C.navy900};${i === 0 ? "" : `border-top:1px solid ${C.border};`}">
+            <strong style="color:${C.teal600};">${escape(s.when)}</strong> · ${escape(s.description)}
           </td>
-        </tr>
-        <tr>
-          <td style="padding:14px 18px;font-size:14px;color:${C.navy900};border-top:1px solid ${C.border};">
-            <strong style="color:${C.teal600};">Within 3 days</strong> · We schedule a free 45-minute compliance audit if it's a fit.
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:14px 18px;font-size:14px;color:${C.navy900};border-top:1px solid ${C.border};">
-            <strong style="color:${C.teal600};">No pressure</strong> · No sales follow-up unless you ask for one. We mean it.
-          </td>
-        </tr>
+        </tr>`,
+          )
+          .join("")}
       </table>
       <p style="margin:18px 0 0 0;color:${C.textMuted};font-size:13px;">
-        If you'd rather talk first, our partners are reachable directly on
-        <a href="tel:${escape(COMPANY.contact.phone.replace(/\s/g, ""))}" style="color:${C.navy700};text-decoration:none;font-weight:600;">${escape(COMPANY.contact.phone)}</a>,
-        Mon–Sat, 9:30 AM – 7:00 PM IST.
+        ${phoneFallback
+          .replace(
+            ci.phone,
+            `<a href="tel:${escape(ci.phone.replace(/\s/g, ""))}" style="color:${C.navy700};text-decoration:none;font-weight:600;">${escape(ci.phone)}</a>`,
+          )}
       </p>
     `,
   });
 }
 
-export function renderAutoReplyText(d: AutoReplyEmail): string {
+export function renderAutoReplyText(d: AutoReplyEmail & { contactInfo?: ContactInfo }): string {
+  const ci = resolve(d.contactInfo);
   return [
     `Hi ${d.firstName},`,
     "",
@@ -310,10 +380,10 @@ export function renderAutoReplyText(d: AutoReplyEmail): string {
     "  • Within 3 days — we schedule a free 45-minute compliance audit if it's a fit.",
     "  • No pressure — no sales follow-up unless you ask.",
     "",
-    `If you'd rather talk first, reach us on ${COMPANY.contact.phone}, Mon-Sat 9:30 AM - 7:00 PM IST.`,
+    `If you'd rather talk first, reach us on ${ci.phone}, ${ci.hours}.`,
     "",
     "—",
-    `${COMPANY.legalName} · ${COMPANY.contact.address.city}`,
+    `${COMPANY.legalName} · ${ci.city}`,
     "vaishnaviconsultant.com",
   ].join("\n");
 }

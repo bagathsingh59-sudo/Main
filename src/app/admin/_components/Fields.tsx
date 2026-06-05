@@ -5,19 +5,23 @@ import { type ReactNode } from "react";
 export function PageHeader({ title, description }: { title: string; description?: string }) {
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-900">{title}</h1>
-      {description && <p className="mt-1.5 text-[0.92rem] leading-relaxed text-slate-600">{description}</p>}
+      <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{title}</h1>
+      {description && (
+        <p className="mt-1.5 text-[0.92rem] leading-relaxed text-slate-600 dark:text-slate-400">{description}</p>
+      )}
     </div>
   );
 }
 
 export function Card({ title, description, children }: { title?: string; description?: string; children: ReactNode }) {
   return (
-    <section className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <section className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
       {(title || description) && (
-        <header className="border-b border-slate-100 bg-slate-50/60 px-6 py-4">
-          {title && <h2 className="text-[1rem] font-semibold text-slate-900">{title}</h2>}
-          {description && <p className="mt-1 text-[0.85rem] leading-relaxed text-slate-600">{description}</p>}
+        <header className="border-b border-slate-100 bg-slate-50/60 px-6 py-4 dark:border-slate-800 dark:bg-slate-950/60">
+          {title && <h2 className="text-[1rem] font-semibold text-slate-900 dark:text-slate-100">{title}</h2>}
+          {description && (
+            <p className="mt-1 text-[0.85rem] leading-relaxed text-slate-600 dark:text-slate-400">{description}</p>
+          )}
         </header>
       )}
       <div className="p-6">{children}</div>
@@ -36,15 +40,15 @@ export function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-[0.82rem] font-semibold text-slate-800">{label}</span>
+      <span className="mb-1.5 block text-[0.82rem] font-semibold text-slate-800 dark:text-slate-200">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-[0.78rem] text-slate-500">{hint}</span>}
+      {hint && <span className="mt-1 block text-[0.78rem] text-slate-500 dark:text-slate-400">{hint}</span>}
     </label>
   );
 }
 
 const baseInput =
-  "block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-[0.92rem] text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-navy-500 focus:ring-2 focus:ring-navy-100";
+  "block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-[0.92rem] text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-navy-500 focus:ring-2 focus:ring-navy-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-500 dark:focus:ring-teal-900/40";
 
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "className"> {}
 export function Input(props: InputProps) {
@@ -127,12 +131,16 @@ export function SaveBar({
   onReset: () => void;
 }) {
   return (
-    <div className="sticky bottom-4 mt-6 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-lg shadow-slate-200/50 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
+    <div className="sticky bottom-4 mt-6 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-lg shadow-slate-200/50 dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/40 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
       <div className="text-[0.85rem]">
-        {status.kind === "ok" && <span className="font-semibold text-emerald-600">✓ {status.message ?? "Saved"}</span>}
-        {status.kind === "error" && <span className="font-semibold text-rose-600">✕ {status.message ?? "Save failed"}</span>}
+        {status.kind === "ok" && (
+          <span className="font-semibold text-emerald-600 dark:text-emerald-400">✓ {status.message ?? "Saved"}</span>
+        )}
+        {status.kind === "error" && (
+          <span className="font-semibold text-rose-600 dark:text-rose-400">✕ {status.message ?? "Save failed"}</span>
+        )}
         {status.kind === "idle" && (
-          <span className="text-slate-500">{dirty ? "You have unsaved changes" : "No changes"}</span>
+          <span className="text-slate-500 dark:text-slate-400">{dirty ? "You have unsaved changes" : "No changes"}</span>
         )}
       </div>
       <div className="flex gap-2">
@@ -140,7 +148,7 @@ export function SaveBar({
           type="button"
           onClick={onReset}
           disabled={!dirty || saving}
-          className="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-2 text-[0.85rem] font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-40 sm:flex-none"
+          className="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-2 text-[0.85rem] font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 sm:flex-none"
         >
           Discard
         </button>

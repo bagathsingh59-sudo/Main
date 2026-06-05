@@ -35,6 +35,9 @@ function migrate(raw: unknown): SiteSettings {
     navigation: obj.navigation
       ? { ...DEFAULT_SETTINGS.navigation, ...(obj.navigation as object) }
       : DEFAULT_SETTINGS.navigation,
+    emailTemplates: obj.emailTemplates
+      ? { ...DEFAULT_SETTINGS.emailTemplates, ...(obj.emailTemplates as object) }
+      : DEFAULT_SETTINGS.emailTemplates,
   };
   return merged;
 }

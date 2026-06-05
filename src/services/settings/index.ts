@@ -17,6 +17,9 @@ export {
   navLinkSchema,
   footerColumnSchema,
   socialLinkSchema,
+  emailTemplatesSchema,
+  leadNotificationTemplateSchema,
+  autoReplyTemplateSchema,
   type SiteSettings,
   type Automation,
   type RateLimitSettings,
@@ -32,4 +35,7 @@ export {
   type NavLink,
   type FooterColumn,
   type SocialLink,
+  type EmailTemplates,
+  type LeadNotificationTemplate,
+  type AutoReplyTemplate,
 } from "./types";

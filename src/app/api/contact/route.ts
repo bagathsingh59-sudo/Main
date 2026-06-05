@@ -10,7 +10,6 @@ import {
   renderContactLeadEmail,
   renderContactLeadText,
 } from "@/utils/emailTemplates";
-import { COMPANY } from "@/constants/company";
 
 export const runtime = "nodejs";
 
@@ -102,10 +101,19 @@ export async function POST(req: Request) {
       approveUrl,
     };
 
+    const leadTmpl = settings.emailTemplates.leadNotification;
+    const subjectFilled = leadTmpl.subjectPattern
+      .replace(/\{firstName\}/g, d.firstName)
+      .replace(/\{lastName\}/g, d.lastName)
+      .replace(/\{service\}/g, d.service);
     const notifyResult = await sendLeadEmail({
       ...mailerOverrides,
-      subject: `New enquiry · ${d.firstName} ${d.lastName} — ${d.service}`,
-      html: renderContactLeadEmail(leadPayload),
+      subject: subjectFilled,
+      html: renderContactLeadEmail({
+        ...leadPayload,
+        contactInfo: settings.contactInfo,
+        template: leadTmpl,
+      }),
       text: renderContactLeadText(leadPayload),
       replyTo: d.email,
     });
@@ -119,15 +127,21 @@ export async function POST(req: Request) {
 
     // ── 2. Immediate auto-reply to lead (if mode is "immediate") ────
     if (mode === "immediate") {
+      const autoTmpl = settings.emailTemplates.autoReply;
+      const autoSubject = autoTmpl.subjectPattern.replace(/\{firstName\}/g, d.firstName);
       // Fire-and-forget — don't block the user response on this. Errors
       // are logged but don't fail the submission (staff can resend later
       // via mailto from the notification email).
       sendLeadEmail({
         ...mailerOverrides,
         to: d.email,
-        subject: `Thanks for reaching out to ${COMPANY.name}, ${d.firstName}`,
-        html: renderAutoReplyEmail({ firstName: d.firstName }),
-        text: renderAutoReplyText({ firstName: d.firstName }),
+        subject: autoSubject,
+        html: renderAutoReplyEmail({
+          firstName: d.firstName,
+          contactInfo: settings.contactInfo,
+          template: autoTmpl,
+        }),
+        text: renderAutoReplyText({ firstName: d.firstName, contactInfo: settings.contactInfo }),
       }).catch((err) => {
         console.error("[contact] immediate auto-reply failed:", err);
       });

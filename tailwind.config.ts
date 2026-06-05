@@ -2,6 +2,9 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  // Dark mode applies only inside the admin shell (`[data-admin-theme="dark"]`
+  // on <html>), so the public marketing site is unaffected.
+  darkMode: ['selector', '[data-admin-theme="dark"]'],
   theme: {
     container: {
       center: true,

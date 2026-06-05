@@ -78,7 +78,9 @@ export const maintenanceSchema = z.object({
 export const pageSeoSchema = z.object({
   title: z.string().max(70),
   description: z.string().max(200),
-  keywords: z.array(z.string().min(1).max(60)).max(15),
+  // Per-page list can hold up to 50 keywords (long-tail + local-geo
+  // mixes can run that deep before becoming meta-spam).
+  keywords: z.array(z.string().min(1).max(60)).max(50),
   ogImage: z.string(),
 });
 
@@ -86,7 +88,9 @@ export const seoSchema = z.object({
   siteName: z.string().max(60),
   titleTemplate: z.string().max(80),
   defaultDescription: z.string().max(200),
-  defaultKeywords: z.array(z.string().min(1).max(60)).max(15),
+  // Site-wide defaults cap at 100 — bigger lists hit diminishing returns
+  // and risk being treated as keyword stuffing.
+  defaultKeywords: z.array(z.string().min(1).max(60)).max(100),
   defaultOgImage: z.string(),
   twitterHandle: z.string().max(40),
   pages: z.object({

@@ -75,6 +75,13 @@ export function SeoEditor() {
         description="Meta titles, descriptions, keywords and OG images. Used by Google, social previews, and Search Console. Changes deploy in ~30 seconds; search engines re-index over hours to days."
       />
 
+      <div className="mb-6 rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-[0.85rem] leading-relaxed text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-900/20 dark:text-emerald-200">
+        <strong className="font-semibold">Tip · Bulk keyword import:</strong> click the{" "}
+        <code className="rounded bg-emerald-200/60 px-1 dark:bg-emerald-900/50">+ Bulk add</code> button on any keyword
+        field. Paste your list (newlines, commas, or semicolons all work) and apply in one click. Caps: 100 site-wide
+        defaults, 50 per page.
+      </div>
+
       <Card
         title="Site-wide defaults"
         description="Used as fallbacks when a page doesn't have its own values."

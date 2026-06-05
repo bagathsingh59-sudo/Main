@@ -1,11 +1,20 @@
 import { NextResponse } from "next/server";
 import { bookingSchema } from "@/services/booking";
 import { sendLeadEmail } from "@/services/mailer";
+import { checkRateLimit } from "@/services/rateLimit";
 import { renderBookingLeadEmail, renderBookingLeadText } from "@/utils/emailTemplates";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  const limit = checkRateLimit(req);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { ok: false, code: "rate_limited", message: limit.message },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSec) } },
+    );
+  }
+
   try {
     const body = (await req.json()) as unknown;
     const parsed = bookingSchema.safeParse(body);

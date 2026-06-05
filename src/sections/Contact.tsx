@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { COMPANY } from "@/constants/company";
 import { contactSchema, submitContact, type ContactInput } from "@/services/contact";
+import { APIError } from "@/services/api";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 import type { ContactPayload } from "@/types";
 
@@ -38,7 +39,8 @@ const initial: ContactInput = {
 export function Contact() {
   const [data, setData] = useState<ContactInput>(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof ContactInput, string>>>({});
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error" | "throttled">("idle");
+  const [throttleMessage, setThrottleMessage] = useState<string | null>(null);
 
   const update = <K extends keyof ContactInput>(k: K, v: ContactInput[K]) => {
     setData((d) => ({ ...d, [k]: v }));
@@ -63,8 +65,13 @@ export function Contact() {
       await submitContact(parsed.data as ContactPayload);
       setStatus("success");
       setData(initial);
-    } catch {
-      setStatus("error");
+    } catch (err) {
+      if (err instanceof APIError && err.status === 429) {
+        setThrottleMessage(err.message);
+        setStatus("throttled");
+      } else {
+        setStatus("error");
+      }
     }
   };
 
@@ -172,8 +179,15 @@ export function Contact() {
               ? "Sending…"
               : status === "success"
                 ? "✓ Sent — we'll reply within 1 working day"
-                : "Send message →"}
+                : status === "throttled"
+                  ? "Try again in a moment"
+                  : "Send message →"}
           </Button>
+          {status === "throttled" && throttleMessage && (
+            <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50/80 px-4 py-2.5 text-center text-[0.82rem] text-amber-900">
+              {throttleMessage}
+            </p>
+          )}
           {status === "error" && (
             <p className="mt-3 text-center text-[0.82rem] text-rose-600">
               Couldn't send — please email {COMPANY.contact.email}.

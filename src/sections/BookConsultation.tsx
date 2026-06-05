@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 import { submitBooking, type BookingInput } from "@/services/booking";
+import { APIError } from "@/services/api";
 
 const SLOTS_BY_DAY = [
   { day: "Mon", slots: ["10:00", "11:30", "14:30", "16:00"] },
@@ -32,7 +33,7 @@ export function BookConsultation() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [companyRole, setCompanyRole] = useState("");
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error" | "throttled">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const currentSlots = SLOTS_BY_DAY.find((d) => d.day === day)?.slots ?? [];
@@ -46,8 +47,13 @@ export function BookConsultation() {
       await submitBooking({ fullName, email, companyRole, day, time: slot });
       setStatus("success");
     } catch (err) {
-      setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Couldn't reserve slot");
+      if (err instanceof APIError && err.status === 429) {
+        setStatus("throttled");
+        setErrorMsg(err.message);
+      } else {
+        setStatus("error");
+        setErrorMsg(err instanceof Error ? err.message : "Couldn't reserve slot");
+      }
     }
   };
 
@@ -162,6 +168,11 @@ export function BookConsultation() {
                       ? `Reserve ${day} · ${slot} IST`
                       : "Pick a slot first"}
               </Button>
+              {status === "throttled" && errorMsg && (
+                <p className="sm:col-span-2 rounded-xl border border-amber-200/40 bg-amber-100/10 px-4 py-2.5 text-center text-[0.8rem] text-amber-100">
+                  {errorMsg}
+                </p>
+              )}
               {status === "error" && (
                 <p className="sm:col-span-2 text-center text-[0.8rem] text-rose-300">
                   {errorMsg ?? "Couldn't reserve — please email connect@vaishnaviconsultant.com"}

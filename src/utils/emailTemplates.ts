@@ -44,6 +44,8 @@ interface ShellOpts {
   cta?: CTA;
   /** Optional secondary CTA, rendered to the right of the primary. */
   secondaryCta?: CTA;
+  /** Legal microcopy under the card. Defaults to the staff-notification line. */
+  footerNote?: string;
 }
 
 function escape(s: string) {
@@ -64,7 +66,10 @@ function renderCta(c: CTA): string {
   return `<a href="${escape(c.href)}" style="display:inline-block;background:${bg};color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;padding:14px 22px;border-radius:12px;letter-spacing:0.2px;box-shadow:${shadow};margin:0 8px 8px 0;">${escape(c.label)}</a>`;
 }
 
-function shell({ preheader, badge, title, body, cta, secondaryCta }: ShellOpts): string {
+function shell({ preheader, badge, title, body, cta, secondaryCta, footerNote }: ShellOpts): string {
+  const microcopy =
+    footerNote ?? `This is an automated notification from the contact form on vaishnaviconsultant.com.`;
+
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -165,7 +170,7 @@ function shell({ preheader, badge, title, body, cta, secondaryCta }: ShellOpts):
 
           <!-- legal microcopy -->
           <div style="max-width:600px;margin-top:16px;color:${C.textMuted};font-size:11px;line-height:1.5;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Inter,Helvetica,Arial,sans-serif;">
-            This is an automated notification from the contact form on vaishnaviconsultant.com.<br/>
+            ${escape(microcopy)}<br/>
             ${escape(COMPANY.contact.hours)}
           </div>
         </td>
@@ -263,6 +268,7 @@ export function renderAutoReplyEmail(d: AutoReplyEmail): string {
   return shell({
     preheader: `Thanks for reaching out, ${d.firstName} — we'll be in touch within 1 working day.`,
     badge: "We received your message",
+    footerNote: "You're receiving this because you sent us an enquiry through vaishnaviconsultant.com. We don't share your details with anyone outside our team.",
     title: `Thanks for reaching out, <span style="color:${C.teal600};">${escape(d.firstName)}</span>.`,
     body: `
       <p style="margin:0 0 14px 0;">Your message landed safely with our team. A senior consultant has read it personally and will reply to you within <strong>one working day</strong> — that's a promise we honour for every enquiry.</p>

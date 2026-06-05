@@ -7,6 +7,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { fadeUp, viewportOnce } from "@/animations/variants";
+import { submitBooking, type BookingInput } from "@/services/booking";
 
 const SLOTS_BY_DAY = [
   { day: "Mon", slots: ["10:00", "11:30", "14:30", "16:00"] },
@@ -23,12 +24,34 @@ const PROMISES = [
   "No sales pitch. No follow-up unless you ask.",
 ];
 
+type Day = BookingInput["day"];
+
 export function BookConsultation() {
-  const [day, setDay] = useState(SLOTS_BY_DAY[0].day);
+  const [day, setDay] = useState<Day>(SLOTS_BY_DAY[0].day as Day);
   const [slot, setSlot] = useState<string | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [companyRole, setCompanyRole] = useState("");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const currentSlots = SLOTS_BY_DAY.find((d) => d.day === day)?.slots ?? [];
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!slot) return;
+    setStatus("submitting");
+    setErrorMsg(null);
+    try {
+      await submitBooking({ fullName, email, companyRole, day, time: slot });
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Couldn't reserve slot");
+    }
+  };
+
+  const submitted = status === "success";
 
   return (
     <SectionLayout id="book" className="bg-gradient-to-br from-navy-900 to-navy-800 text-white" tone="dark">
@@ -63,7 +86,7 @@ export function BookConsultation() {
                   key={d.day}
                   type="button"
                   onClick={() => {
-                    setDay(d.day);
+                    setDay(d.day as Day);
                     setSlot(null);
                   }}
                   className={`rounded-xl px-4 py-2.5 text-[0.85rem] font-semibold transition-all ${
@@ -100,19 +123,50 @@ export function BookConsultation() {
             <div className="mt-7 text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-teal-300">
               Step 3 — confirm
             </div>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitted(true);
-              }}
-              className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2"
-            >
-              <input className="dark-input" placeholder="Full name" required />
-              <input className="dark-input" placeholder="Work email" type="email" required />
-              <input className="dark-input sm:col-span-2" placeholder="Company · Role" />
-              <Button type="submit" variant="white" className="sm:col-span-2 w-full" disabled={!slot || submitted}>
-                {submitted ? "✓ Slot reserved — check your inbox" : slot ? `Reserve ${day} · ${slot} IST` : "Pick a slot first"}
+            <form onSubmit={onSubmit} className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                className="dark-input"
+                placeholder="Full name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                disabled={submitted}
+              />
+              <input
+                className="dark-input"
+                placeholder="Work email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={submitted}
+              />
+              <input
+                className="dark-input sm:col-span-2"
+                placeholder="Company · Role"
+                value={companyRole}
+                onChange={(e) => setCompanyRole(e.target.value)}
+                disabled={submitted}
+              />
+              <Button
+                type="submit"
+                variant="white"
+                className="sm:col-span-2 w-full"
+                disabled={!slot || status === "submitting" || submitted}
+              >
+                {submitted
+                  ? "✓ Slot reserved — we'll send a calendar invite"
+                  : status === "submitting"
+                    ? "Reserving…"
+                    : slot
+                      ? `Reserve ${day} · ${slot} IST`
+                      : "Pick a slot first"}
               </Button>
+              {status === "error" && (
+                <p className="sm:col-span-2 text-center text-[0.8rem] text-rose-300">
+                  {errorMsg ?? "Couldn't reserve — please email connect@vaishnaviconsultant.com"}
+                </p>
+              )}
             </form>
           </motion.div>
 

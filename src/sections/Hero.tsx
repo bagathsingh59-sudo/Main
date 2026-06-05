@@ -81,16 +81,6 @@ export function Hero() {
               </div>
             ))}
           </div>
-
-          {/* Trust strip */}
-          <div className="hero-fade hero-fade-d5 mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.78rem] text-navy-900/55 lg:justify-start">
-            <span className="font-semibold">As featured by:</span>
-            {["Business Today", "ET Iconic", "GPTW", "CII", "FICCI"].map((b) => (
-              <span key={b} className="font-semibold text-navy-900/75">
-                {b}
-              </span>
-            ))}
-          </div>
         </div>
 
         {/* Dashboard mockup */}

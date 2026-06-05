@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { contactSchema } from "@/services/contact";
+import { bookingSchema } from "@/services/booking";
 import { sendLeadEmail } from "@/services/mailer";
-import { renderContactLeadEmail, renderContactLeadText } from "@/utils/emailTemplates";
+import { renderBookingLeadEmail, renderBookingLeadText } from "@/utils/emailTemplates";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as unknown;
-    const parsed = contactSchema.safeParse(body);
+    const parsed = bookingSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
         { ok: false, message: "Validation failed", issues: parsed.error.issues },
@@ -16,31 +16,28 @@ export async function POST(req: Request) {
       );
     }
 
-    const id = `lead_${Date.now().toString(36)}`;
+    const id = `book_${Date.now().toString(36)}`;
     const d = parsed.data;
 
     const payload = {
-      firstName: d.firstName,
-      lastName: d.lastName,
+      fullName: d.fullName,
       email: d.email,
-      phone: d.phone || undefined,
-      company: d.company || undefined,
-      companySize: d.companySize,
-      service: d.service,
-      message: d.message,
-      leadId: id,
+      companyRole: d.companyRole || undefined,
+      day: d.day,
+      time: d.time,
+      bookingId: id,
     };
 
     const mail = await sendLeadEmail({
-      subject: `New enquiry · ${d.firstName} ${d.lastName} — ${d.service}`,
-      html: renderContactLeadEmail(payload),
-      text: renderContactLeadText(payload),
+      subject: `Consultation booked · ${d.fullName} — ${d.day} ${d.time} IST`,
+      html: renderBookingLeadEmail(payload),
+      text: renderBookingLeadText(payload),
       replyTo: d.email,
     });
 
     if (!mail.ok) {
       return NextResponse.json(
-        { ok: false, message: "We couldn't send your message — please email us directly." },
+        { ok: false, message: "We couldn't reserve your slot — please email us directly." },
         { status: 502 },
       );
     }

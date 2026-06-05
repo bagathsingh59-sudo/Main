@@ -8,16 +8,24 @@ import { TESTIMONIALS } from "@/constants/testimonials";
 
 /**
  * Compact carousel — single quote card, auto-advances, manual nav.
- * Avoids the long 3-column grid we had previously, far less text density.
+ *
+ * Auto-hides until at least 3 real, client-approved testimonials exist
+ * (see `src/constants/testimonials.ts`). This avoids shipping a half-empty
+ * carousel and matches the "no fabricated endorsements" compliance bar.
  */
+const MIN_TESTIMONIALS_TO_RENDER = 3;
+
 export function TestimonialsCarousel() {
   const [idx, setIdx] = useState(0);
   const count = TESTIMONIALS.length;
 
   useEffect(() => {
+    if (count < MIN_TESTIMONIALS_TO_RENDER) return;
     const i = window.setInterval(() => setIdx((v) => (v + 1) % count), 6500);
     return () => window.clearInterval(i);
   }, [count]);
+
+  if (count < MIN_TESTIMONIALS_TO_RENDER) return null;
 
   const t = TESTIMONIALS[idx];
 

@@ -6,6 +6,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteMetadata } from "@/utils/seo";
 import { organizationSchema, websiteSchema } from "@/utils/jsonLd";
 import { JsonLd } from "@/components/shared/JsonLd";
+import { SiteBanner } from "@/components/shared/SiteBanner";
 import "./globals.css";
 
 /**
@@ -67,6 +68,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
+        {/* Admin-editable announcement strip; renders nothing when disabled. */}
+        <SiteBanner />
         {children}
         {/* Vercel — Web Analytics (pageviews) + Speed Insights (Core Web Vitals) */}
         <Analytics />

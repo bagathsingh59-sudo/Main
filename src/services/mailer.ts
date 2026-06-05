@@ -55,6 +55,10 @@ export interface SendArgs {
   replyTo?: string;
   /** Override the recipient. Defaults to LEAD_TO (internal notification). */
   to?: string;
+  /** Override From display name. Defaults to MAIL_FROM_NAME env. */
+  fromName?: string;
+  /** Override From address. Defaults to MAIL_FROM_ADDRESS env. */
+  fromAddress?: string;
 }
 
 export interface SendResult {
@@ -77,8 +81,10 @@ export async function sendLeadEmail(args: SendArgs): Promise<SendResult> {
   }
 
   try {
+    const fromName = args.fromName?.trim() || env.fromName;
+    const fromAddress = args.fromAddress?.trim() || env.fromAddress;
     const info = await getTransport(env).sendMail({
-      from: `"${env.fromName}" <${env.fromAddress}>`,
+      from: `"${fromName}" <${fromAddress}>`,
       to: args.to ?? env.leadTo,
       replyTo: args.replyTo,
       subject: args.subject,

@@ -12,7 +12,7 @@ import { APIError } from "@/services/api";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 import type { ContactPayload } from "@/types";
 
-const SERVICES = [
+const DEFAULT_SERVICES = [
   "Payroll & Statutory Compliance",
   "EPF & ESI Compliance",
   "GST Compliance",
@@ -23,20 +23,30 @@ const SERVICES = [
   "Full Compliance Suite",
 ];
 
-const SIZES = ["1-10", "11-50", "51-250", "250+"] as const;
+const DEFAULT_SIZES = ["1-10", "11-50", "51-250", "250+"];
 
-const initial: ContactInput = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  company: "",
-  companySize: "11-50",
-  service: SERVICES[0],
-  message: "",
-};
+interface ContactProps {
+  /** Service dropdown options. Falls back to defaults when not provided. */
+  services?: readonly string[];
+  /** Company-size brackets. Falls back to defaults when not provided. */
+  sizes?: readonly string[];
+}
 
-export function Contact() {
+export function Contact({ services, sizes }: ContactProps = {}) {
+  const SERVICES = services && services.length > 0 ? services : DEFAULT_SERVICES;
+  const SIZES = sizes && sizes.length > 0 ? sizes : DEFAULT_SIZES;
+
+  const initial: ContactInput = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    company: "",
+    companySize: (SIZES.includes("11-50") ? "11-50" : SIZES[0]) as ContactInput["companySize"],
+    service: SERVICES[0],
+    message: "",
+  };
+
   const [data, setData] = useState<ContactInput>(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof ContactInput, string>>>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error" | "throttled">("idle");

@@ -4,7 +4,7 @@ import { SITE_URL } from "@/utils/jsonLd";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      { userAgent: "*", allow: "/", disallow: ["/api/"] },
+      { userAgent: "*", allow: "/", disallow: ["/api/", "/admin/", "/admin"] },
       { userAgent: "GPTBot", allow: "/" },
       { userAgent: "Google-Extended", allow: "/" },
     ],

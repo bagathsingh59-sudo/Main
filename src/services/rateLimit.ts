@@ -16,14 +16,14 @@
 
 const HOUR = 60 * 60 * 1000;
 
-/**
- * Sliding-window limits. Tuned for a public contact form:
- *   • Per-IP: 5 submissions per 10 min → blocks form-spam bots
- *   • Global: 30 submissions per 1 min → protects Google's 2k/day SMTP
- *     quota from a flood that's slipped past per-IP limits.
- */
-const PER_IP = { max: 5, windowMs: 10 * 60 * 1000 };
-const GLOBAL = { max: 30, windowMs: 60 * 1000 };
+/** Default sliding-window limits — used when settings can't be read. */
+const DEFAULT_PER_IP = { max: 5, windowMs: 10 * 60 * 1000 };
+const DEFAULT_GLOBAL = { max: 30, windowMs: 60 * 1000 };
+
+export interface RateLimitConfig {
+  perIp: { max: number; windowMs: number };
+  global: { max: number; windowMs: number };
+}
 
 /** Bucket cleanup horizon — anything older than this is GC-d. */
 const GC_HORIZON_MS = HOUR;
@@ -77,7 +77,9 @@ function getIp(req: Request): string {
   return "unknown";
 }
 
-export function checkRateLimit(req: Request): RateLimitResult {
+export function checkRateLimit(req: Request, config?: RateLimitConfig): RateLimitResult {
+  const PER_IP = config?.perIp ?? DEFAULT_PER_IP;
+  const GLOBAL = config?.global ?? DEFAULT_GLOBAL;
   const now = Date.now();
   gc(now);
 

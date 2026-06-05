@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendLeadEmail } from "@/services/mailer";
+import { getSiteSettings } from "@/services/settings";
 import { verifyApproval } from "@/utils/approvalToken";
 import { renderAutoReplyEmail, renderAutoReplyText } from "@/utils/emailTemplates";
 import { COMPANY } from "@/constants/company";
@@ -58,12 +59,15 @@ export async function GET(req: Request) {
   }
 
   const { email, firstName } = result.payload;
+  const settings = await getSiteSettings();
 
   const mail = await sendLeadEmail({
     to: email,
     subject: `Thanks for reaching out to ${COMPANY.name}, ${firstName}`,
     html: renderAutoReplyEmail({ firstName }),
     text: renderAutoReplyText({ firstName }),
+    fromName: settings.automation.fromName || undefined,
+    fromAddress: settings.automation.fromAddress || undefined,
     // Replies to the auto-reply land on connect@ (default From), which
     // is exactly what we want — the staff inbox.
   });

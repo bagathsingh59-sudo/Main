@@ -8,6 +8,7 @@ import { Contact } from "@/sections/Contact";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadata } from "@/utils/seo";
+import { getSiteSettings } from "@/services/settings";
 
 const PAGE_TITLE = "Contact — Book a Free 45-Minute Consultation";
 const PAGE_DESC =
@@ -25,7 +26,8 @@ const DOTS = [
   { id: "contact", label: "Message" },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSiteSettings();
   return (
     <MainLayout>
       <JsonLd
@@ -68,7 +70,7 @@ export default function ContactPage() {
         overlay="brand"
       />
 
-      <Contact />
+      <Contact services={settings.formConfig.services} sizes={settings.formConfig.sizes} />
     </MainLayout>
   );
 }

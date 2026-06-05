@@ -9,14 +9,35 @@ import { Button } from "@/components/ui/Button";
 import { Logo } from "./Logo";
 import { cn } from "@/utils/cn";
 
+interface BannerData {
+  message: string;
+  linkUrl?: string;
+  linkLabel?: string;
+  tone: "info" | "warning" | "success";
+}
+
+interface MaintenanceData {
+  message: string;
+}
+
 interface NavbarProps {
   /** Admin-editable nav links. Falls back to NAV_LINKS constant. */
   links?: readonly { label: string; href: string; visible?: boolean }[];
   /** Admin-uploaded logo URL. Falls back to bundled brand asset. */
   logoUrl?: string;
+  /** Announcement banner — renders above the nav row. */
+  banner?: BannerData | null;
+  /** Maintenance strip — renders above announcement banner. */
+  maintenance?: MaintenanceData | null;
 }
 
-export function Navbar({ links, logoUrl }: NavbarProps = {}) {
+const BANNER_TONE: Record<BannerData["tone"], string> = {
+  info: "bg-navy-600",
+  warning: "bg-amber-500",
+  success: "bg-emerald-600",
+};
+
+export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}) {
   const source: ReadonlyArray<{ label: string; href: string; visible?: boolean }> =
     links && links.length > 0 ? links : NAV_LINKS;
   const navLinks = source.filter((l) => l.visible !== false);
@@ -48,14 +69,44 @@ export function Navbar({ links, logoUrl }: NavbarProps = {}) {
     pathname === href || (href !== "/" && pathname?.startsWith(href));
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-[100] transition-all duration-300",
-        scrolled
-          ? "bg-mist/85 backdrop-blur-xl border-b border-white/60 shadow-soft"
-          : "bg-transparent",
+    <header className="fixed inset-x-0 top-0 z-[100]">
+      {/* Maintenance strip — rendered above everything when forms are disabled. */}
+      {maintenance && (
+        <div className="bg-amber-500 text-white">
+          <div className="mx-auto flex max-w-7xl items-start gap-2.5 px-4 py-2 text-[0.82rem] leading-snug sm:items-center sm:px-8">
+            <span aria-hidden="true" className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-white/25 text-[0.65rem] font-bold sm:mt-0">
+              !
+            </span>
+            <div>
+              <strong className="font-bold uppercase tracking-[0.08em]">Maintenance · </strong>
+              <span className="font-medium">{maintenance.message}</span>
+            </div>
+          </div>
+        </div>
       )}
-    >
+
+      {/* Announcement strip — rendered above the nav row. */}
+      {banner && banner.message && (
+        <div className={cn(BANNER_TONE[banner.tone] ?? BANNER_TONE.info, "text-white")}>
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-1.5 text-center text-[0.82rem] sm:px-8">
+            <span className="font-medium">{banner.message}</span>
+            {banner.linkUrl && banner.linkLabel && (
+              <a href={banner.linkUrl} className="font-semibold underline decoration-white/60 underline-offset-2 hover:decoration-white">
+                {banner.linkLabel}
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div
+        className={cn(
+          "transition-all duration-300",
+          scrolled
+            ? "bg-mist/85 backdrop-blur-xl border-b border-white/60 shadow-soft"
+            : "bg-transparent",
+        )}
+      >
       <nav className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Primary">
         <Logo overrideSrc={logoUrl} />
 
@@ -102,6 +153,7 @@ export function Navbar({ links, logoUrl }: NavbarProps = {}) {
           </button>
         </div>
       </nav>
+      </div>
 
       <AnimatePresence>
         {open && (

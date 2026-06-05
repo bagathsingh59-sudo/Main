@@ -30,11 +30,38 @@ interface ContactProps {
   services?: readonly string[];
   /** Company-size brackets. Falls back to defaults when not provided. */
   sizes?: readonly string[];
+  /** Admin-edited contact info — overrides COMPANY constant when set. */
+  contactInfo?: {
+    phone: string;
+    altPhone: string;
+    email: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    pin: string;
+    hours: string;
+  };
+  /** When set, replaces the form with a maintenance card. */
+  maintenanceMessage?: string;
 }
 
-export function Contact({ services, sizes }: ContactProps = {}) {
+export function Contact({ services, sizes, contactInfo, maintenanceMessage }: ContactProps = {}) {
   const SERVICES = services && services.length > 0 ? services : DEFAULT_SERVICES;
   const SIZES = sizes && sizes.length > 0 ? sizes : DEFAULT_SIZES;
+
+  // Contact display — prefer admin-edited, fall back to COMPANY constant.
+  const ci = {
+    phone: contactInfo?.phone || COMPANY.contact.phone,
+    altPhone: contactInfo?.altPhone || COMPANY.contact.altPhone,
+    email: contactInfo?.email || COMPANY.contact.email,
+    addressLine1: contactInfo?.addressLine1 || COMPANY.contact.address.line1,
+    addressLine2: contactInfo?.addressLine2 || COMPANY.contact.address.line2,
+    city: contactInfo?.city || COMPANY.contact.address.city,
+    state: contactInfo?.state || COMPANY.contact.address.state,
+    pin: contactInfo?.pin || COMPANY.contact.address.pin,
+    hours: contactInfo?.hours || COMPANY.contact.hours,
+  };
 
   const initial: ContactInput = {
     firstName: "",
@@ -106,30 +133,67 @@ export function Contact({ services, sizes }: ContactProps = {}) {
           className="flex flex-col gap-4"
         >
           <ContactItem icon="MapPin" title="Head office">
-            <div>{COMPANY.contact.address.line1}</div>
-            <div>{COMPANY.contact.address.line2}</div>
+            <div>{ci.addressLine1}</div>
+            <div>{ci.addressLine2}</div>
             <div>
-              {COMPANY.contact.address.city}, {COMPANY.contact.address.state} {COMPANY.contact.address.pin}
+              {ci.city}, {ci.state} {ci.pin}
             </div>
           </ContactItem>
           <ContactItem icon="Phone" title="Phone">
-            <a href={`tel:${COMPANY.contact.phone.replace(/\s/g, "")}`} className="hover:text-navy-600">
-              {COMPANY.contact.phone}
+            <a href={`tel:${ci.phone.replace(/\s/g, "")}`} className="hover:text-navy-600">
+              {ci.phone}
             </a>
-            <div className="text-[0.82rem] text-navy-900/55">Also on {COMPANY.contact.altPhone}</div>
+            <div className="text-[0.82rem] text-navy-900/55">Also on {ci.altPhone}</div>
           </ContactItem>
           <ContactItem icon="Mail" title="Email">
-            <a href={`mailto:${COMPANY.contact.email}`} className="hover:text-navy-600">
-              {COMPANY.contact.email}
+            <a href={`mailto:${ci.email}`} className="hover:text-navy-600">
+              {ci.email}
             </a>
             <div className="text-[0.82rem] text-navy-900/55">Replies within one working day</div>
           </ContactItem>
           <ContactItem icon="Clock" title="Working hours">
-            <div>{COMPANY.contact.hours}</div>
+            <div>{ci.hours}</div>
             <div className="text-[0.82rem] text-navy-900/55">Branches: {COMPANY.contact.branches.join(" · ")}</div>
           </ContactItem>
         </motion.div>
 
+        {maintenanceMessage ? (
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            custom={1}
+            className="flex flex-col items-start gap-5 rounded-3xl border-2 border-amber-200 bg-amber-50/80 p-7 shadow-elevated sm:p-9"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500 text-xl font-bold text-white shadow-glow">
+              !
+            </div>
+            <div>
+              <div className="text-[0.78rem] font-bold uppercase tracking-[0.18em] text-amber-700">
+                Forms briefly offline
+              </div>
+              <h3 className="mt-2 text-[1.4rem] font-bold leading-tight text-amber-950">
+                We&apos;re doing scheduled maintenance.
+              </h3>
+              <p className="mt-3 text-[0.95rem] leading-relaxed text-amber-950/85">{maintenanceMessage}</p>
+            </div>
+            <div className="grid w-full gap-3 sm:grid-cols-2">
+              <a
+                href={`tel:${ci.phone.replace(/\s/g, "")}`}
+                className="flex items-center justify-center gap-2 rounded-xl bg-amber-600 px-4 py-3 text-[0.92rem] font-semibold text-white shadow-md hover:bg-amber-700"
+              >
+                📞 {ci.phone}
+              </a>
+              <a
+                href={`mailto:${ci.email}`}
+                className="flex items-center justify-center gap-2 rounded-xl border border-amber-300 bg-white px-4 py-3 text-[0.92rem] font-semibold text-amber-900 hover:bg-amber-50"
+              >
+                ✉ {ci.email}
+              </a>
+            </div>
+          </motion.div>
+        ) : (
         <motion.form
           variants={fadeUp}
           initial="hidden"
@@ -204,6 +268,7 @@ export function Contact({ services, sizes }: ContactProps = {}) {
             </p>
           )}
         </motion.form>
+        )}
       </div>
     </SectionLayout>
   );

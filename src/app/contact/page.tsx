@@ -51,7 +51,10 @@ export default async function ContactPage() {
         imageAlt="Client consultation in progress"
       />
 
-      <BookConsultation />
+      <BookConsultation
+        contactInfo={settings.contactInfo}
+        maintenanceMessage={settings.maintenance.formsDisabled ? settings.maintenance.message : undefined}
+      />
 
       <ImageBanner
         src="https://images.unsplash.com/photo-1582719188393-bb71ca45dbb9?w=1800&q=80&auto=format&fit=crop"
@@ -67,7 +70,12 @@ export default async function ContactPage() {
         overlay="brand"
       />
 
-      <Contact services={settings.formConfig.services} sizes={settings.formConfig.sizes} />
+      <Contact
+        services={settings.formConfig.services}
+        sizes={settings.formConfig.sizes}
+        contactInfo={settings.contactInfo}
+        maintenanceMessage={settings.maintenance.formsDisabled ? settings.maintenance.message : undefined}
+      />
     </MainLayout>
   );
 }

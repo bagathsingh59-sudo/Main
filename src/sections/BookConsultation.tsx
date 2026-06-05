@@ -36,7 +36,22 @@ const HOW_IT_WORKS = [
   { step: "3", title: "We do the prep", detail: "A short questionnaire arrives so the call hits the ground running." },
 ];
 
-export function BookConsultation() {
+interface BookConsultationProps {
+  /** Admin-edited contact info — overrides COMPANY constant when set. */
+  contactInfo?: {
+    phone: string;
+    email: string;
+    hours: string;
+  };
+  /** When set, replaces the booking CTA with a maintenance card. */
+  maintenanceMessage?: string;
+}
+
+export function BookConsultation({ contactInfo, maintenanceMessage }: BookConsultationProps = {}) {
+  const phone = contactInfo?.phone || COMPANY.contact.phone;
+  const email = contactInfo?.email || COMPANY.contact.email;
+  const hours = contactInfo?.hours || COMPANY.contact.hours;
+
   return (
     <SectionLayout id="book" className="bg-gradient-to-br from-navy-900 to-navy-800 text-white" tone="dark">
       <div aria-hidden="true" className="absolute inset-0 -z-0 opacity-20 bg-grid-light [background-size:48px_48px]" />
@@ -80,7 +95,28 @@ export function BookConsultation() {
             </ol>
 
             <div className="mt-8">
-              {BOOKING_URL ? (
+              {maintenanceMessage ? (
+                <div className="rounded-2xl border-2 border-amber-300/60 bg-amber-500/15 p-5">
+                  <div className="flex items-center gap-2 text-[0.78rem] font-bold uppercase tracking-[0.18em] text-amber-300">
+                    ⚠ Booking paused
+                  </div>
+                  <p className="mt-2 text-[0.92rem] leading-relaxed text-amber-50">{maintenanceMessage}</p>
+                  <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                    <a
+                      href={`tel:${phone.replace(/\s/g, "")}`}
+                      className="flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-[0.88rem] font-semibold text-white hover:bg-amber-600"
+                    >
+                      📞 {phone}
+                    </a>
+                    <a
+                      href={`mailto:${email}`}
+                      className="flex items-center justify-center gap-2 rounded-xl border border-amber-300/40 bg-white/5 px-4 py-2.5 text-[0.88rem] font-semibold text-amber-50 hover:bg-white/10"
+                    >
+                      ✉ {email}
+                    </a>
+                  </div>
+                </div>
+              ) : BOOKING_URL ? (
                 <Button
                   href={BOOKING_URL}
                   target="_blank"
@@ -94,18 +130,18 @@ export function BookConsultation() {
               ) : (
                 <div className="rounded-2xl border border-white/15 bg-white/[0.04] p-5 text-[0.9rem] text-navy-100/80">
                   Booking calendar is being set up. In the meantime, reach us on{" "}
-                  <a href={`tel:${COMPANY.contact.phone.replace(/\s/g, "")}`} className="font-semibold text-teal-300 hover:text-teal-200">
-                    {COMPANY.contact.phone}
+                  <a href={`tel:${phone.replace(/\s/g, "")}`} className="font-semibold text-teal-300 hover:text-teal-200">
+                    {phone}
                   </a>{" "}
                   or{" "}
-                  <a href={`mailto:${COMPANY.contact.email}`} className="font-semibold text-teal-300 hover:text-teal-200">
-                    {COMPANY.contact.email}
+                  <a href={`mailto:${email}`} className="font-semibold text-teal-300 hover:text-teal-200">
+                    {email}
                   </a>
                   .
                 </div>
               )}
               <p className="mt-3 text-center text-[0.78rem] text-navy-100/55">
-                Opens Google Calendar · {COMPANY.contact.hours}
+                {maintenanceMessage ? "Forms briefly offline" : "Opens Google Calendar"} · {hours}
               </p>
             </div>
           </motion.div>
@@ -141,10 +177,10 @@ export function BookConsultation() {
               </div>
               <ul className="mt-3 space-y-2.5 text-[0.92rem] text-white/85">
                 <li className="flex items-center gap-3">
-                  <Icon name="Phone" size={18} className="text-teal-300" /> {COMPANY.contact.phone}
+                  <Icon name="Phone" size={18} className="text-teal-300" /> {phone}
                 </li>
                 <li className="flex items-center gap-3">
-                  <Icon name="Mail" size={18} className="text-teal-300" /> {COMPANY.contact.email}
+                  <Icon name="Mail" size={18} className="text-teal-300" /> {email}
                 </li>
               </ul>
             </div>

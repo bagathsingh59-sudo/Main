@@ -38,6 +38,7 @@ export function useSettings() {
     };
   }, []);
 
+  /** Full-settings save — kept for backward compatibility. */
   const save = useCallback(async (next: SiteSettings) => {
     const res = await fetch("/api/admin/settings", {
       method: "PUT",
@@ -51,5 +52,30 @@ export function useSettings() {
     setState({ settings: json.settings ?? next, loading: false, error: null });
   }, []);
 
-  return { ...state, save };
+  /**
+   * Section-scoped save. Each editor passes only the sections it owns
+   * (e.g. AutomationEditor sends both `automation` and `rateLimit`).
+   * Validation runs only on those sections; other sections are read
+   * from current storage and left untouched. This is the recommended
+   * path — a bad SEO field can't block a banner save anymore.
+   */
+  const savePartial = useCallback(async (partial: Partial<SiteSettings>) => {
+    // Strip any accidental `version` field so the API takes the partial path.
+    const { version: _ignore, ...rest } = partial as Partial<SiteSettings> & { version?: unknown };
+    void _ignore;
+    const res = await fetch("/api/admin/settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(rest),
+    });
+    const json = (await res.json()) as { ok: boolean; message?: string; settings?: SiteSettings };
+    if (!res.ok || !json.ok) {
+      throw new Error(json.message ?? `HTTP ${res.status}`);
+    }
+    if (json.settings) {
+      setState({ settings: json.settings, loading: false, error: null });
+    }
+  }, []);
+
+  return { ...state, save, savePartial };
 }

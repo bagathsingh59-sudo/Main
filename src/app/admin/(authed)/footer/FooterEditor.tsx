@@ -8,7 +8,7 @@ import type { FooterColumn, NavLink, SiteSettings, SocialLink } from "@/services
 const PLATFORMS: SocialLink["platform"][] = ["linkedin", "twitter", "instagram", "youtube", "facebook"];
 
 export function FooterEditor() {
-  const { settings, loading, error, save } = useSettings();
+  const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
@@ -47,7 +47,7 @@ export function FooterEditor() {
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await save(draft);
+      await savePartial({ navigation: draft.navigation });
       setStatus({ kind: "ok", message: "Footer saved. Live within ~30 seconds." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });

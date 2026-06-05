@@ -16,7 +16,7 @@ const PAGE_TABS: Array<{ key: SeoPageKey; label: string; path: string }> = [
 ];
 
 export function SeoEditor() {
-  const { settings, loading, error, save } = useSettings();
+  const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
@@ -56,7 +56,7 @@ export function SeoEditor() {
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await save(draft);
+      await savePartial({ seo: draft.seo });
       setStatus({ kind: "ok", message: "SEO saved. Search engines pick up changes on next crawl." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });

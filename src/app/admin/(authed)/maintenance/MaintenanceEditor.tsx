@@ -6,7 +6,7 @@ import { useSettings } from "../../_components/useSettings";
 import type { SiteSettings } from "@/services/settings";
 
 export function MaintenanceEditor() {
-  const { settings, loading, error, save } = useSettings();
+  const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
@@ -32,7 +32,7 @@ export function MaintenanceEditor() {
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await save(draft);
+      await savePartial({ maintenance: draft.maintenance });
       setStatus({ kind: "ok", message: "Maintenance settings saved." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });

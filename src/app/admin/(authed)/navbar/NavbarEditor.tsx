@@ -6,7 +6,7 @@ import { useSettings } from "../../_components/useSettings";
 import type { NavLink, SiteSettings } from "@/services/settings";
 
 export function NavbarEditor() {
-  const { settings, loading, error, save } = useSettings();
+  const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
@@ -49,7 +49,7 @@ export function NavbarEditor() {
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await save(draft);
+      await savePartial({ navigation: draft.navigation });
       setStatus({ kind: "ok", message: "Navbar saved. Live within ~30 seconds." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });

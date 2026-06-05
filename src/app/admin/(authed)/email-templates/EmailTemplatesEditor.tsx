@@ -19,7 +19,7 @@ const TABS: Array<{ key: "leadNotification" | "autoReply"; label: string; descri
 ];
 
 export function EmailTemplatesEditor() {
-  const { settings, loading, error, save } = useSettings();
+  const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
@@ -69,7 +69,7 @@ export function EmailTemplatesEditor() {
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await save(draft);
+      await savePartial({ emailTemplates: draft.emailTemplates });
       setStatus({ kind: "ok", message: "Email templates saved. Used on the next form submission." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });

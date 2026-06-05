@@ -6,7 +6,7 @@ import { useSettings } from "../../_components/useSettings";
 import type { SiteSettings } from "@/services/settings";
 
 export function AutomationEditor() {
-  const { settings, loading, error, save } = useSettings();
+  const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
@@ -36,7 +36,7 @@ export function AutomationEditor() {
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await save(draft);
+      await savePartial({ automation: draft.automation, rateLimit: draft.rateLimit });
       setStatus({ kind: "ok", message: "Settings saved. Propagating globally — may take ~30 seconds." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });

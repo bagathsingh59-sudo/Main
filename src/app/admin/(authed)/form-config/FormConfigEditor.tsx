@@ -6,7 +6,7 @@ import { useSettings } from "../../_components/useSettings";
 import type { SiteSettings } from "@/services/settings";
 
 export function FormConfigEditor() {
-  const { settings, loading, error, save } = useSettings();
+  const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
@@ -32,7 +32,7 @@ export function FormConfigEditor() {
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await save(draft);
+      await savePartial({ formConfig: draft.formConfig });
       setStatus({ kind: "ok", message: "Form options saved." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });

@@ -1,7 +1,24 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { ADMIN_COOKIE, verifySession } from "@/services/adminAuth";
-import { getSiteSettings, updateSiteSettings, siteSettingsSchema } from "@/services/settings";
+import {
+  getSiteSettings,
+  updateSiteSettings,
+  siteSettingsSchema,
+  automationSchema,
+  rateLimitSchema,
+  contactInfoSchema,
+  formConfigSchema,
+  bannerSchema,
+  maintenanceSchema,
+  seoSchema,
+  brandingSchema,
+  navigationSchema,
+  emailTemplatesSchema,
+  CURRENT_VERSION,
+  type SiteSettings,
+} from "@/services/settings";
 import { pingIndexNow } from "@/services/indexnow";
 
 export const runtime = "nodejs";
@@ -25,6 +42,28 @@ export async function GET() {
   return NextResponse.json({ ok: true, settings });
 }
 
+/**
+ * Per-section schema lookup. Section keys mirror the SiteSettings shape
+ * minus `version`. Partial saves validate only the provided sections
+ * and merge them into current settings — so a bad SEO description can
+ * no longer block a banner save (and vice versa).
+ */
+const SECTION_SCHEMAS = {
+  automation: automationSchema,
+  rateLimit: rateLimitSchema,
+  contactInfo: contactInfoSchema,
+  formConfig: formConfigSchema,
+  banner: bannerSchema,
+  maintenance: maintenanceSchema,
+  seo: seoSchema,
+  branding: brandingSchema,
+  navigation: navigationSchema,
+  emailTemplates: emailTemplatesSchema,
+} as const satisfies Record<string, z.ZodTypeAny>;
+
+type SectionKey = keyof typeof SECTION_SCHEMAS;
+const SECTION_KEYS = Object.keys(SECTION_SCHEMAS) as SectionKey[];
+
 export async function PUT(req: Request) {
   const unauth = requireAuth();
   if (unauth) return unauth;
@@ -36,19 +75,77 @@ export async function PUT(req: Request) {
     return NextResponse.json({ ok: false, message: "Invalid JSON" }, { status: 400 });
   }
 
-  const parsed = siteSettingsSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json(
-      {
-        ok: false,
-        message: "Validation failed",
-        issues: parsed.error.issues,
-      },
-      { status: 400 },
-    );
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ ok: false, message: "Body must be an object" }, { status: 400 });
   }
 
-  const result = await updateSiteSettings(parsed.data);
+  const payload = body as Record<string, unknown>;
+
+  // ── Detect mode ────────────────────────────────────────────────────
+  // Full save: payload contains a `version` field at the top level.
+  //   We validate the whole siteSettingsSchema and replace storage wholesale.
+  // Partial save: payload omits `version` and contains only some sections.
+  //   We validate each section individually, then merge into current.
+  const isFullSave = "version" in payload;
+
+  let next: SiteSettings;
+
+  if (isFullSave) {
+    const parsed = siteSettingsSchema.safeParse(payload);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { ok: false, message: "Validation failed", issues: parsed.error.issues },
+        { status: 400 },
+      );
+    }
+    next = parsed.data;
+  } else {
+    // ── Partial path ─────────────────────────────────────────────────
+    const providedKeys = Object.keys(payload).filter((k) => k !== "version") as SectionKey[];
+    if (providedKeys.length === 0) {
+      return NextResponse.json(
+        { ok: false, message: "Empty partial — no sections to update" },
+        { status: 400 },
+      );
+    }
+
+    const unknownKeys = providedKeys.filter((k) => !SECTION_KEYS.includes(k as SectionKey));
+    if (unknownKeys.length > 0) {
+      return NextResponse.json(
+        { ok: false, message: `Unknown section(s): ${unknownKeys.join(", ")}` },
+        { status: 400 },
+      );
+    }
+
+    // Validate each provided section individually.
+    const issues: z.ZodIssue[] = [];
+    const validated: Partial<SiteSettings> = {};
+    for (const key of providedKeys) {
+      const schema = SECTION_SCHEMAS[key];
+      const result = schema.safeParse(payload[key]);
+      if (!result.success) {
+        for (const issue of result.error.issues) {
+          // Prefix each issue's path with the section so the client sees the
+          // full address (e.g. ["seo", "defaultDescription"]).
+          issues.push({ ...issue, path: [key, ...issue.path] });
+        }
+      } else {
+        (validated as Record<string, unknown>)[key] = result.data;
+      }
+    }
+
+    if (issues.length > 0) {
+      return NextResponse.json(
+        { ok: false, message: "Validation failed", issues },
+        { status: 400 },
+      );
+    }
+
+    const current = await getSiteSettings();
+    next = { ...current, ...validated, version: CURRENT_VERSION };
+  }
+
+  const result = await updateSiteSettings(next);
   if (!result.ok) {
     return NextResponse.json(
       { ok: false, message: result.detail ?? "Save failed", reason: result.reason },
@@ -57,5 +154,5 @@ export async function PUT(req: Request) {
   }
   // Fire-and-forget IndexNow ping — fast, doesn't block the admin save.
   pingIndexNow().catch(() => {});
-  return NextResponse.json({ ok: true, settings: parsed.data });
+  return NextResponse.json({ ok: true, settings: next });
 }

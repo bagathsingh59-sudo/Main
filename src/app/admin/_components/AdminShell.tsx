@@ -46,6 +46,21 @@ const ICONS: Record<string, { bg: string; fg: string; path: React.ReactNode }> =
     fg: "text-fuchsia-700 dark:text-fuchsia-300",
     path: <><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" /></>,
   },
+  Team: {
+    bg: "bg-pink-100 dark:bg-pink-900/40",
+    fg: "text-pink-700 dark:text-pink-300",
+    path: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
+  },
+  Services: {
+    bg: "bg-blue-100 dark:bg-blue-900/40",
+    fg: "text-blue-700 dark:text-blue-300",
+    path: <><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></>,
+  },
+  Founder: {
+    bg: "bg-yellow-100 dark:bg-yellow-900/40",
+    fg: "text-yellow-700 dark:text-yellow-300",
+    path: <><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></>,
+  },
   Blog: {
     bg: "bg-orange-100 dark:bg-orange-900/40",
     fg: "text-orange-700 dark:text-orange-300",
@@ -90,6 +105,9 @@ const NAV = [
   { href: "/admin/navbar", label: "Navbar" },
   { href: "/admin/footer", label: "Footer" },
   { href: "/admin/blog", label: "Blog" },
+  { href: "/admin/team", label: "Team" },
+  { href: "/admin/services", label: "Services" },
+  { href: "/admin/founder", label: "Founder" },
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/automation", label: "Automation" },
   { href: "/admin/email-templates", label: "Email templates" },

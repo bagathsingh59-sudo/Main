@@ -72,6 +72,11 @@ function migrate(raw: unknown): SiteSettings {
       : DEFAULT_SETTINGS.emailTemplates,
     faq: obj.faq ? { ...DEFAULT_SETTINGS.faq, ...(obj.faq as object) } : DEFAULT_SETTINGS.faq,
     blog: obj.blog ? { ...DEFAULT_SETTINGS.blog, ...(obj.blog as object) } : DEFAULT_SETTINGS.blog,
+    team: obj.team ? { ...DEFAULT_SETTINGS.team, ...(obj.team as object) } : DEFAULT_SETTINGS.team,
+    services: obj.services
+      ? { ...DEFAULT_SETTINGS.services, ...(obj.services as object) }
+      : DEFAULT_SETTINGS.services,
+    founder: obj.founder ? { ...DEFAULT_SETTINGS.founder, ...(obj.founder as object) } : DEFAULT_SETTINGS.founder,
   };
 }
 

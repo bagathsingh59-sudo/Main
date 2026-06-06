@@ -9,7 +9,7 @@
 
 import { z } from "zod";
 
-export const CURRENT_VERSION = 6 as const;
+export const CURRENT_VERSION = 7 as const;
 
 /* ─────────────────────────  schemas  ─────────────────────── */
 
@@ -248,6 +248,104 @@ export const blogSettingsSchema = z.object({
   categories: z.array(z.string().min(1).max(60)).max(30),
 });
 
+/* ── Team (members CRUD) ────────────────────────────────── */
+
+/**
+ * Accent gradient picker — keeps team avatars visually consistent
+ * with the brand even when no photo is uploaded.
+ */
+export const TEAM_ACCENTS = [
+  "from-navy-700 to-teal-600",
+  "from-teal-600 to-navy-700",
+  "from-navy-600 to-teal-500",
+  "from-teal-700 to-navy-600",
+  "from-navy-500 to-teal-600",
+  "from-teal-500 to-navy-700",
+] as const;
+
+export const teamMemberSchema = z.object({
+  id: z.string().min(6).max(40),
+  name: z.string().min(2).max(120),
+  role: z.string().max(160),
+  bio: z.string().max(800),
+  /** Two-letter fallback shown when no photo is uploaded. */
+  initials: z.string().max(4),
+  /** Tailwind gradient class (without "bg-gradient-to-br"). */
+  accent: z.string().max(60),
+  /** Uploaded photo URL. Empty = render initials avatar. */
+  image: z.string().max(500),
+  linkedinUrl: z.string().max(300),
+});
+
+export const teamSettingsSchema = z.object({
+  members: z.array(teamMemberSchema).max(50),
+});
+
+/* ── Services (8-item list) ──────────────────────────────── */
+
+/**
+ * Icon names allowed for services. Maps to existing Icon component
+ * (src/components/ui/Icon.tsx). We type-check by enum so admins can't
+ * pick a non-existent icon.
+ */
+export const SERVICE_ICONS = [
+  "Wallet",
+  "ShieldCheck",
+  "Scale",
+  "Receipt",
+  "FileText",
+  "LineChart",
+  "ClipboardCheck",
+  "Building2",
+  "Users",
+  "Activity",
+  "Lock",
+  "Globe",
+  "Sparkles",
+  "Calculator",
+  "Award",
+  "BookOpen",
+] as const;
+
+export const serviceItemSchema = z.object({
+  id: z.string().min(6).max(40),
+  icon: z.enum(SERVICE_ICONS),
+  title: z.string().min(2).max(120),
+  summary: z.string().max(400),
+  /** Bullet points shown under the summary on the Services page. */
+  points: z.array(z.string().min(1).max(120)).max(8),
+  /** Tailwind gradient class (without "bg-gradient-to-br"). */
+  accent: z.string().max(60),
+});
+
+export const servicesSettingsSchema = z.object({
+  items: z.array(serviceItemSchema).max(20),
+});
+
+/* ── Founder profile (single record) ─────────────────────── */
+
+export const founderSettingsSchema = z.object({
+  /** Empty = use Team list[0] as fallback. */
+  name: z.string().max(120),
+  role: z.string().max(160),
+  /** Photo URL — falls back to initials avatar if empty. */
+  image: z.string().max(500),
+  /** Initials used in the photo fallback. */
+  initials: z.string().max(4),
+  /** Tailwind gradient class. */
+  accent: z.string().max(60),
+  /** Pull-quote shown in display font at the top of the card. */
+  quote: z.string().max(280),
+  /** Body paragraphs (rendered as separate <p> blocks). */
+  paragraphs: z.array(z.string().min(1).max(800)).max(8),
+  /** Years-of-practice stat (e.g., "24+ yrs"). Empty hides the chip. */
+  experienceStat: z.string().max(20),
+  /** Qualification stat (e.g., "FCA"). Empty hides the chip. */
+  qualificationStat: z.string().max(20),
+  /** Body for the signature row at the bottom. */
+  signatureLabel: z.string().max(120),
+});
+
 export const siteSettingsSchema = z.object({
   version: z.literal(CURRENT_VERSION),
   automation: automationSchema,
@@ -262,6 +360,9 @@ export const siteSettingsSchema = z.object({
   emailTemplates: emailTemplatesSchema,
   faq: faqSettingsSchema,
   blog: blogSettingsSchema,
+  team: teamSettingsSchema,
+  services: servicesSettingsSchema,
+  founder: founderSettingsSchema,
 });
 
 /* ─────────────────────────  types  ───────────────────────── */
@@ -287,6 +388,12 @@ export type FaqSettings = z.infer<typeof faqSettingsSchema>;
 export type BlogPost = z.infer<typeof blogPostSchema>;
 export type BlogPostSeo = z.infer<typeof blogPostSeoSchema>;
 export type BlogSettings = z.infer<typeof blogSettingsSchema>;
+export type TeamMember = z.infer<typeof teamMemberSchema>;
+export type TeamSettings = z.infer<typeof teamSettingsSchema>;
+export type ServiceItem = z.infer<typeof serviceItemSchema>;
+export type ServicesSettings = z.infer<typeof servicesSettingsSchema>;
+export type FounderSettings = z.infer<typeof founderSettingsSchema>;
+export type ServiceIcon = (typeof SERVICE_ICONS)[number];
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 
 /** Page keys we support per-page SEO for. */

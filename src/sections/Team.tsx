@@ -8,7 +8,24 @@ import { TEAM } from "@/constants/team";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 import { cn } from "@/utils/cn";
 
-export function Team() {
+interface TeamItem {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  initials: string;
+  accent: string;
+  image?: string;
+  linkedinUrl?: string;
+}
+
+interface TeamProps {
+  /** Admin-managed list. Falls back to bundled TEAM constant when empty. */
+  members?: readonly TeamItem[];
+}
+
+export function Team({ members }: TeamProps = {}) {
+  const list: readonly TeamItem[] = members && members.length > 0 ? members : TEAM;
   return (
     <SectionLayout id="team" className="bg-cloud">
       <SectionHeader
@@ -23,7 +40,7 @@ export function Team() {
       />
 
       <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {TEAM.map((m, i) => (
+        {list.map((m, i) => (
           <motion.article
             key={m.id}
             variants={fadeUp}
@@ -68,15 +85,18 @@ export function Team() {
               </div>
             </div>
             <p className="mt-5 text-[0.9rem] leading-[1.7] text-navy-900/65">{m.bio}</p>
-            <div className="mt-6 flex items-center gap-3 text-[0.78rem]">
-              <a className="font-semibold text-navy-600 hover:underline" href="#">
-                LinkedIn ↗
-              </a>
-              <span className="text-navy-900/30">·</span>
-              <a className="font-semibold text-navy-600 hover:underline" href="#">
-                Full bio
-              </a>
-            </div>
+            {m.linkedinUrl && (
+              <div className="mt-6 flex items-center gap-3 text-[0.78rem]">
+                <a
+                  className="font-semibold text-navy-600 hover:underline"
+                  href={m.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  LinkedIn ↗
+                </a>
+              </div>
+            )}
           </motion.article>
         ))}
       </div>

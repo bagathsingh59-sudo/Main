@@ -12,6 +12,7 @@ import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { SERVICES } from "@/constants/services";
+import { getSiteSettings } from "@/services/settings";
 
 const PAGE_TITLE = "Services — EPF, ESI, GST, Payroll & Tax Compliance";
 const PAGE_DESC =
@@ -28,7 +29,9 @@ const DOTS = [
   { id: "calculator", label: "Calculator" },
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const settings = await getSiteSettings();
+  const services = settings.services.items.length > 0 ? settings.services.items : SERVICES;
   return (
     <MainLayout>
       <JsonLd
@@ -38,7 +41,7 @@ export default function ServicesPage() {
             { name: "Home", path: "/" },
             { name: "Services", path: "/services" },
           ]),
-          serviceListSchema(SERVICES.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
+          serviceListSchema(services.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
         ]}
       />
       <SectionDots dots={DOTS} />
@@ -56,7 +59,7 @@ export default function ServicesPage() {
         imageAlt="Compliance and finance workflows"
       />
 
-      <Services />
+      <Services items={settings.services.items} />
 
       <ImageBanner
         src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1800&q=80&auto=format&fit=crop"

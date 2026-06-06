@@ -11,12 +11,15 @@ import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { SERVICES } from "@/constants/services";
+import { getSiteSettings } from "@/services/settings";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("home", "/");
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getSiteSettings();
+  const services = settings.services.items.length > 0 ? settings.services.items : SERVICES;
   return (
     <MainLayout>
       <JsonLd
@@ -28,7 +31,7 @@ export default function HomePage() {
               "EPF, ESI, Payroll, GST, TDS and Labour Law compliance for Indian businesses. Zero-penalty track record across 850+ clients.",
           }),
           breadcrumbSchema([{ name: "Home", path: "/" }]),
-          serviceListSchema(SERVICES.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
+          serviceListSchema(services.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
         ]}
       />
       {/* Header section — untouched */}
@@ -63,7 +66,7 @@ export default function HomePage() {
       <AboutTeaser />
 
       {/* Slim services preview → /services */}
-      <ServicesPreview />
+      <ServicesPreview items={settings.services.items} />
 
       {/* Visual break #2 — dashboard / product moment */}
       <ImageBanner

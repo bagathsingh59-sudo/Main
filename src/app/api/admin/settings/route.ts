@@ -18,6 +18,9 @@ import {
   emailTemplatesSchema,
   faqSettingsSchema,
   blogSettingsSchema,
+  teamSettingsSchema,
+  servicesSettingsSchema,
+  founderSettingsSchema,
   CURRENT_VERSION,
   type SiteSettings,
 } from "@/services/settings";
@@ -64,6 +67,9 @@ const SECTION_SCHEMAS = {
   emailTemplates: emailTemplatesSchema,
   faq: faqSettingsSchema,
   blog: blogSettingsSchema,
+  team: teamSettingsSchema,
+  services: servicesSettingsSchema,
+  founder: founderSettingsSchema,
 } as const satisfies Record<string, z.ZodTypeAny>;
 
 type SectionKey = keyof typeof SECTION_SCHEMAS;

@@ -8,12 +8,28 @@ import { Icon } from "@/components/ui/Icon";
 import { SERVICES } from "@/constants/services";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 import { cn } from "@/utils/cn";
+import type { IconName } from "@/types";
+
+interface ServiceListItem {
+  id: string;
+  icon: IconName;
+  title: string;
+  summary: string;
+  points: readonly string[];
+  accent: string;
+}
+
+interface ServicesPreviewProps {
+  /** Admin-managed list. Falls back to bundled SERVICES constant when empty. */
+  items?: readonly ServiceListItem[];
+}
 
 /**
  * Slimmed services tile grid for the home page — shows 4 priority services and links to /services.
  */
-export function ServicesPreview() {
-  const featured = SERVICES.slice(0, 4);
+export function ServicesPreview({ items }: ServicesPreviewProps = {}) {
+  const source: readonly ServiceListItem[] = items && items.length > 0 ? items : SERVICES;
+  const featured = source.slice(0, 4);
 
   return (
     <SectionLayout id="services-preview" className="bg-mist">

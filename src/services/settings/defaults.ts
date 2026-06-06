@@ -199,7 +199,25 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   blog: {
     posts: [],
-    categories: ["Compliance", "EPF", "ESIC", "GST", "Payroll", "Labour Law"],
+    categories: ["Compliance", "EPF", "ESIC", "GST", "Payroll", "Labour Law", "Updates"],
+  },
+
+  /* Empty content lists mean "use the bundled constants as fallback".
+     The public sections check `items.length === 0` and substitute the
+     hard-coded data, so the deploy default is unchanged. */
+  team: { members: [] },
+  services: { items: [] },
+  founder: {
+    name: "",
+    role: "",
+    image: "",
+    initials: "",
+    accent: "from-navy-700 to-teal-600",
+    quote: "",
+    paragraphs: [],
+    experienceStat: "",
+    qualificationStat: "",
+    signatureLabel: "",
   },
 
   emailTemplates: {

@@ -16,6 +16,7 @@ import { CTABanner } from "@/sections/CTABanner";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
+import { getSiteSettings } from "@/services/settings";
 
 const PAGE_TITLE = "About Us — 15 Years of Trusted Compliance";
 const PAGE_DESC =
@@ -35,7 +36,8 @@ const DOTS = [
   { id: "trust", label: "Security" },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getSiteSettings();
   return (
     <MainLayout>
       <JsonLd
@@ -63,7 +65,7 @@ export default function AboutPage() {
       />
 
       <AboutUs />
-      <FounderMessage />
+      <FounderMessage profile={settings.founder} />
 
       <ImageBanner
         src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1800&q=80&auto=format&fit=crop"
@@ -81,7 +83,7 @@ export default function AboutPage() {
 
       <CompanyJourney />
       <ClientMetrics />
-      <Team />
+      <Team members={settings.team.members} />
 
       <ImageBanner
         src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1800&q=80&auto=format&fit=crop"

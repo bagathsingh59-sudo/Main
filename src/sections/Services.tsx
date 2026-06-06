@@ -7,8 +7,24 @@ import { Icon } from "@/components/ui/Icon";
 import { SERVICES } from "@/constants/services";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 import { cn } from "@/utils/cn";
+import type { IconName } from "@/types";
 
-export function Services() {
+interface ServiceListItem {
+  id: string;
+  icon: IconName;
+  title: string;
+  summary: string;
+  points: readonly string[];
+  accent: string;
+}
+
+interface ServicesProps {
+  /** Admin-managed list. Falls back to bundled SERVICES constant when empty. */
+  items?: readonly ServiceListItem[];
+}
+
+export function Services({ items }: ServicesProps = {}) {
+  const list: readonly ServiceListItem[] = items && items.length > 0 ? items : SERVICES;
   return (
     <SectionLayout id="services" className="bg-cloud">
       <SectionHeader
@@ -23,7 +39,7 @@ export function Services() {
       />
 
       <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {SERVICES.map((s, i) => (
+        {list.map((s, i) => (
           <motion.article
             key={s.id}
             variants={fadeUp}

@@ -22,6 +22,7 @@ import {
   type SiteSettings,
 } from "@/services/settings";
 import { pingIndexNow } from "@/services/indexnow";
+import { cleanupOrphans } from "@/services/blobCleanup";
 
 export const runtime = "nodejs";
 
@@ -158,5 +159,14 @@ export async function PUT(req: Request) {
   }
   // Fire-and-forget IndexNow ping — fast, doesn't block the admin save.
   pingIndexNow().catch(() => {});
+
+  // Fire-and-forget Blob orphan cleanup. Catches files that became
+  // unreferenced (replaced logo, deleted blog post cover, etc.) and
+  // are at least 1 hour old. Safe to call after every save — heavy
+  // pruning only happens when there's something to prune.
+  cleanupOrphans().catch((err) => {
+    console.warn("[settings] blob cleanup failed (non-fatal):", err);
+  });
+
   return NextResponse.json({ ok: true, settings: next });
 }

@@ -51,6 +51,11 @@ const ICONS: Record<string, { bg: string; fg: string; path: React.ReactNode }> =
     fg: "text-orange-700 dark:text-orange-300",
     path: <><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z" /></>,
   },
+  Storage: {
+    bg: "bg-cyan-100 dark:bg-cyan-900/40",
+    fg: "text-cyan-700 dark:text-cyan-300",
+    path: <><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0" /></>,
+  },
   "Contact info": {
     bg: "bg-rose-100 dark:bg-rose-900/40",
     fg: "text-rose-700 dark:text-rose-300",
@@ -87,6 +92,7 @@ const NAV = [
   { href: "/admin/form-config", label: "Form options" },
   { href: "/admin/banner", label: "Site banner" },
   { href: "/admin/maintenance", label: "Maintenance" },
+  { href: "/admin/storage", label: "Storage" },
 ];
 
 function NavIcon({ name, active }: { name: string; active: boolean }) {

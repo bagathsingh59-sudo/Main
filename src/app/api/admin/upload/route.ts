@@ -17,6 +17,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { ADMIN_COOKIE, verifySession } from "@/services/adminAuth";
+import { checkQuotaFor } from "@/services/blobCleanup";
 
 export const runtime = "nodejs";
 
@@ -78,6 +79,24 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { ok: false, message: `Unsupported file type: ${file.type}` },
       { status: 415 },
+    );
+  }
+
+  // ── Quota guard ──────────────────────────────────────────
+  // Reject the upload before transferring bytes to Blob if it would
+  // push storage past the safe limit (800 MB, leaving 200 MB reserve).
+  const quota = await checkQuotaFor(file.size);
+  if (!quota.ok) {
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "quota_exceeded",
+        message: quota.message,
+        currentBytes: quota.currentBytes,
+        projectedBytes: quota.projectedBytes,
+        safeLimit: quota.safeLimit,
+      },
+      { status: 413 },
     );
   }
 

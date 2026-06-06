@@ -21,6 +21,7 @@ import {
   teamSettingsSchema,
   servicesSettingsSchema,
   founderSettingsSchema,
+  updatesSettingsSchema,
   CURRENT_VERSION,
   type SiteSettings,
 } from "@/services/settings";
@@ -73,6 +74,7 @@ const SECTION_SCHEMAS = {
   team: teamSettingsSchema,
   services: servicesSettingsSchema,
   founder: founderSettingsSchema,
+  updates: updatesSettingsSchema,
 } as const satisfies Record<string, z.ZodTypeAny>;
 
 type SectionKey = keyof typeof SECTION_SCHEMAS;

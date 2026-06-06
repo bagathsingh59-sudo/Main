@@ -77,6 +77,7 @@ function migrate(raw: unknown): SiteSettings {
       ? { ...DEFAULT_SETTINGS.services, ...(obj.services as object) }
       : DEFAULT_SETTINGS.services,
     founder: obj.founder ? { ...DEFAULT_SETTINGS.founder, ...(obj.founder as object) } : DEFAULT_SETTINGS.founder,
+    updates: obj.updates ? { ...DEFAULT_SETTINGS.updates, ...(obj.updates as object) } : DEFAULT_SETTINGS.updates,
   };
 }
 

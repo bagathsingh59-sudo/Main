@@ -32,6 +32,8 @@ export {
   serviceItemSchema,
   SERVICE_ICONS,
   founderSettingsSchema,
+  updateItemSchema,
+  updatesSettingsSchema,
   type SiteSettings,
   type Automation,
   type RateLimitSettings,
@@ -61,4 +63,6 @@ export {
   type ServiceItem,
   type FounderSettings,
   type ServiceIcon,
+  type UpdateItem,
+  type UpdatesSettings,
 } from "./types";

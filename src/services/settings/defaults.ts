@@ -207,6 +207,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
      hard-coded data, so the deploy default is unchanged. */
   team: { members: [] },
   services: { items: [] },
+  updates: { items: [] },
   founder: {
     name: "",
     role: "",

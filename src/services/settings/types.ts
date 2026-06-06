@@ -9,7 +9,7 @@
 
 import { z } from "zod";
 
-export const CURRENT_VERSION = 7 as const;
+export const CURRENT_VERSION = 8 as const;
 
 /* ─────────────────────────  schemas  ─────────────────────── */
 
@@ -324,6 +324,32 @@ export const servicesSettingsSchema = z.object({
 
 /* ── Founder profile (single record) ─────────────────────── */
 
+/* ── Regulatory Updates (briefings shown on /insights) ─── */
+
+export const updateItemSchema = z.object({
+  id: z.string().min(6).max(40),
+  slug: z.string().min(3).max(120).regex(/^[a-z0-9-]+$/, "lowercase a-z, 0-9, hyphens only"),
+  /** Display date string (e.g. "28 May 2026"). */
+  date: z.string().min(2).max(40),
+  /** Short tag (e.g. "GST", "EPF", "Labour Law"). */
+  tag: z.string().min(1).max(40),
+  /** Severity drives the colored pill on the card. */
+  severity: z.enum(["low", "medium", "high"]),
+  title: z.string().min(3).max(280),
+  /** 1-2 line excerpt shown on the list. */
+  summary: z.string().max(400),
+  /** Markdown body for the briefing detail page. */
+  content: z.string().max(50000),
+  /** ISO date for sorting + sitemap lastmod. */
+  publishedAt: z.string(),
+  updatedAt: z.string(),
+  isDraft: z.boolean(),
+});
+
+export const updatesSettingsSchema = z.object({
+  items: z.array(updateItemSchema).max(200),
+});
+
 export const founderSettingsSchema = z.object({
   /** Empty = use Team list[0] as fallback. */
   name: z.string().max(120),
@@ -363,6 +389,7 @@ export const siteSettingsSchema = z.object({
   team: teamSettingsSchema,
   services: servicesSettingsSchema,
   founder: founderSettingsSchema,
+  updates: updatesSettingsSchema,
 });
 
 /* ─────────────────────────  types  ───────────────────────── */
@@ -393,6 +420,8 @@ export type TeamSettings = z.infer<typeof teamSettingsSchema>;
 export type ServiceItem = z.infer<typeof serviceItemSchema>;
 export type ServicesSettings = z.infer<typeof servicesSettingsSchema>;
 export type FounderSettings = z.infer<typeof founderSettingsSchema>;
+export type UpdateItem = z.infer<typeof updateItemSchema>;
+export type UpdatesSettings = z.infer<typeof updatesSettingsSchema>;
 export type ServiceIcon = (typeof SERVICE_ICONS)[number];
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 

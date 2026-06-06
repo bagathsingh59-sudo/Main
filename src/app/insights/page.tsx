@@ -3,7 +3,6 @@ import { MainLayout } from "@/layouts/MainLayout";
 import { PageHero } from "@/components/shared/PageHero";
 import { SectionDots } from "@/components/shared/SectionDots";
 import { ImageBanner } from "@/components/shared/ImageBanner";
-import { Resources } from "@/sections/Resources";
 import { Updates } from "@/sections/Updates";
 import { FAQ } from "@/sections/FAQ";
 import { CTABanner } from "@/sections/CTABanner";
@@ -23,7 +22,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const DOTS = [
-  { id: "resources", label: "Briefings" },
   { id: "updates", label: "Updates" },
   { id: "faq", label: "FAQ" },
 ];
@@ -68,8 +66,6 @@ export default async function InsightsPage() {
         imageAlt="Reading a compliance briefing"
       />
 
-      <Resources />
-
       <BlogPostList posts={settings.blog.posts.filter((p) => !p.isDraft)} />
 
       <ImageBanner
@@ -83,7 +79,7 @@ export default async function InsightsPage() {
         align="center"
       />
 
-      <Updates />
+      <Updates items={settings.updates.items} />
       <FAQ items={faqs} />
 
       <CTABanner

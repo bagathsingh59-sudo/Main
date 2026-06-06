@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, Field, Input, PageHeader, SaveBar, Textarea } from "../../_components/Fields";
+import { MarkdownEditor } from "../../_components/MarkdownEditor";
 import { useSettings } from "../../_components/useSettings";
 import type { FaqItem, SiteSettings } from "@/services/settings";
 
@@ -204,12 +205,17 @@ export function FaqEditor() {
                     <Input value={item.question} onChange={(e) => updateItem(i, { question: e.target.value })} maxLength={MAX_Q} />
                   </Field>
                   <div className="mt-3">
-                    <Field label="Answer" hint="50-300 words. Plain text. Include keywords naturally.">
-                      <Textarea
+                    <Field
+                      label="Answer"
+                      hint="50–300 words. Markdown supported — use the toolbar for lists, headings, bold, links, even inline images."
+                    >
+                      <MarkdownEditor
                         value={item.answer}
-                        onChange={(e) => updateItem(i, { answer: e.target.value })}
-                        rows={4}
+                        onChange={(v) => updateItem(i, { answer: v })}
+                        rows={6}
+                        uploadPurpose="faq"
                         maxLength={2000}
+                        placeholder="Write a clear, useful answer. Markdown shortcuts work — bullet lists with - or numbered with 1."
                       />
                     </Field>
                   </div>

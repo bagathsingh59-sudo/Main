@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { Card, Field, Input, PageHeader, SaveBar, Select, Textarea, Toggle } from "../../../_components/Fields";
 import { ImageUpload } from "../../../_components/ImageUpload";
 import { KeywordEditor } from "../../../_components/KeywordEditor";
+import { MarkdownEditor } from "../../../_components/MarkdownEditor";
 import { useSettings } from "../../../_components/useSettings";
 import { readingTimeMinutes, slugify } from "../../../_components/blogUtils";
 import type { BlogPost, BlogPostSeo } from "@/services/settings";
@@ -27,7 +28,6 @@ export function BlogEditor({ postId }: Props) {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
-  const [showPreview, setShowPreview] = useState(true);
 
   useEffect(() => {
     if (!settings) return;
@@ -137,14 +137,7 @@ export function BlogEditor({ postId }: Props) {
         ))}
       </div>
 
-      {tab === "Content" && (
-        <ContentTab
-          draft={draft}
-          patch={patch}
-          showPreview={showPreview}
-          setShowPreview={setShowPreview}
-        />
-      )}
+      {tab === "Content" && <ContentTab draft={draft} patch={patch} />}
       {tab === "SEO" && <SeoTab draft={draft} patchSeo={patchSeo} />}
       {tab === "Settings" && (
         <SettingsTab
@@ -205,13 +198,9 @@ export function BlogEditor({ postId }: Props) {
 function ContentTab({
   draft,
   patch,
-  showPreview,
-  setShowPreview,
 }: {
   draft: BlogPost;
   patch: (p: Partial<BlogPost>) => void;
-  showPreview: boolean;
-  setShowPreview: (b: boolean) => void;
 }) {
   const [autoSlug, setAutoSlug] = useState(draft.slug === "" || draft.slug === slugify(draft.title));
 
@@ -274,44 +263,26 @@ function ContentTab({
       </Card>
 
       <Card
-        title="Body (Markdown)"
-        description="Headings, lists, links, bold/italic, code blocks, tables. Use ## for section titles."
+        title="Body"
+        description="Headings, lists, links, bold/italic, code, tables, inline images. Use the toolbar — or click Preview to see the rendered post."
       >
-        <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="mb-3 flex items-center justify-end">
           <span className="text-[0.78rem] text-slate-600 dark:text-slate-400">
             {readingTimeMinutes(draft.content)} min read
           </span>
-          <label className="flex cursor-pointer items-center gap-2 text-[0.78rem] text-slate-600 dark:text-slate-400">
-            <input type="checkbox" checked={showPreview} onChange={(e) => setShowPreview(e.target.checked)} />
-            Live preview
-          </label>
         </div>
-        <div className={`grid gap-3 ${showPreview ? "lg:grid-cols-2" : ""}`}>
-          <textarea
-            value={draft.content}
-            onChange={(e) => patch({ content: e.target.value })}
-            rows={24}
-            className="block w-full rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-[0.85rem] leading-relaxed text-slate-900 outline-none focus:border-navy-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-            placeholder={`## Introduction\n\nWrite your article in Markdown. Use **bold**, _italic_, and [links](https://example.com).\n\n### Subsection\n\n- bullet 1\n- bullet 2\n\n> Quote or callout\n\n\`\`\`\ncode block\n\`\`\``}
-          />
-          {showPreview && (
-            <div className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
-              <MarkdownPreview source={draft.content} />
-            </div>
-          )}
-        </div>
+        <MarkdownEditor
+          value={draft.content}
+          onChange={(v) => patch({ content: v })}
+          rows={24}
+          uploadPurpose="blog-content"
+          maxLength={50000}
+          placeholder={
+            "## Introduction\n\nWrite your article. Use the toolbar for **bold**, *italic*, lists, headings, and inline images.\n\n### Subsection\n\n- bullet 1\n- bullet 2\n\n> Quote or callout"
+          }
+        />
       </Card>
     </>
-  );
-}
-
-function MarkdownPreview({ source }: { source: string }) {
-  return (
-    <article className="prose prose-slate max-w-none text-[0.92rem] dark:prose-invert prose-headings:font-display prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-a:text-navy-600">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {source || "*Preview will appear here as you type…*"}
-      </ReactMarkdown>
-    </article>
   );
 }
 

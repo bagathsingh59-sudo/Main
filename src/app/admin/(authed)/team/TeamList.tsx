@@ -22,12 +22,14 @@ export function TeamList() {
   async function newMember() {
     if (!settings || creating) return;
     setCreating(true);
+    // Pre-fill schema-required fields so the initial save passes Zod.
+    // Admin overwrites everything on the editor screen.
     const member: TeamMember = {
       id: makeId(),
-      name: "",
+      name: "New team member",
       role: "",
       bio: "",
-      initials: "",
+      initials: "NM",
       accent: TEAM_ACCENTS[members.length % TEAM_ACCENTS.length],
       image: "",
       linkedinUrl: "",

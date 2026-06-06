@@ -33,12 +33,18 @@ export function makeId(): string {
   return out;
 }
 
-/** Empty post template — used by the "new post" action. */
+/**
+ * Empty post template — used by the "new post" action.
+ * Pre-fills the schema-required fields (title, slug) with valid
+ * placeholders so the initial draft passes Zod validation. The admin
+ * overwrites them immediately on the editor screen.
+ */
 export function emptyPost(now: string): BlogPost {
+  const id = makeId();
   return {
-    id: makeId(),
-    slug: "",
-    title: "",
+    id,
+    slug: `untitled-${id}`,
+    title: "Untitled draft",
     excerpt: "",
     content: "",
     coverImage: "",

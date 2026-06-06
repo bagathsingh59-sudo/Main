@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { SectionLayout } from "@/layouts/SectionLayout";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { FAQS } from "@/constants/faq";
@@ -78,7 +80,9 @@ export function FAQ({ items }: FAQProps = {}) {
                     transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden"
                   >
-                    <p className="px-6 pb-6 text-[0.92rem] leading-[1.75] text-navy-900/65">{f.answer}</p>
+                    <div className="prose prose-slate max-w-none px-6 pb-6 text-[0.92rem] leading-[1.75] text-navy-900/70 prose-p:my-3 prose-ul:my-3 prose-ol:my-3 prose-li:my-1 prose-headings:font-display prose-headings:text-navy-900 prose-h3:text-lg prose-h4:text-base prose-strong:text-navy-900 prose-a:text-navy-600 prose-blockquote:border-l-teal-400 prose-blockquote:text-navy-900/70">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{f.answer}</ReactMarkdown>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

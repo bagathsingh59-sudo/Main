@@ -17,7 +17,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { ADMIN_COOKIE, verifySession } from "@/services/adminAuth";
-import { checkQuotaFor } from "@/services/blobCleanup";
+import { checkQuotaFor, cleanupOrphans } from "@/services/blobCleanup";
 
 export const runtime = "nodejs";
 
@@ -109,6 +109,12 @@ export async function POST(req: Request) {
       access: "public",
       contentType: file.type,
       addRandomSuffix: false,
+    });
+    // Fire-and-forget cleanup — purge previous timestamped versions of
+    // anything that's no longer referenced AND older than the 1-hour
+    // grace window. The just-uploaded file is safe (it's <1 min old).
+    cleanupOrphans().catch((err) => {
+      console.warn("[upload] post-upload cleanup failed (non-fatal):", err);
     });
     return NextResponse.json({ ok: true, url: blob.url, pathname: blob.pathname });
   } catch (err) {

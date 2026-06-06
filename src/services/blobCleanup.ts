@@ -232,6 +232,108 @@ export async function cleanupOrphans(): Promise<CleanupReport> {
   return { deleted, reclaimedBytes, failed, errors: failures };
 }
 
+/* ─────────────────  Listing with reference info  ───────── */
+
+export interface FileReference {
+  /** Dotted settings path, e.g. "branding.logoUrl". */
+  path: string;
+  /** Human-readable label for the UI. */
+  label: string;
+}
+
+export interface BlobFileWithRefs {
+  pathname: string;
+  url: string;
+  size: number;
+  uploadedAt: string;
+  /** True for files under vc-config/ (settings JSON). */
+  isProtected: boolean;
+  /** Every place in settings that references this URL. Empty = orphan. */
+  references: FileReference[];
+}
+
+/** Walk settings and build a url → references map. */
+async function buildReferenceMap(): Promise<Map<string, FileReference[]>> {
+  const s = await getSiteSettings();
+  const map = new Map<string, FileReference[]>();
+
+  const add = (url: string | undefined | null, path: string, label: string) => {
+    if (!url || typeof url !== "string" || !url.startsWith("http")) return;
+    const existing = map.get(url) ?? [];
+    existing.push({ path, label });
+    map.set(url, existing);
+  };
+
+  // Branding
+  add(s.branding.logoUrl, "branding.logoUrl", "Logo");
+  add(s.branding.faviconUrl, "branding.faviconUrl", "Favicon");
+  add(s.branding.ogImageUrl, "branding.ogImageUrl", "OG image (default)");
+
+  // SEO — site-wide + per-page OG overrides
+  add(s.seo.defaultOgImage, "seo.defaultOgImage", "SEO default OG image");
+  for (const [pageKey, page] of Object.entries(s.seo.pages)) {
+    const cap = pageKey.charAt(0).toUpperCase() + pageKey.slice(1);
+    add(page.ogImage, `seo.pages.${pageKey}.ogImage`, `${cap} page OG`);
+  }
+
+  // Blog: cover image + per-post OG override
+  for (let i = 0; i < s.blog.posts.length; i++) {
+    const post = s.blog.posts[i];
+    const title = post.title.trim() || `Post ${i + 1}`;
+    add(post.coverImage, `blog.posts[${i}].coverImage`, `Cover · ${title}`);
+    add(post.seo.ogImage, `blog.posts[${i}].seo.ogImage`, `OG · ${title}`);
+  }
+
+  return map;
+}
+
+export async function listAllWithReferences(): Promise<{
+  files: BlobFileWithRefs[];
+  errors: string[];
+}> {
+  if (!isConfigured()) return { files: [], errors: ["BLOB_READ_WRITE_TOKEN not set"] };
+  const refsMap = await buildReferenceMap();
+  const { blobs, errors } = await listAll();
+  const files: BlobFileWithRefs[] = blobs.map((b) => ({
+    pathname: b.pathname,
+    url: b.url,
+    size: b.size,
+    uploadedAt: b.uploadedAt.toISOString(),
+    isProtected: b.pathname.startsWith(SETTINGS_PREFIX),
+    references: refsMap.get(b.url) ?? [],
+  }));
+  return { files, errors };
+}
+
+/** Delete a list of URLs. Protects settings files. */
+export async function deleteUrls(urls: string[]): Promise<{
+  deleted: number;
+  failed: number;
+  protectedCount: number;
+  errors: string[];
+}> {
+  let deleted = 0;
+  let failed = 0;
+  let protectedCount = 0;
+  const errors: string[] = [];
+
+  for (const url of urls) {
+    // Defensive — vc-config/ pathname segment indicates protected settings file.
+    if (url.includes(`/${SETTINGS_PREFIX}`)) {
+      protectedCount++;
+      continue;
+    }
+    try {
+      await del(url);
+      deleted++;
+    } catch (err) {
+      failed++;
+      errors.push(`${url}: ${err instanceof Error ? err.message : "unknown"}`);
+    }
+  }
+  return { deleted, failed, protectedCount, errors };
+}
+
 /* ─────────────────  Pre-upload guard  ────────────────────── */
 
 export interface QuotaCheck {

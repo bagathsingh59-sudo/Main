@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
+import { redirect } from "next/navigation";
 import { getLogoDataUrl } from "@/utils/brandAsset";
+import { getSiteSettings } from "@/services/settings";
 
 /**
  * Default Open Graph share image (1200×630) — Next.js convention.
@@ -17,7 +19,19 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OG() {
-  const logo = await getLogoDataUrl(256);
+  const settings = await getSiteSettings();
+
+  // 1. If the admin has uploaded a custom finished OG image (1200×630),
+  //    just redirect to it. WhatsApp / LinkedIn / X follow the redirect.
+  //    This is the fastest path to a fully branded share preview.
+  if (settings.branding.ogImageUrl?.trim()) {
+    redirect(settings.branding.ogImageUrl);
+  }
+
+  // 2. Otherwise generate our default composition, but embed the
+  //    admin-uploaded brand LOGO if one is set. Falls back to the
+  //    bundled /public/brand/logo.png.
+  const logo = settings.branding.logoUrl?.trim() || (await getLogoDataUrl(256));
 
   return new ImageResponse(
     (

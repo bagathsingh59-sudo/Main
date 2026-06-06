@@ -54,6 +54,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     state: COMPANY.contact.address.state,
     pin: COMPANY.contact.address.pin,
     hours: COMPANY.contact.hours,
+    mapEmbedUrl: "",
   },
 
   formConfig: {

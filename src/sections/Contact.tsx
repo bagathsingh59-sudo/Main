@@ -9,6 +9,7 @@ import { Icon } from "@/components/ui/Icon";
 import { COMPANY } from "@/constants/company";
 import { contactSchema, submitContact, type ContactInput } from "@/services/contact";
 import { APIError } from "@/services/api";
+import { MapEmbed } from "@/components/shared/MapEmbed";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 import type { ContactPayload } from "@/types";
 
@@ -41,6 +42,7 @@ interface ContactProps {
     state: string;
     pin: string;
     hours: string;
+    mapEmbedUrl?: string;
   };
   /** When set, replaces the form with a maintenance card. */
   maintenanceMessage?: string;
@@ -270,6 +272,25 @@ export function Contact({ services, sizes, contactInfo, maintenanceMessage }: Co
         </motion.form>
         )}
       </div>
+
+      {/* Lazy-loaded Google Maps embed — renders nothing when the admin
+          hasn't pasted a URL into /admin/contact-info → "Google Maps embed". */}
+      {contactInfo?.mapEmbedUrl && (
+        <div className="mt-14">
+          <div className="mb-4 text-center">
+            <div className="text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-navy-600/70">
+              Find us
+            </div>
+            <h3 className="mt-2 text-display-md font-display text-navy-900">
+              {ci.addressLine1}
+            </h3>
+            <p className="mt-1 text-[0.95rem] text-navy-900/65">
+              {ci.addressLine2}, {ci.city} {ci.pin}
+            </p>
+          </div>
+          <MapEmbed url={contactInfo.mapEmbedUrl} title={`${ci.addressLine1} — map`} />
+        </div>
+      )}
     </SectionLayout>
   );
 }

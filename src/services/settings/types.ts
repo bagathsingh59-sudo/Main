@@ -9,7 +9,7 @@
 
 import { z } from "zod";
 
-export const CURRENT_VERSION = 5 as const;
+export const CURRENT_VERSION = 6 as const;
 
 /* ─────────────────────────  schemas  ─────────────────────── */
 
@@ -50,6 +50,12 @@ export const contactInfoSchema = z.object({
   state: z.string(),
   pin: z.string(),
   hours: z.string(),
+  /**
+   * Google Maps embed URL (the `src` attribute from the iframe Google
+   * generates for "Embed a map"). Empty string = no map rendered.
+   * Validated client-side: only accept URLs from google.com/maps/embed.
+   */
+  mapEmbedUrl: z.string().max(2000),
 });
 
 export const formConfigSchema = z.object({

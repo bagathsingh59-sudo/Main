@@ -70,6 +70,7 @@ function migrate(raw: unknown): SiteSettings {
     emailTemplates: obj.emailTemplates
       ? { ...DEFAULT_SETTINGS.emailTemplates, ...(obj.emailTemplates as object) }
       : DEFAULT_SETTINGS.emailTemplates,
+    faq: obj.faq ? { ...DEFAULT_SETTINGS.faq, ...(obj.faq as object) } : DEFAULT_SETTINGS.faq,
   };
 }
 

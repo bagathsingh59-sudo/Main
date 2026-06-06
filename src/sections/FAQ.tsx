@@ -7,8 +7,20 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { FAQS } from "@/constants/faq";
 import { fadeUp, viewportOnce } from "@/animations/variants";
 
-export function FAQ() {
-  const [openId, setOpenId] = useState<string | null>(FAQS[0].id);
+interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+interface FAQProps {
+  /** Admin-managed FAQ list. Falls back to bundled FAQS constant when empty. */
+  items?: readonly FaqItem[];
+}
+
+export function FAQ({ items }: FAQProps = {}) {
+  const list = items && items.length > 0 ? items : FAQS;
+  const [openId, setOpenId] = useState<string | null>(list[0]?.id ?? null);
 
   return (
     <SectionLayout id="faq" className="bg-mist">
@@ -30,7 +42,7 @@ export function FAQ() {
         viewport={viewportOnce}
         className="mx-auto mt-12 max-w-3xl space-y-3"
       >
-        {FAQS.map((f) => {
+        {list.map((f) => {
           const isOpen = openId === f.id;
           return (
             <div

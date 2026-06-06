@@ -194,6 +194,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     ],
   },
 
+  faq: { items: [] },
+
   emailTemplates: {
     leadNotification: {
       subjectPattern: "New enquiry · {firstName} {lastName} — {service}",

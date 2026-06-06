@@ -10,6 +10,7 @@ import { CTABanner } from "@/sections/CTABanner";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, faqSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
+import { getSiteSettings } from "@/services/settings";
 import { FAQS } from "@/constants/faq";
 
 const PAGE_TITLE = "Insights — Compliance Briefings, Updates & FAQs";
@@ -26,7 +27,19 @@ const DOTS = [
   { id: "faq", label: "FAQ" },
 ];
 
-export default function InsightsPage() {
+export default async function InsightsPage() {
+  // Admin-edited FAQs override the bundled defaults. Only items with
+  // both a question AND an answer are published; drafts are skipped
+  // (they'd otherwise pollute the JSON-LD and the visible FAQ list).
+  const settings = await getSiteSettings();
+  const adminFaqs = settings.faq.items.filter(
+    (f) => f.question.trim().length >= 5 && f.answer.trim().length >= 10,
+  );
+  const faqs =
+    adminFaqs.length > 0
+      ? adminFaqs.map((f, i) => ({ id: `faq-${i}`, question: f.question, answer: f.answer }))
+      : FAQS;
+
   return (
     <MainLayout>
       <JsonLd
@@ -36,7 +49,7 @@ export default function InsightsPage() {
             { name: "Home", path: "/" },
             { name: "Insights", path: "/insights" },
           ]),
-          faqSchema(FAQS.map((f) => ({ question: f.question, answer: f.answer }))),
+          faqSchema(faqs.map((f) => ({ question: f.question, answer: f.answer }))),
         ]}
       />
       <SectionDots dots={DOTS} />
@@ -68,7 +81,7 @@ export default function InsightsPage() {
       />
 
       <Updates />
-      <FAQ />
+      <FAQ items={faqs} />
 
       <CTABanner
         eyebrow="Subscribe"

@@ -9,7 +9,7 @@
 
 import { z } from "zod";
 
-export const CURRENT_VERSION = 3 as const;
+export const CURRENT_VERSION = 4 as const;
 
 /* ─────────────────────────  schemas  ─────────────────────── */
 
@@ -183,6 +183,18 @@ export const emailTemplatesSchema = z.object({
   autoReply: autoReplyTemplateSchema,
 });
 
+/* ── FAQ (powers the /insights FAQ section + FAQ JSON-LD) ── */
+
+export const faqItemSchema = z.object({
+  question: z.string().min(5).max(280),
+  // Empty allowed during draft (admin pastes 30 questions, fills answers later).
+  answer: z.string().max(2000),
+});
+
+export const faqSettingsSchema = z.object({
+  items: z.array(faqItemSchema).max(100),
+});
+
 export const siteSettingsSchema = z.object({
   version: z.literal(CURRENT_VERSION),
   automation: automationSchema,
@@ -195,6 +207,7 @@ export const siteSettingsSchema = z.object({
   branding: brandingSchema,
   navigation: navigationSchema,
   emailTemplates: emailTemplatesSchema,
+  faq: faqSettingsSchema,
 });
 
 /* ─────────────────────────  types  ───────────────────────── */
@@ -215,6 +228,8 @@ export type Navigation = z.infer<typeof navigationSchema>;
 export type LeadNotificationTemplate = z.infer<typeof leadNotificationTemplateSchema>;
 export type AutoReplyTemplate = z.infer<typeof autoReplyTemplateSchema>;
 export type EmailTemplates = z.infer<typeof emailTemplatesSchema>;
+export type FaqItem = z.infer<typeof faqItemSchema>;
+export type FaqSettings = z.infer<typeof faqSettingsSchema>;
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 
 /** Page keys we support per-page SEO for. */

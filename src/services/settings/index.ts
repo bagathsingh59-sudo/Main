@@ -20,6 +20,8 @@ export {
   emailTemplatesSchema,
   leadNotificationTemplateSchema,
   autoReplyTemplateSchema,
+  faqSettingsSchema,
+  faqItemSchema,
   type SiteSettings,
   type Automation,
   type RateLimitSettings,
@@ -38,4 +40,6 @@ export {
   type EmailTemplates,
   type LeadNotificationTemplate,
   type AutoReplyTemplate,
+  type FaqSettings,
+  type FaqItem,
 } from "./types";

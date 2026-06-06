@@ -22,6 +22,9 @@ export {
   autoReplyTemplateSchema,
   faqSettingsSchema,
   faqItemSchema,
+  blogSettingsSchema,
+  blogPostSchema,
+  blogPostSeoSchema,
   type SiteSettings,
   type Automation,
   type RateLimitSettings,
@@ -42,4 +45,7 @@ export {
   type AutoReplyTemplate,
   type FaqSettings,
   type FaqItem,
+  type BlogSettings,
+  type BlogPost,
+  type BlogPostSeo,
 } from "./types";

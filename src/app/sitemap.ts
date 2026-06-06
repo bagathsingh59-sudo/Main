@@ -1,26 +1,32 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/utils/jsonLd";
+import { getSiteSettings } from "@/services/settings";
 
 /**
  * Sitemap consumed by Google Search Console + other crawlers.
  * Served at /sitemap.xml automatically by Next.js.
  *
- * Priority + changeFrequency are guidance for Google — not commitments. We
- * keep the marketing pages weekly/monthly and the legal pages yearly because
- * those genuinely change on those cadences.
+ * Marketing pages: priorities tuned to commercial intent. Legal pages:
+ * yearly, low priority. Blog posts: pulled live from admin storage so
+ * a newly-published post becomes crawlable within ~30 seconds (settings
+ * cache TTL) — no rebuild needed.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const make = (
     path: string,
     priority: number,
     changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
+    lastModified: Date = now,
   ) => ({
     url: `${SITE_URL}${path}`,
-    lastModified: now,
+    lastModified,
     changeFrequency,
     priority,
   });
+
+  const settings = await getSiteSettings();
+  const publishedPosts = settings.blog.posts.filter((p) => !p.isDraft && p.slug);
 
   return [
     // ── Marketing core ──
@@ -30,6 +36,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     make("/about", 0.8, "monthly"),
     make("/insights", 0.75, "weekly"),
     make("/contact", 0.9, "monthly"),
+
+    // ── Blog posts (highest crawl signal — fresh content) ──
+    ...publishedPosts.map((p) =>
+      make(`/insights/${p.slug}`, 0.7, "monthly", new Date(p.updatedAt || p.publishedAt)),
+    ),
 
     // ── Legal ──
     make("/privacy", 0.3, "yearly"),

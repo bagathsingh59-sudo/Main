@@ -196,6 +196,11 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   faq: { items: [] },
 
+  blog: {
+    posts: [],
+    categories: ["Compliance", "EPF", "ESIC", "GST", "Payroll", "Labour Law"],
+  },
+
   emailTemplates: {
     leadNotification: {
       subjectPattern: "New enquiry · {firstName} {lastName} — {service}",

@@ -9,7 +9,7 @@
 
 import { z } from "zod";
 
-export const CURRENT_VERSION = 4 as const;
+export const CURRENT_VERSION = 5 as const;
 
 /* ─────────────────────────  schemas  ─────────────────────── */
 
@@ -195,6 +195,53 @@ export const faqSettingsSchema = z.object({
   items: z.array(faqItemSchema).max(100),
 });
 
+/* ── Blog (CMS for /insights/[slug] posts) ──────────────── */
+
+const SLUG_RE = /^[a-z0-9-]+$/;
+
+export const blogPostSeoSchema = z.object({
+  /** Override for <title>. Falls back to post title when empty. */
+  title: z.string().max(80),
+  /** Meta description for SERP snippet. Falls back to excerpt. */
+  description: z.string().max(320),
+  /** Per-post keywords (max 30, each ≤60 chars). */
+  keywords: z.array(z.string().min(1).max(60)).max(30),
+  /** OG image override. Falls back to coverImage, then site default. */
+  ogImage: z.string().max(500),
+});
+
+export const blogPostSchema = z.object({
+  /** Stable internal id (cuid-style, never displayed). */
+  id: z.string().min(6).max(40),
+  /** Public URL slug — lowercase, alphanumeric + hyphens. */
+  slug: z.string().min(3).max(120).regex(SLUG_RE, "Slug must be lowercase a-z, 0-9, and hyphens only"),
+  title: z.string().min(3).max(200),
+  /** 1-2 line summary for cards + meta description fallback. */
+  excerpt: z.string().max(400),
+  /** Markdown body — rendered with react-markdown + remark-gfm. */
+  content: z.string().max(50000),
+  /** Hero/cover image URL (uploaded via /admin/blog or external). */
+  coverImage: z.string().max(500),
+  author: z.string().max(100),
+  /** Free-form category. Use a few consistent values for filtering. */
+  category: z.string().max(60),
+  /** Tags surface in card meta + can feed faceted filtering later. */
+  tags: z.array(z.string().min(1).max(40)).max(10),
+  /** ISO 8601 timestamp — published date (initial publish). */
+  publishedAt: z.string(),
+  /** ISO 8601 timestamp — last edit. */
+  updatedAt: z.string(),
+  /** Drafts don't render publicly and are skipped from sitemap. */
+  isDraft: z.boolean(),
+  seo: blogPostSeoSchema,
+});
+
+export const blogSettingsSchema = z.object({
+  posts: z.array(blogPostSchema).max(200),
+  /** Optional category list (drives suggested category dropdown). */
+  categories: z.array(z.string().min(1).max(60)).max(30),
+});
+
 export const siteSettingsSchema = z.object({
   version: z.literal(CURRENT_VERSION),
   automation: automationSchema,
@@ -208,6 +255,7 @@ export const siteSettingsSchema = z.object({
   navigation: navigationSchema,
   emailTemplates: emailTemplatesSchema,
   faq: faqSettingsSchema,
+  blog: blogSettingsSchema,
 });
 
 /* ─────────────────────────  types  ───────────────────────── */
@@ -230,6 +278,9 @@ export type AutoReplyTemplate = z.infer<typeof autoReplyTemplateSchema>;
 export type EmailTemplates = z.infer<typeof emailTemplatesSchema>;
 export type FaqItem = z.infer<typeof faqItemSchema>;
 export type FaqSettings = z.infer<typeof faqSettingsSchema>;
+export type BlogPost = z.infer<typeof blogPostSchema>;
+export type BlogPostSeo = z.infer<typeof blogPostSeoSchema>;
+export type BlogSettings = z.infer<typeof blogSettingsSchema>;
 export type SiteSettings = z.infer<typeof siteSettingsSchema>;
 
 /** Page keys we support per-page SEO for. */

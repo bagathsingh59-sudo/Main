@@ -46,6 +46,11 @@ const ICONS: Record<string, { bg: string; fg: string; path: React.ReactNode }> =
     fg: "text-fuchsia-700 dark:text-fuchsia-300",
     path: <><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" /></>,
   },
+  Blog: {
+    bg: "bg-orange-100 dark:bg-orange-900/40",
+    fg: "text-orange-700 dark:text-orange-300",
+    path: <><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z" /></>,
+  },
   "Contact info": {
     bg: "bg-rose-100 dark:bg-rose-900/40",
     fg: "text-rose-700 dark:text-rose-300",
@@ -74,6 +79,7 @@ const NAV = [
   { href: "/admin/branding", label: "Branding" },
   { href: "/admin/navbar", label: "Navbar" },
   { href: "/admin/footer", label: "Footer" },
+  { href: "/admin/blog", label: "Blog" },
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/automation", label: "Automation" },
   { href: "/admin/email-templates", label: "Email templates" },

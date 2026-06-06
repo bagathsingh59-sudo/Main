@@ -12,6 +12,7 @@ import { breadcrumbSchema, faqSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { getSiteSettings } from "@/services/settings";
 import { FAQS } from "@/constants/faq";
+import { BlogPostList } from "@/components/blog/BlogPostList";
 
 const PAGE_TITLE = "Insights — Compliance Briefings, Updates & FAQs";
 const PAGE_DESC =
@@ -68,6 +69,8 @@ export default async function InsightsPage() {
       />
 
       <Resources />
+
+      <BlogPostList posts={settings.blog.posts.filter((p) => !p.isDraft)} />
 
       <ImageBanner
         src="https://images.unsplash.com/photo-1554224155-1696413565d3?w=1800&q=80&auto=format&fit=crop"

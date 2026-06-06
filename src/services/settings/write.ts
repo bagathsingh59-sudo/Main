@@ -1,31 +1,15 @@
 /**
- * Write site settings to Vercel Edge Config.
+ * Write site settings to Vercel Blob (single JSON file).
  *
- * Edge Config writes go through Vercel's REST API (not the Edge Config
- * SDK, which is read-only). Requires:
- *   • VERCEL_API_TOKEN  — account-level token from vercel.com/account/tokens
- *   • EDGE_CONFIG       — connection string Vercel auto-provisions when
- *                         you link a config store to the project. The
- *                         config id is parsed from this string.
- *
- * Edge Config writes propagate globally in seconds. The reader's
- * 30-second in-memory cache means an admin save may not reflect for
- * up to ~30s in already-warm functions; we invalidate the cache in
- * the writing function instance so saves feel instant there.
+ * Migrated from Vercel Edge Config because Hobby Edge Config caps a
+ * single item at ~8 KB. Blob has no such cap (1 GB free), already-
+ * configured BLOB_READ_WRITE_TOKEN handles both reads & writes, and
+ * the JSON file lives at a deterministic public URL.
  */
 
-import { invalidateSettingsCache } from "./read";
+import { put } from "@vercel/blob";
+import { invalidateSettingsCache, SETTINGS_BLOB_PATHNAME } from "./read";
 import { siteSettingsSchema, type SiteSettings } from "./types";
-
-const KEY = "siteSettings";
-
-function getConfigId(): string | null {
-  const conn = process.env.EDGE_CONFIG;
-  if (!conn) return null;
-  // EDGE_CONFIG looks like: https://edge-config.vercel.com/ecfg_xxx?token=yyy
-  const m = conn.match(/\/(ecfg_[A-Za-z0-9]+)/);
-  return m ? m[1] : null;
-}
 
 export type WriteResult =
   | { ok: true }
@@ -41,34 +25,22 @@ export async function updateSiteSettings(next: SiteSettings): Promise<WriteResul
     };
   }
 
-  const configId = getConfigId();
-  const apiToken = process.env.VERCEL_API_TOKEN;
-  if (!configId || !apiToken) {
-    return { ok: false, reason: "not_configured", detail: "EDGE_CONFIG and VERCEL_API_TOKEN must be set" };
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return {
+      ok: false,
+      reason: "not_configured",
+      detail: "BLOB_READ_WRITE_TOKEN env var must be set. In Vercel: Storage → Blob → Connect to project.",
+    };
   }
 
-  const team = process.env.VERCEL_TEAM_ID;
-  const url = team
-    ? `https://api.vercel.com/v1/edge-config/${configId}/items?teamId=${team}`
-    : `https://api.vercel.com/v1/edge-config/${configId}/items`;
-
   try {
-    const res = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        items: [{ operation: "upsert", key: KEY, value: parsed.data }],
-      }),
+    await put(SETTINGS_BLOB_PATHNAME, JSON.stringify(parsed.data), {
+      access: "public",
+      contentType: "application/json",
+      addRandomSuffix: false,
+      allowOverwrite: true,
+      cacheControlMaxAge: 0,
     });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      return { ok: false, reason: "api_error", detail: `${res.status} ${text}` };
-    }
-
     invalidateSettingsCache();
     return { ok: true };
   } catch (err) {

@@ -34,6 +34,15 @@ export default async function Icon() {
         <img src={logo} alt="" width={30} height={30} style={{ objectFit: "contain" }} />
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      headers: {
+        // Short edge cache so admin uploads propagate within minutes
+        // rather than the multi-day default. Browsers still cache more
+        // aggressively for favicons — see UI notes for the cache-busting
+        // workflow.
+        "Cache-Control": "public, max-age=300, s-maxage=300",
+      },
+    },
   );
 }

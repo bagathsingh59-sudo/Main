@@ -202,6 +202,14 @@ export default async function OG() {
         </div>
       </div>
     ),
-    { ...size },
+    {
+      ...size,
+      headers: {
+        // Edge cache for 1 hour. Social platforms (LinkedIn, X, Facebook)
+        // keep their OWN long-lived cache — use Sharing Debugger /
+        // Post Inspector to force-refresh after a branding change.
+        "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      },
+    },
   );
 }

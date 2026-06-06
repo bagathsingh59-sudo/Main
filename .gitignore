@@ -9,3 +9,7 @@ build/
 next-env.d.ts
 .turbo
 coverage/
+
+# Local content-audit dump (generated for owner)
+content-audit/
+vaishnavi-content-audit.zip

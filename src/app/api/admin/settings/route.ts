@@ -44,7 +44,10 @@ function requireAuth(): NextResponse | null {
 export async function GET() {
   const unauth = requireAuth();
   if (unauth) return unauth;
-  const settings = await getSiteSettings();
+  // Admin reads bypass the 30-second in-memory cache so a freshly
+  // created blog post / team member is immediately visible on the
+  // very next request (no multi-instance staleness window).
+  const settings = await getSiteSettings({ skipCache: true });
   return NextResponse.json({ ok: true, settings });
 }
 
@@ -152,7 +155,10 @@ export async function PUT(req: Request) {
       );
     }
 
-    const current = await getSiteSettings();
+    // skipCache: true — guarantees we merge against the most recent
+    // stored state, not a stale in-memory snapshot from a previous read.
+    // Prevents concurrent partial saves from clobbering each other.
+    const current = await getSiteSettings({ skipCache: true });
     next = { ...current, ...validated, version: CURRENT_VERSION };
   }
 

@@ -80,9 +80,19 @@ function migrate(raw: unknown): SiteSettings {
   };
 }
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+export interface GetSettingsOptions {
+  /**
+   * Bypass the in-memory cache and read directly from Blob storage.
+   * Use this for admin reads where freshness matters more than latency —
+   * particularly right after a save, to avoid the multi-instance staleness
+   * window where another serverless function may serve a pre-write value.
+   */
+  skipCache?: boolean;
+}
+
+export async function getSiteSettings(opts: GetSettingsOptions = {}): Promise<SiteSettings> {
   const now = Date.now();
-  if (cached && now - cached.at < TTL_MS) return cached.value;
+  if (!opts.skipCache && cached && now - cached.at < TTL_MS) return cached.value;
 
   const storeUrl = getBlobStoreUrl();
   if (!storeUrl) {

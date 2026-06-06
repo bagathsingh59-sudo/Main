@@ -101,12 +101,14 @@ export async function POST(req: Request) {
       approveUrl,
     };
 
+    // ── Build both email payloads up-front ───────────────────────────
     const leadTmpl = settings.emailTemplates.leadNotification;
     const subjectFilled = leadTmpl.subjectPattern
       .replace(/\{firstName\}/g, d.firstName)
       .replace(/\{lastName\}/g, d.lastName)
       .replace(/\{service\}/g, d.service);
-    const notifyResult = await sendLeadEmail({
+
+    const notifyArgs = {
       ...mailerOverrides,
       subject: subjectFilled,
       html: renderContactLeadEmail({
@@ -116,38 +118,56 @@ export async function POST(req: Request) {
       }),
       text: renderContactLeadText(leadPayload),
       replyTo: d.email,
-    });
+    };
+
+    const autoTmpl = settings.emailTemplates.autoReply;
+    const autoSubject = autoTmpl.subjectPattern.replace(/\{firstName\}/g, d.firstName);
+    const autoArgs = {
+      ...mailerOverrides,
+      to: d.email,
+      subject: autoSubject,
+      html: renderAutoReplyEmail({
+        firstName: d.firstName,
+        contactInfo: settings.contactInfo,
+        template: autoTmpl,
+      }),
+      text: renderAutoReplyText({ firstName: d.firstName, contactInfo: settings.contactInfo }),
+    };
+
+    console.log(`[contact] received lead ${id} — autoReplyMode=${mode} email=${d.email}`);
+
+    // ── Send notification + (if immediate) auto-reply in parallel ────
+    // Awaiting both is critical on Vercel serverless — fire-and-forget
+    // after the response can be killed mid-flight by the runtime, so
+    // we wait for SMTP to finish before returning.
+    const [notifyResult, autoReplyResult] = await Promise.all([
+      sendLeadEmail(notifyArgs),
+      mode === "immediate" ? sendLeadEmail(autoArgs) : Promise.resolve(null),
+    ]);
 
     if (!notifyResult.ok) {
+      console.error("[contact] notification email failed:", notifyResult.error);
       return NextResponse.json(
         { ok: false, message: "We couldn't send your message — please email us directly." },
         { status: 502 },
       );
     }
+    console.log(`[contact] notification sent (${notifyResult.messageId ?? "skipped"})`);
 
-    // ── 2. Immediate auto-reply to lead (if mode is "immediate") ────
-    if (mode === "immediate") {
-      const autoTmpl = settings.emailTemplates.autoReply;
-      const autoSubject = autoTmpl.subjectPattern.replace(/\{firstName\}/g, d.firstName);
-      // Fire-and-forget — don't block the user response on this. Errors
-      // are logged but don't fail the submission (staff can resend later
-      // via mailto from the notification email).
-      sendLeadEmail({
-        ...mailerOverrides,
-        to: d.email,
-        subject: autoSubject,
-        html: renderAutoReplyEmail({
-          firstName: d.firstName,
-          contactInfo: settings.contactInfo,
-          template: autoTmpl,
-        }),
-        text: renderAutoReplyText({ firstName: d.firstName, contactInfo: settings.contactInfo }),
-      }).catch((err) => {
-        console.error("[contact] immediate auto-reply failed:", err);
-      });
+    if (autoReplyResult) {
+      if (autoReplyResult.ok) {
+        console.log(`[contact] auto-reply sent to ${d.email} (${autoReplyResult.messageId ?? "skipped"})`);
+      } else {
+        console.error(`[contact] auto-reply to ${d.email} FAILED:`, autoReplyResult.error);
+      }
     }
 
-    return NextResponse.json({ ok: true, id, autoReplyMode: mode });
+    return NextResponse.json({
+      ok: true,
+      id,
+      autoReplyMode: mode,
+      autoReplySent: autoReplyResult?.ok ?? false,
+    });
   } catch {
     return NextResponse.json({ ok: false, message: "Bad request" }, { status: 400 });
   }

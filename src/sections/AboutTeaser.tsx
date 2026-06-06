@@ -8,7 +8,46 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { fadeUp, slideInLeft, slideInRight, viewportOnce } from "@/animations/variants";
 
-export function AboutTeaser() {
+interface FounderTeaser {
+  /** Pull quote shown in the founder card. *Asterisk-wrapped* segments render in brand. */
+  quote: string;
+  /** Display name + role e.g. "CA Lakshmi Narayan, Founder". */
+  signature: string;
+}
+
+interface AboutTeaserProps {
+  /**
+   * Admin-edited founder bits. Both fields fall back to bundled defaults
+   * when empty so the public site never renders blank on first deploy.
+   */
+  founder?: FounderTeaser;
+}
+
+const DEFAULT_QUOTE = '"Compliance is not paperwork. It is the operating system of trust."';
+const DEFAULT_SIGNATURE = "CA Lakshmi Narayan, Founder";
+
+/**
+ * Render *asterisk-wrapped* segments in the brand colour. Mirrors the
+ * FounderMessage renderer so admin can keep one quote and have both
+ * places format it the same way.
+ */
+function renderQuote(text: string) {
+  return text.split(/(\*[^*]+\*)/g).map((part, i) => {
+    if (part.startsWith("*") && part.endsWith("*") && part.length > 2) {
+      return (
+        <em key={i} className="not-italic text-teal-300">
+          {part.slice(1, -1)}
+        </em>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
+export function AboutTeaser({ founder }: AboutTeaserProps = {}) {
+  const quote = founder?.quote?.trim() || DEFAULT_QUOTE;
+  const signature = founder?.signature?.trim() || DEFAULT_SIGNATURE;
+
   return (
     <SectionLayout id="about-teaser" className="bg-cloud">
       <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -67,12 +106,10 @@ export function AboutTeaser() {
           <div className="absolute inset-0 bg-gradient-to-t from-navy-900/75 via-navy-900/10 to-transparent" />
           <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-white/20 bg-white/[0.12] p-5 text-white backdrop-blur-xl">
             <div className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white/75">From the founder</div>
-            <p className="mt-2 font-display text-[1.05rem] leading-tight text-balance">
-              "Compliance is not paperwork. It is the operating system of trust."
-            </p>
-            <div className="mt-3 text-[0.78rem] text-white/65">— CA Lakshmi Narayan, Founder</div>
+            <p className="mt-2 font-display text-[1.05rem] leading-tight text-balance">{renderQuote(quote)}</p>
+            <div className="mt-3 text-[0.78rem] text-white/65">— {signature}</div>
             <Link href="/about#founder" className="mt-3 inline-flex text-[0.78rem] font-semibold text-teal-300 hover:underline">
-              Read founder's note →
+              Read founder&apos;s note →
             </Link>
           </div>
         </motion.div>

@@ -63,7 +63,14 @@ export default async function HomePage() {
       />
 
       {/* Slim about teaser → /about */}
-      <AboutTeaser />
+      <AboutTeaser
+        founder={{
+          quote: settings.founder.quote,
+          signature:
+            settings.founder.signatureLabel ||
+            (settings.founder.name ? `${settings.founder.name}, ${settings.founder.role || "Founder"}` : ""),
+        }}
+      />
 
       {/* Slim services preview → /services */}
       <ServicesPreview items={settings.services.items} />

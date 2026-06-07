@@ -73,10 +73,19 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   banner: {
     enabled: false,
+    kind: "strip" as const,
+    style: "neutral" as const,
     message: "",
     linkUrl: "",
     linkLabel: "",
-    tone: "info",
+    tone: "info" as const,
+    popupHeadline: "",
+    popupEyebrow: "",
+    popupCtaSecondaryLabel: "",
+    popupCtaSecondaryUrl: "",
+    popupShowDelaySec: 4,
+    popupFrequency: "session" as const,
+    floatingPosition: "bottom-right" as const,
   },
 
   maintenance: {

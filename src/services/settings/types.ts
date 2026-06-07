@@ -65,12 +65,43 @@ export const formConfigSchema = z.object({
   sizes: z.array(z.string().min(1).max(40)).min(1).max(10),
 });
 
+/**
+ * Site banner — multi-mode promotion system.
+ *
+ * `kind` switches the rendered surface:
+ *   - "strip"    — slim full-width strip pinned to the top of every page (legacy default)
+ *   - "popup"    — centered modal that opens after `popupShowDelaySec` seconds
+ *   - "floating" — corner card pinned bottom-right / bottom-left, dismissible
+ *
+ * `style` is a presentation variant applied to the chosen kind:
+ *   - "neutral"  — calm, single-tone (preserves the legacy minimalist look)
+ *   - "gradient" — branded navy → teal sweep, white text
+ *   - "glass"    — frosted translucent surface with backdrop blur
+ *   - "branded"  — solid brand colour with high-contrast white type
+ *
+ * `popupFrequency` controls how often a popup/floating banner re-appears:
+ *   - "session" — once per browser session (default; respects refresh)
+ *   - "once"    — once per device until the user clears storage
+ *   - "always"  — every page load (test only)
+ *
+ * All new fields default to safe values so existing stored settings
+ * (which lack these keys) keep rendering the legacy neutral strip.
+ */
 export const bannerSchema = z.object({
   enabled: z.boolean(),
-  message: z.string().max(200),
+  kind: z.enum(["strip", "popup", "floating"]).default("strip"),
+  style: z.enum(["neutral", "gradient", "glass", "branded"]).default("neutral"),
+  message: z.string().max(400),
   linkUrl: z.string(),
   linkLabel: z.string().max(40),
   tone: z.enum(["info", "warning", "success"]),
+  popupHeadline: z.string().max(80).default(""),
+  popupEyebrow: z.string().max(40).default(""),
+  popupCtaSecondaryLabel: z.string().max(40).default(""),
+  popupCtaSecondaryUrl: z.string().default(""),
+  popupShowDelaySec: z.number().int().min(0).max(60).default(4),
+  popupFrequency: z.enum(["session", "once", "always"]).default("session"),
+  floatingPosition: z.enum(["bottom-right", "bottom-left"]).default("bottom-right"),
 });
 
 export const maintenanceSchema = z.object({

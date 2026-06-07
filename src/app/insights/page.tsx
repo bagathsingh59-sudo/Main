@@ -70,10 +70,10 @@ export default async function InsightsPage() {
 
       <ImageBanner
         src="https://images.unsplash.com/photo-1554224155-1696413565d3?w=1800&q=80&auto=format&fit=crop"
-        alt="Compliance updates and regulatory alerts"
-        eyebrow="Weekly desk digest"
-        title={<>23 portals. <em className="not-italic">One Monday email.</em></>}
-        description="Our compliance desk monitors central and state portals every day. The five updates that actually matter to you, summarised every Monday."
+        alt="Compliance briefings and regulatory guidance"
+        eyebrow="Speak with a partner"
+        title={<>23 portals. <em className="not-italic">One trusted desk.</em></>}
+        description="Our compliance desk monitors central and state portals every day. When something changes that affects your business, we tell you what to do — and we do it for you."
         height="sm"
         overlay="brand"
         align="center"
@@ -83,11 +83,11 @@ export default async function InsightsPage() {
       <FAQ items={faqs} />
 
       <CTABanner
-        eyebrow="Subscribe"
-        title={<>Get the Monday digest. <em className="not-italic">Free, always.</em></>}
-        description="No marketing. No content marketing. Just the regulatory updates that affect your tax, payroll, and compliance posture."
-        cta={{ label: "Subscribe to digest", href: "/contact" }}
-        secondary={{ label: "Talk to us", href: "/contact" }}
+        eyebrow="Talk to our compliance desk"
+        title={<>A 45-minute audit. <em className="not-italic">Zero obligation.</em></>}
+        description="Pick a time that suits you. We'll review your last six filings, surface the two or three priority fixes, and tell you exactly what they'll cost you if left unaddressed."
+        cta={{ label: "Contact us", href: "/contact" }}
+        secondary={{ label: "Browse services", href: "/services" }}
         variant="dark"
         className="bg-mist"
       />

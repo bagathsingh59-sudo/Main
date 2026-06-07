@@ -14,6 +14,8 @@ interface BannerData {
   linkUrl?: string;
   linkLabel?: string;
   tone: "info" | "warning" | "success";
+  /** Visual style. Defaults to "neutral" for backwards compatibility. */
+  style?: "neutral" | "gradient" | "glass" | "branded";
 }
 
 interface MaintenanceData {
@@ -35,6 +37,20 @@ const BANNER_TONE: Record<BannerData["tone"], string> = {
   info: "bg-navy-600",
   warning: "bg-amber-500",
   success: "bg-emerald-600",
+};
+
+/**
+ * Style variants for the strip — the "neutral" path preserves the
+ * existing solid-tone behaviour so saved settings render identically.
+ */
+const BANNER_STYLE: Record<NonNullable<BannerData["style"]>, (tone: BannerData["tone"]) => string> = {
+  neutral: (tone) => `${BANNER_TONE[tone] ?? BANNER_TONE.info} text-white`,
+  gradient: () =>
+    "bg-gradient-to-r from-navy-700 via-navy-600 to-teal-500 text-white shadow-[0_2px_18px_-8px_rgba(13,42,84,0.6)]",
+  glass: () =>
+    "bg-white/80 text-navy-900 backdrop-blur-xl border-b border-slate-200/70",
+  branded: (tone) =>
+    `${BANNER_TONE[tone] ?? BANNER_TONE.info} text-white ring-1 ring-inset ring-white/15`,
 };
 
 export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}) {
@@ -87,11 +103,19 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
 
       {/* Announcement strip — rendered above the nav row. */}
       {banner && banner.message && (
-        <div className={cn(BANNER_TONE[banner.tone] ?? BANNER_TONE.info, "text-white")}>
+        <div className={cn(BANNER_STYLE[banner.style ?? "neutral"](banner.tone))}>
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-1.5 text-center text-[0.82rem] sm:px-8">
             <span className="font-medium">{banner.message}</span>
             {banner.linkUrl && banner.linkLabel && (
-              <a href={banner.linkUrl} className="font-semibold underline decoration-white/60 underline-offset-2 hover:decoration-white">
+              <a
+                href={banner.linkUrl}
+                className={cn(
+                  "font-semibold underline-offset-2",
+                  banner.style === "glass"
+                    ? "text-navy-700 underline decoration-navy-400/60 hover:decoration-navy-700"
+                    : "underline decoration-white/60 hover:decoration-white",
+                )}
+              >
                 {banner.linkLabel}
               </a>
             )}

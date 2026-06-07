@@ -8,6 +8,21 @@ import type { SiteSettings } from "@/services/settings";
 type BannerDraft = SiteSettings["banner"];
 type Preset = "classic" | "modern" | "popup" | "floating" | "sticky";
 
+const UI_EFFECTS: Array<{ value: string; label: string; suggestedFor: string }> = [
+  { value: "default", label: "Use global setting", suggestedFor: "Inherit the site-wide effect set below" },
+  { value: "none", label: "None", suggestedFor: "Quiet, no overlay" },
+  { value: "confetti", label: "🎉 Confetti", suggestedFor: "Milestones, launches" },
+  { value: "sparkle", label: "✨ Sparkle", suggestedFor: "Premium feel, testimonials" },
+  { value: "glitter-anniversary", label: "🥇 Glitter — anniversary", suggestedFor: "Site / brand anniversary" },
+  { value: "snow-holiday", label: "❄ Snow — holiday", suggestedFor: "Dec / New Year" },
+  { value: "fireworks-launch", label: "🎆 Fireworks", suggestedFor: "Product launches, Independence/Republic Day" },
+  { value: "shimmer-premium", label: "💎 Shimmer — premium", suggestedFor: "Luxury offers, VIP audit" },
+  { value: "floating-icons", label: "🪔 Floating icons", suggestedFor: "Diwali, Eid, festival campaigns" },
+  { value: "glow-pulse-urgent", label: "🚨 Glow pulse — urgent", suggestedFor: "Deadline reminders, last-day offers" },
+  { value: "coupon-burst-sale", label: "🏷 Coupon burst — sale", suggestedFor: "Discount campaigns, sale events" },
+  { value: "ribbons-celebration", label: "🎀 Ribbons — celebration", suggestedFor: "Graduations, year-end wraps" },
+];
+
 /**
  * Preset library — each preset is a starting point with pre-tuned
  * defaults that suit a particular use case. Operators pick one, then
@@ -189,7 +204,8 @@ export function BannerEditor() {
             <Select value={b.style ?? "neutral"} onChange={(e) => patch({ style: e.target.value as BannerDraft["style"] })}>
               <option value="neutral">Neutral — solid tone, classic minimalist</option>
               <option value="gradient">Gradient — navy → teal sweep</option>
-              <option value="glass">Glass — translucent frosted</option>
+              <option value="apple-glass">Apple glass — frosted blue (premium)</option>
+              <option value="glass">Glass (legacy)</option>
               <option value="branded">Branded — solid brand colour</option>
             </Select>
           </Field>
@@ -316,6 +332,87 @@ export function BannerEditor() {
           }
           disabled={infoLockedPermanent}
         />
+      </Card>
+
+      <Card
+        title="Run multiple banners at once"
+        description="Toggle each surface independently. When ANY of these is on, the preset above only edits the currently-selected one — but multiple can run on the public site simultaneously. When all are off, the editor falls back to single-banner mode using the preset above."
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Toggle
+            checked={b.enableStrip ?? false}
+            onChange={(v) => patch({ enableStrip: v })}
+            label="📌 Top strip"
+            description="The slim full-width announcement strip."
+          />
+          <Toggle
+            checked={b.enablePopup ?? false}
+            onChange={(v) => patch({ enablePopup: v })}
+            label="🎯 Popup ad"
+            description="Centered modal with timer + frequency."
+          />
+          <Toggle
+            checked={b.enableFloating ?? false}
+            onChange={(v) => patch({ enableFloating: v })}
+            label="💬 Floating corner card"
+            description="Persistent CTA card at the bottom corner."
+          />
+          <Toggle
+            checked={b.enableStickyBar ?? false}
+            onChange={(v) => patch({ enableStickyBar: v })}
+            label="📣 Sticky bottom bar"
+            description="Full-width bar pinned to viewport bottom."
+          />
+        </div>
+      </Card>
+
+      <Card
+        title="UI effect for this banner"
+        description="Decorative animated overlay. Set to 'Use global setting' to inherit the site-wide effect below — works like inline CSS overriding a stylesheet."
+      >
+        <Field label="Effect" hint="Each effect maps to a specific marketing moment.">
+          <Select value={b.uiEffect ?? "default"} onChange={(e) => patch({ uiEffect: e.target.value as BannerDraft["uiEffect"] })}>
+            {UI_EFFECTS.map((eff) => (
+              <option key={eff.value} value={eff.value}>
+                {eff.label} — {eff.suggestedFor}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      </Card>
+
+      <Card
+        title="Global UI effect (site-wide)"
+        description="Default for all banners that have effect set to 'Use global setting'. Acts like a stylesheet rule that a per-banner inline override always wins against."
+      >
+        <Field label="Global effect">
+          <Select value={b.globalUiEffect ?? "none"} onChange={(e) => patch({ globalUiEffect: e.target.value as BannerDraft["globalUiEffect"] })}>
+            {UI_EFFECTS.filter((eff) => eff.value !== "default").map((eff) => (
+              <option key={eff.value} value={eff.value}>
+                {eff.label} — {eff.suggestedFor}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      </Card>
+
+      <Card title="Logo & CTA style" description="Brand polish for popup / floating / sticky surfaces.">
+        <div className="space-y-4">
+          <Toggle
+            checked={b.showLogo ?? false}
+            onChange={(v) => patch({ showLogo: v })}
+            label="Show brand logo inside banner"
+            description="Renders the logo you uploaded at /admin/branding in the popup, floating card and sticky bar."
+          />
+          <Field label="CTA button style" hint="Affects all surfaces. Adapts colours to the chosen visual style.">
+            <Select value={b.ctaStyle ?? "solid"} onChange={(e) => patch({ ctaStyle: e.target.value as BannerDraft["ctaStyle"] })}>
+              <option value="solid">Solid — classic filled button (default)</option>
+              <option value="outline">Outline — border only, fills on hover</option>
+              <option value="glow">Glow — solid with animated brand glow</option>
+              <option value="pill">Pill — fully rounded, larger touch target</option>
+            </Select>
+          </Field>
+        </div>
       </Card>
 
       <Card title="Live preview">

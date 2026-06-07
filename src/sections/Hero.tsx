@@ -38,7 +38,10 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
         <div className="text-center lg:text-left">
-          <div className="hero-fade">
+          {/* Trust pill — mobile clutters; hidden < 640px to keep the
+              hero readable on small screens. The proof points are still
+              communicated below the fold in the stats strip. */}
+          <div className="hero-fade hidden sm:block">
             <Badge dot tone="brand">
               Trusted by 250+ Indian businesses · 25+ years of practice
             </Badge>

@@ -15,7 +15,7 @@ interface BannerData {
   linkLabel?: string;
   tone: "info" | "warning" | "success";
   /** Visual style. Defaults to "neutral" for backwards compatibility. */
-  style?: "neutral" | "gradient" | "glass" | "branded";
+  style?: "neutral" | "gradient" | "glass" | "apple-glass" | "branded";
   /** When true and tone !== "info", show an × dismiss button. */
   dismissible?: boolean;
   /** Stable key used for sessionStorage dismissal tracking. */
@@ -53,6 +53,10 @@ const BANNER_STYLE: Record<NonNullable<BannerData["style"]>, (tone: BannerData["
     "bg-gradient-to-r from-navy-700 via-navy-600 to-teal-500 text-white shadow-[0_2px_18px_-8px_rgba(13,42,84,0.6)]",
   glass: () =>
     "bg-white/80 text-navy-900 backdrop-blur-xl border-b border-slate-200/70",
+  "apple-glass": () =>
+    "text-navy-900 backdrop-blur-2xl backdrop-saturate-150 " +
+    "bg-[linear-gradient(135deg,rgba(255,255,255,0.85)_0%,rgba(219,234,254,0.75)_50%,rgba(186,230,253,0.7)_100%)] " +
+    "border-b border-white/60 shadow-[0_2px_18px_-8px_rgba(13,42,84,0.35),inset_0_1px_0_rgba(255,255,255,0.9)]",
   branded: (tone) =>
     `${BANNER_TONE[tone] ?? BANNER_TONE.info} text-white ring-1 ring-inset ring-white/15`,
 };
@@ -145,7 +149,7 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
                   href={banner.linkUrl}
                   className={cn(
                     "font-semibold underline-offset-2 whitespace-nowrap",
-                    banner.style === "glass"
+                    banner.style === "glass" || banner.style === "apple-glass"
                       ? "text-navy-700 underline decoration-navy-400/60 hover:decoration-navy-700"
                       : "underline decoration-white/60 hover:decoration-white",
                   )}
@@ -161,7 +165,7 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
                 aria-label="Dismiss announcement"
                 className={cn(
                   "flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[0.9rem] leading-none transition",
-                  banner.style === "glass"
+                  banner.style === "glass" || banner.style === "apple-glass"
                     ? "text-navy-700/70 hover:bg-navy-700/10"
                     : "text-white/70 hover:bg-white/15",
                 )}

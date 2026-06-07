@@ -9,33 +9,56 @@ import {
   SitePromoPopup,
   SitePromoStickyBar,
 } from "@/components/shared/SitePromo";
+import type { UiEffectKind } from "@/components/shared/UiEffectOverlay";
 import { getSiteSettings } from "@/services/settings";
 
 export async function MainLayout({ children }: { children: ReactNode }) {
   const settings = await getSiteSettings();
   const b = settings.banner;
-  const showAny = b.enabled && b.message.trim();
-  const kind = b.kind ?? "strip";
+  const enabledMaster = b.enabled && b.message.trim();
 
-  // Only feed the strip surface to the Navbar when kind === "strip".
-  // Popup / floating are rendered as their own surfaces below.
-  // Storage key is hashed below from message+url+label so a refreshed
-  // campaign re-engages users who dismissed the previous run.
-  const promoStorageKey = `vc-promo:${kind}:${hashString(b.message + b.linkUrl + b.linkLabel)}`;
+  /**
+   * Inline-CSS-style cascade for UI effect:
+   *   1. Per-banner `uiEffect` (most specific) — when "default", inherit
+   *   2. `globalUiEffect` (site-wide) — fallback
+   * Equivalent to: inline style > stylesheet, with the editor field
+   * marked "default" deferring to the global setting.
+   */
+  const effectiveEffect: UiEffectKind =
+    b.uiEffect && b.uiEffect !== "default" ? (b.uiEffect as UiEffectKind) : b.globalUiEffect ?? "none";
 
-  const banner =
-    showAny && kind === "strip"
-      ? {
-          message: b.message,
-          linkUrl: b.linkUrl || undefined,
-          linkLabel: b.linkLabel || undefined,
-          tone: b.tone,
-          style: b.style ?? "neutral",
-          // Info tones are always permanent — enforce here too, not just admin.
-          dismissible: (b.dismissible ?? false) && b.tone !== "info",
-          storageKey: promoStorageKey,
-        }
-      : null;
+  const ctaStyle = b.ctaStyle ?? "solid";
+  const logoUrl = b.showLogo ? settings.branding.logoUrl : undefined;
+
+  /**
+   * Per-kind activation. Each kind has its own enable flag — multiple
+   * may be on simultaneously (permanent strip + lead-capture popup).
+   * Falls back to the legacy single-banner model when none of the
+   * individual switches are on, using `b.kind` to choose the surface.
+   */
+  const anyKindToggled =
+    b.enableStrip || b.enablePopup || b.enableFloating || b.enableStickyBar;
+  const stripActive = enabledMaster && (anyKindToggled ? b.enableStrip : b.kind === "strip");
+  const popupActive = enabledMaster && (anyKindToggled ? b.enablePopup : b.kind === "popup");
+  const floatingActive = enabledMaster && (anyKindToggled ? b.enableFloating : b.kind === "floating");
+  const stickyActive = enabledMaster && (anyKindToggled ? b.enableStickyBar : b.kind === "sticky-bar");
+
+  function keyFor(kind: string): string {
+    return `vc-promo:${kind}:${hashString(b.message + b.linkUrl + b.linkLabel + b.popupHeadline)}`;
+  }
+
+  const stripData = stripActive
+    ? {
+        message: b.message,
+        linkUrl: b.linkUrl || undefined,
+        linkLabel: b.linkLabel || undefined,
+        tone: b.tone,
+        style: b.style ?? "neutral",
+        // Info tones are always permanent — runtime safety net.
+        dismissible: (b.dismissible ?? false) && b.tone !== "info",
+        storageKey: keyFor("strip"),
+      }
+    : null;
   const maintenance = settings.maintenance.formsDisabled
     ? { message: settings.maintenance.message }
     : null;
@@ -46,7 +69,7 @@ export async function MainLayout({ children }: { children: ReactNode }) {
       <Navbar
         links={settings.navigation.navbarLinks}
         logoUrl={settings.branding.logoUrl}
-        banner={banner}
+        banner={stripData}
         maintenance={maintenance}
       />
       <main id="main">{children}</main>
@@ -56,7 +79,7 @@ export async function MainLayout({ children }: { children: ReactNode }) {
         logoUrl={settings.branding.logoUrl}
         contactInfo={settings.contactInfo}
       />
-      {showAny && kind === "popup" && (
+      {popupActive && (
         <SitePromoPopup
           eyebrow={b.popupEyebrow}
           headline={b.popupHeadline || "An update from our compliance desk"}
@@ -69,11 +92,14 @@ export async function MainLayout({ children }: { children: ReactNode }) {
           tone={b.tone}
           frequency={b.popupFrequency ?? "session"}
           showDelaySec={b.popupShowDelaySec ?? 4}
-          storageKey={promoStorageKey}
+          storageKey={keyFor("popup")}
           dismissible={(b.dismissible ?? true) && b.tone !== "info"}
+          uiEffect={effectiveEffect}
+          logoUrl={logoUrl}
+          ctaStyle={ctaStyle}
         />
       )}
-      {showAny && kind === "floating" && (
+      {floatingActive && (
         <SitePromoFloating
           eyebrow={b.popupEyebrow}
           headline={b.popupHeadline || "Talk to our desk"}
@@ -84,11 +110,14 @@ export async function MainLayout({ children }: { children: ReactNode }) {
           tone={b.tone}
           frequency={b.popupFrequency ?? "session"}
           position={b.floatingPosition ?? "bottom-right"}
-          storageKey={promoStorageKey}
+          storageKey={keyFor("floating")}
           dismissible={(b.dismissible ?? true) && b.tone !== "info"}
+          uiEffect={effectiveEffect}
+          logoUrl={logoUrl}
+          ctaStyle={ctaStyle}
         />
       )}
-      {showAny && kind === "sticky-bar" && (
+      {stickyActive && (
         <SitePromoStickyBar
           eyebrow={b.popupEyebrow}
           headline={b.popupHeadline || ""}
@@ -98,8 +127,11 @@ export async function MainLayout({ children }: { children: ReactNode }) {
           style={b.style ?? "gradient"}
           tone={b.tone}
           frequency={b.popupFrequency ?? "session"}
-          storageKey={promoStorageKey}
+          storageKey={keyFor("sticky-bar")}
           dismissible={(b.dismissible ?? true) && b.tone !== "info"}
+          uiEffect={effectiveEffect}
+          logoUrl={logoUrl}
+          ctaStyle={ctaStyle}
         />
       )}
     </SmoothScrollProvider>

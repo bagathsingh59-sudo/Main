@@ -87,21 +87,83 @@ export const formConfigSchema = z.object({
  * All new fields default to safe values so existing stored settings
  * (which lack these keys) keep rendering the legacy neutral strip.
  */
+/**
+ * Available UI-effect overlays — CSS-only animations rendered on top of
+ * a banner surface (popup/floating/sticky). Each one suits a different
+ * marketing moment; see UiEffectOverlay for the actual frame styles.
+ *
+ *  - "none"                 → no overlay (default)
+ *  - "confetti"             → falling colored confetti — launches, milestones
+ *  - "sparkle"              → twinkling stars — premium feel, testimonials
+ *  - "glitter-anniversary"  → gold glitter cascade — site anniversary, brand birthday
+ *  - "snow-holiday"         → drifting snowflakes — Dec / New Year
+ *  - "fireworks-launch"     → bursting fireworks — product launches, Republic/Independence Day
+ *  - "shimmer-premium"      → diagonal shimmer sweep — luxury offers, VIP audit
+ *  - "floating-icons"       → drifting compliance icons — Diwali / Eid / festival campaigns
+ *  - "glow-pulse-urgent"    → pulsing brand glow — deadline reminders, last-day offers
+ *  - "coupon-burst-sale"    → radial burst rays — discount campaigns, sale events
+ *  - "ribbons-celebration"  → silk ribbons fall — graduations, year-end wraps
+ */
+export const uiEffectEnum = z.enum([
+  "none",
+  "confetti",
+  "sparkle",
+  "glitter-anniversary",
+  "snow-holiday",
+  "fireworks-launch",
+  "shimmer-premium",
+  "floating-icons",
+  "glow-pulse-urgent",
+  "coupon-burst-sale",
+  "ribbons-celebration",
+]);
+
 export const bannerSchema = z.object({
   enabled: z.boolean(),
   kind: z.enum(["strip", "popup", "floating", "sticky-bar"]).default("strip"),
-  style: z.enum(["neutral", "gradient", "glass", "branded"]).default("neutral"),
+  style: z.enum(["neutral", "gradient", "glass", "apple-glass", "branded"]).default("neutral"),
   message: z.string().max(400),
   linkUrl: z.string(),
   linkLabel: z.string().max(40),
   tone: z.enum(["info", "warning", "success"]),
   /**
-   * Whether the visitor can dismiss the banner. The admin UI forces this
-   * to false (and disables the toggle) when tone === "info" — informational
-   * banners must remain visible per the user's editorial rule. Warning and
-   * success tones may opt into a × close button.
+   * Editorial rule: when tone === "info", admin UI forces dismissible
+   * = false and the runtime guard re-enforces. Warning and success
+   * tones can opt into a × close button.
    */
   dismissible: z.boolean().default(true),
+  /**
+   * Per-kind independent enable flags. The flat fields above describe
+   * the CURRENTLY-EDITED preset; these toggles control which kinds are
+   * ACTIVE on the public site. Multiple may be enabled simultaneously
+   * (e.g. permanent strip + lead-capture popup + sticky audit bar).
+   *
+   * When all toggles are false, the runtime falls back to the legacy
+   * single-banner model and renders whatever `kind` is set to.
+   */
+  enableStrip: z.boolean().default(false),
+  enablePopup: z.boolean().default(false),
+  enableFloating: z.boolean().default(false),
+  enableStickyBar: z.boolean().default(false),
+  /**
+   * Visual effect overlay. Set to "default" to inherit the site-wide
+   * globalUiEffect. Any other value overrides the global — inline-CSS-style
+   * priority cascade.
+   */
+  uiEffect: z.enum(["default", ...uiEffectEnum.options]).default("default"),
+  /**
+   * When true, the admin-uploaded logo (from /admin/branding) renders
+   * inside popup / floating / sticky surfaces. Ignored on strip.
+   */
+  showLogo: z.boolean().default(false),
+  /**
+   * CTA button visual variant. Affects all banner kinds.
+   *   - "solid"   classic filled rectangle (default)
+   *   - "outline" border-only on transparent background
+   *   - "glow"    solid + animated brand glow halo
+   *   - "pill"    fully rounded, larger touch target
+   */
+  ctaStyle: z.enum(["solid", "outline", "glow", "pill"]).default("solid"),
   popupHeadline: z.string().max(80).default(""),
   popupEyebrow: z.string().max(40).default(""),
   popupCtaSecondaryLabel: z.string().max(40).default(""),
@@ -109,6 +171,12 @@ export const bannerSchema = z.object({
   popupShowDelaySec: z.number().int().min(0).max(60).default(4),
   popupFrequency: z.enum(["session", "once", "always"]).default("session"),
   floatingPosition: z.enum(["bottom-right", "bottom-left"]).default("bottom-right"),
+  /**
+   * Site-wide UI effect — applies to every active banner that has
+   * uiEffect = "default". A banner with a non-default uiEffect always
+   * overrides this global. Mirrors the inline-CSS-most-specific cascade.
+   */
+  globalUiEffect: uiEffectEnum.default("none"),
 });
 
 export const maintenanceSchema = z.object({

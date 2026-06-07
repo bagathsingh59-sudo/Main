@@ -80,6 +80,13 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     linkLabel: "",
     tone: "info" as const,
     dismissible: false, // tone defaults to "info" → permanent
+    enableStrip: false,
+    enablePopup: false,
+    enableFloating: false,
+    enableStickyBar: false,
+    uiEffect: "default" as const,
+    showLogo: false,
+    ctaStyle: "solid" as const,
     popupHeadline: "",
     popupEyebrow: "",
     popupCtaSecondaryLabel: "",
@@ -87,6 +94,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     popupShowDelaySec: 4,
     popupFrequency: "session" as const,
     floatingPosition: "bottom-right" as const,
+    globalUiEffect: "none" as const,
   },
 
   maintenance: {

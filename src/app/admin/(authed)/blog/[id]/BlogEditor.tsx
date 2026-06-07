@@ -24,6 +24,7 @@ export function BlogEditor({ postId }: Props) {
   const router = useRouter();
   const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<BlogPost | null>(null);
+  const [resolved, setResolved] = useState(false);
   const [tab, setTab] = useState<Tab>("Content");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -33,11 +34,11 @@ export function BlogEditor({ postId }: Props) {
     if (!settings) return;
     const post = settings.blog.posts.find((p) => p.id === postId);
     setDraft(post ?? null);
+    setResolved(true);
   }, [settings, postId]);
 
-  if (loading) return <p className="p-6 text-slate-500">Loading…</p>;
+  if (loading || !settings || !resolved) return <p className="p-6 text-slate-500">Loading…</p>;
   if (error) return <p className="p-6 text-rose-600">Couldn&apos;t load: {error}</p>;
-  if (!settings) return null;
   if (!draft) {
     return (
       <div className="p-6">

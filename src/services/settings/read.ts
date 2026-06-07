@@ -102,7 +102,15 @@ export async function getSiteSettings(opts: GetSettingsOptions = {}): Promise<Si
   }
 
   try {
-    const res = await fetch(`${storeUrl}/${SETTINGS_BLOB_PATHNAME}`, {
+    // When skipCache is set (admin reads), append a unique query string
+    // so the Vercel Blob CDN cannot serve a stale edge-cached copy from a
+    // node that hasn't yet seen the latest write. `cache: "no-store"` only
+    // bypasses Next.js's fetch cache — it doesn't influence the CDN layer
+    // between us and origin. A cache-busting param forces a cache miss.
+    const url = opts.skipCache
+      ? `${storeUrl}/${SETTINGS_BLOB_PATHNAME}?_t=${Date.now()}`
+      : `${storeUrl}/${SETTINGS_BLOB_PATHNAME}`;
+    const res = await fetch(url, {
       cache: "no-store",
     });
     if (!res.ok) {

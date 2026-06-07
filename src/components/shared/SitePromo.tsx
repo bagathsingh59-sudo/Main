@@ -101,13 +101,15 @@ const SURFACE_STYLES: Record<PromoStyle, string> = {
   // Legacy "glass" (kept for backwards compat with saved settings)
   glass:
     "bg-white/85 text-slate-900 backdrop-blur-xl border border-white/40 shadow-[0_25px_60px_-25px_rgba(15,23,42,0.4)]",
-  // Apple-style frosted glass with blue tint, inner highlight ring and
-  // layered shadow. Pairs well against any hero / dark page.
+  // True Apple-style glassmorphism — content BEHIND the card visibly
+  // blurs through. Background is low-opacity blue-tinted (not a solid
+  // gradient), backdrop-blur-3xl + saturate-200 do the heavy frosted-
+  // glass work. Inner highlight + soft shadow add depth.
   "apple-glass":
-    "text-slate-900 backdrop-blur-2xl backdrop-saturate-150 " +
-    "bg-[linear-gradient(135deg,rgba(255,255,255,0.85)_0%,rgba(219,234,254,0.78)_45%,rgba(186,230,253,0.7)_100%)] " +
-    "ring-1 ring-inset ring-white/60 " +
-    "shadow-[0_28px_70px_-25px_rgba(13,42,84,0.45),inset_0_1px_0_rgba(255,255,255,0.9)]",
+    "text-slate-900 backdrop-blur-3xl backdrop-saturate-200 " +
+    "bg-[rgba(219,234,254,0.35)] " +
+    "ring-1 ring-inset ring-white/40 " +
+    "shadow-[0_28px_70px_-25px_rgba(13,42,84,0.35),inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(96,165,250,0.15)]",
   branded:
     "bg-navy-700 text-white shadow-[0_25px_60px_-20px_rgba(13,42,84,0.55)]",
 };

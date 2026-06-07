@@ -54,9 +54,9 @@ const BANNER_STYLE: Record<NonNullable<BannerData["style"]>, (tone: BannerData["
   glass: () =>
     "bg-white/80 text-navy-900 backdrop-blur-xl border-b border-slate-200/70",
   "apple-glass": () =>
-    "text-navy-900 backdrop-blur-2xl backdrop-saturate-150 " +
-    "bg-[linear-gradient(135deg,rgba(255,255,255,0.85)_0%,rgba(219,234,254,0.75)_50%,rgba(186,230,253,0.7)_100%)] " +
-    "border-b border-white/60 shadow-[0_2px_18px_-8px_rgba(13,42,84,0.35),inset_0_1px_0_rgba(255,255,255,0.9)]",
+    "text-navy-900 backdrop-blur-3xl backdrop-saturate-200 " +
+    "bg-[rgba(219,234,254,0.35)] " +
+    "border-b border-white/40 shadow-[0_2px_18px_-8px_rgba(13,42,84,0.25),inset_0_1px_0_rgba(255,255,255,0.7)]",
   branded: (tone) =>
     `${BANNER_TONE[tone] ?? BANNER_TONE.info} text-white ring-1 ring-inset ring-white/15`,
 };

@@ -17,31 +17,20 @@ export async function MainLayout({ children }: { children: ReactNode }) {
   const b = settings.banner;
   const enabledMaster = b.enabled && b.message.trim();
 
-  /**
-   * Inline-CSS-style cascade for UI effect:
-   *   1. Per-banner `uiEffect` (most specific) — when "default", inherit
-   *   2. `globalUiEffect` (site-wide) — fallback
-   * Equivalent to: inline style > stylesheet, with the editor field
-   * marked "default" deferring to the global setting.
-   */
+  // Simplified single-kind model — one banner surface at a time, chosen
+  // by `b.kind`. Per-kind toggles and the global effect cascade were
+  // removed because they confused operators. Legacy stored values for
+  // those fields are simply ignored.
   const effectiveEffect: UiEffectKind =
-    b.uiEffect && b.uiEffect !== "default" ? (b.uiEffect as UiEffectKind) : b.globalUiEffect ?? "none";
+    b.uiEffect && b.uiEffect !== "default" ? (b.uiEffect as UiEffectKind) : "none";
 
   const ctaStyle = b.ctaStyle ?? "solid";
   const logoUrl = b.showLogo ? settings.branding.logoUrl : undefined;
 
-  /**
-   * Per-kind activation. Each kind has its own enable flag — multiple
-   * may be on simultaneously (permanent strip + lead-capture popup).
-   * Falls back to the legacy single-banner model when none of the
-   * individual switches are on, using `b.kind` to choose the surface.
-   */
-  const anyKindToggled =
-    b.enableStrip || b.enablePopup || b.enableFloating || b.enableStickyBar;
-  const stripActive = enabledMaster && (anyKindToggled ? b.enableStrip : b.kind === "strip");
-  const popupActive = enabledMaster && (anyKindToggled ? b.enablePopup : b.kind === "popup");
-  const floatingActive = enabledMaster && (anyKindToggled ? b.enableFloating : b.kind === "floating");
-  const stickyActive = enabledMaster && (anyKindToggled ? b.enableStickyBar : b.kind === "sticky-bar");
+  const stripActive = enabledMaster && b.kind === "strip";
+  const popupActive = enabledMaster && b.kind === "popup";
+  const floatingActive = enabledMaster && b.kind === "floating";
+  const stickyActive = enabledMaster && b.kind === "sticky-bar";
 
   function keyFor(kind: string): string {
     return `vc-promo:${kind}:${hashString(b.message + b.linkUrl + b.linkLabel + b.popupHeadline)}`;

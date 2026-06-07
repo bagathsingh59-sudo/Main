@@ -17,8 +17,33 @@ export function TeamMemberEditor({ memberId }: { memberId: string }) {
   const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    if (settings) setDraft(settings);
-  }, [settings]);
+    if (!settings) return;
+    const has = settings.team.members.some((m) => m.id === memberId);
+    if (has) {
+      setDraft(settings);
+      return;
+    }
+    // Fallback: TeamList just created this member and stashed it in
+    // sessionStorage. Merge it into the local draft so the editor renders
+    // immediately, sidestepping the Blob CDN propagation window.
+    try {
+      const stashed = sessionStorage.getItem(`vc-fresh-member-${memberId}`);
+      if (stashed) {
+        const parsed = JSON.parse(stashed) as TeamMember;
+        if (parsed && parsed.id === memberId) {
+          setDraft({
+            ...settings,
+            team: { ...settings.team, members: [...settings.team.members, parsed] },
+          });
+          sessionStorage.removeItem(`vc-fresh-member-${memberId}`);
+          return;
+        }
+      }
+    } catch {
+      /* swallow */
+    }
+    setDraft(settings);
+  }, [settings, memberId]);
 
   // Same Vercel Blob propagation safety net as BlogEditor — silently
   // re-fetch up to 3 times if a freshly-created member isn't visible yet.

@@ -43,6 +43,14 @@ export function BlogList() {
     const next = [post, ...settings.blog.posts];
     try {
       await savePartial({ blog: { ...settings.blog, posts: next } });
+      // Hand the editor the freshly-created post directly so it can render
+      // instantly — sidesteps the Vercel Blob CDN propagation window where a
+      // re-fetch right after a write can still return the pre-write snapshot.
+      try {
+        sessionStorage.setItem(`vc-fresh-post-${post.id}`, JSON.stringify(post));
+      } catch {
+        /* sessionStorage may be unavailable (private mode) — editor falls back to retry */
+      }
       window.location.href = `/admin/blog/${post.id}`;
     } catch (err) {
       alert(err instanceof Error ? err.message : "Couldn't create post");

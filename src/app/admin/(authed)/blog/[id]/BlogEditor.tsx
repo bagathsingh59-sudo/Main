@@ -34,7 +34,30 @@ export function BlogEditor({ postId }: Props) {
   useEffect(() => {
     if (!settings) return;
     const post = settings.blog.posts.find((p) => p.id === postId);
-    setDraft(post ?? null);
+    if (post) {
+      setDraft(post);
+      setResolved(true);
+      return;
+    }
+    // Fallback: BlogList just created this post and stashed it in
+    // sessionStorage. Use it immediately so we don't wait on Blob
+    // CDN propagation. The post is already persisted server-side.
+    try {
+      const stashed = sessionStorage.getItem(`vc-fresh-post-${postId}`);
+      if (stashed) {
+        const parsed = JSON.parse(stashed) as BlogPost;
+        if (parsed && parsed.id === postId) {
+          setDraft(parsed);
+          setResolved(true);
+          // Clean up so a future genuine 404 doesn't keep showing a phantom.
+          sessionStorage.removeItem(`vc-fresh-post-${postId}`);
+          return;
+        }
+      }
+    } catch {
+      /* swallow */
+    }
+    setDraft(null);
     setResolved(true);
   }, [settings, postId]);
 

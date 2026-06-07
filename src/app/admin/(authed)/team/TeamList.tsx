@@ -36,6 +36,13 @@ export function TeamList() {
     };
     try {
       await savePartial({ team: { members: [...members, member] } });
+      // Hand the editor the freshly-created member so it renders instantly,
+      // sidestepping Vercel Blob CDN propagation lag on the next read.
+      try {
+        sessionStorage.setItem(`vc-fresh-member-${member.id}`, JSON.stringify(member));
+      } catch {
+        /* sessionStorage unavailable — editor retries via Blob */
+      }
       window.location.href = `/admin/team/${member.id}`;
     } catch (err) {
       alert(err instanceof Error ? err.message : "Couldn't create member");

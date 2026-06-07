@@ -158,12 +158,33 @@ export const bannerSchema = z.object({
   showLogo: z.boolean().default(false),
   /**
    * CTA button visual variant. Affects all banner kinds.
-   *   - "solid"   classic filled rectangle (default)
-   *   - "outline" border-only on transparent background
-   *   - "glow"    solid + animated brand glow halo
-   *   - "pill"    fully rounded, larger touch target
+   *
+   * Classic set:
+   *   - "solid"           classic filled rectangle (default)
+   *   - "outline"         border-only on transparent background
+   *   - "glow"            solid + animated brand glow halo
+   *   - "pill"            fully rounded, larger touch target
+   *
+   * hover.dev-inspired set (animated, professional):
+   *   - "shimmer"         diagonal shine sweep across the surface on hover
+   *   - "slide"           content + arrow slides horizontally on hover
+   *   - "draw-outline"    border traces itself around the button on hover
+   *   - "gradient-shadow" brand-colored gradient shadow expands on hover
+   *   - "neubrutalism"    bold offset shadow that snaps in on hover
    */
-  ctaStyle: z.enum(["solid", "outline", "glow", "pill"]).default("solid"),
+  ctaStyle: z
+    .enum([
+      "solid",
+      "outline",
+      "glow",
+      "pill",
+      "shimmer",
+      "slide",
+      "draw-outline",
+      "gradient-shadow",
+      "neubrutalism",
+    ])
+    .default("solid"),
   popupHeadline: z.string().max(80).default(""),
   popupEyebrow: z.string().max(40).default(""),
   popupCtaSecondaryLabel: z.string().max(40).default(""),

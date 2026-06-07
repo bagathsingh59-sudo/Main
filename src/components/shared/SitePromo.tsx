@@ -22,7 +22,16 @@ import { UiEffectOverlay } from "./UiEffectOverlay";
 export type PromoStyle = "neutral" | "gradient" | "glass" | "apple-glass" | "branded";
 export type PromoTone = "info" | "warning" | "success";
 export type PromoFrequency = "session" | "once" | "always";
-export type PromoCtaStyle = "solid" | "outline" | "glow" | "pill";
+export type PromoCtaStyle =
+  | "solid"
+  | "outline"
+  | "glow"
+  | "pill"
+  | "shimmer"
+  | "slide"
+  | "draw-outline"
+  | "gradient-shadow"
+  | "neubrutalism";
 
 interface PromoCommon {
   message: string;
@@ -112,15 +121,22 @@ function isLightSurface(style: PromoStyle): boolean {
 }
 
 /**
- * CTA button variant — adapts to style + ctaStyle. All variants stack
- * full-width on mobile and inline at ≥ sm.
+ * CTA button variant — adapts to surface + ctaStyle. All variants stack
+ * full-width on mobile and inline at ≥ sm. Classic variants (solid /
+ * outline / glow / pill) are pure Tailwind. The hover.dev-inspired set
+ * (shimmer / slide / draw-outline / gradient-shadow / neubrutalism)
+ * relies on the .cta-* helper classes in globals.css for the animations.
  */
 function ctaClass(style: PromoStyle, ctaStyle: PromoCtaStyle, primary: boolean): string {
   const light = isLightSurface(style);
   const base =
-    "inline-flex items-center justify-center font-semibold transition-all w-full sm:w-auto text-[0.9rem] " +
+    "relative inline-flex items-center justify-center font-semibold w-full sm:w-auto text-[0.9rem] " +
+    "transition-all overflow-hidden " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+
   const radius = ctaStyle === "pill" ? "rounded-full px-6 py-3" : "rounded-xl px-5 py-2.5";
+
+  // Secondary CTA stays subtle across all variants.
   if (!primary) {
     return `${base} ${radius} ${
       light
@@ -128,26 +144,88 @@ function ctaClass(style: PromoStyle, ctaStyle: PromoCtaStyle, primary: boolean):
         : "border border-white/40 text-white hover:bg-white/10"
     }`;
   }
-  if (ctaStyle === "outline") {
-    return `${base} ${radius} ${
-      light
-        ? "border-2 border-navy-600 text-navy-700 hover:bg-navy-600 hover:text-white"
-        : "border-2 border-white text-white hover:bg-white hover:text-navy-700"
-    }`;
+
+  // Resolved fill / text colours for the light vs dark surfaces.
+  const solidFill = light
+    ? "bg-navy-600 text-white hover:bg-navy-700 shadow-md"
+    : "bg-white text-navy-700 hover:bg-slate-100 shadow-md";
+
+  switch (ctaStyle) {
+    case "outline":
+      return `${base} ${radius} ${
+        light
+          ? "border-2 border-navy-600 text-navy-700 hover:bg-navy-600 hover:text-white"
+          : "border-2 border-white text-white hover:bg-white hover:text-navy-700"
+      }`;
+
+    case "glow":
+      return `${base} ${radius} ${
+        light
+          ? "bg-gradient-to-r from-navy-700 to-teal-500 text-white shadow-[0_8px_30px_-5px_rgba(20,184,166,0.55)] hover:shadow-[0_12px_40px_-5px_rgba(20,184,166,0.7)]"
+          : "bg-white text-navy-700 shadow-[0_8px_30px_-5px_rgba(255,255,255,0.4)] hover:shadow-[0_12px_40px_-5px_rgba(255,255,255,0.55)]"
+      }`;
+
+    case "shimmer":
+      // Filled surface + animated shine sweep overlay (overlay markup is
+      // injected by the renderer below — see CtaInner).
+      return `${base} ${radius} cta-shimmer ${solidFill}`;
+
+    case "slide":
+      // Solid background; the inner content + arrow animate horizontally.
+      return `${base} ${radius} cta-slide ${solidFill}`;
+
+    case "draw-outline":
+      // Transparent base, brand text, traced border on hover.
+      return `${base} ${radius} cta-draw-outline ${
+        light ? "text-navy-700" : "text-white"
+      } border border-transparent bg-transparent`;
+
+    case "gradient-shadow":
+      // Solid fill + blooming brand-gradient halo underneath on hover.
+      return `${base} ${radius} cta-gradient-shadow ${
+        light ? "bg-navy-700 text-white" : "bg-white text-navy-700"
+      } z-[1]`;
+
+    case "neubrutalism":
+      // Bold border + offset shadow that snaps in.
+      return `${base} ${radius} cta-neubrutalism ${
+        light ? "bg-white text-navy-700" : "bg-navy-700 text-white"
+      }`;
+
+    // solid + pill default
+    default:
+      return `${base} ${radius} ${solidFill}`;
   }
-  if (ctaStyle === "glow") {
-    return `${base} ${radius} ${
-      light
-        ? "bg-gradient-to-r from-navy-700 to-teal-500 text-white shadow-[0_8px_30px_-5px_rgba(20,184,166,0.55)] hover:shadow-[0_12px_40px_-5px_rgba(20,184,166,0.7)]"
-        : "bg-white text-navy-700 shadow-[0_8px_30px_-5px_rgba(255,255,255,0.4)] hover:shadow-[0_12px_40px_-5px_rgba(255,255,255,0.55)]"
-    }`;
+}
+
+/**
+ * Wrap CTA label so style-specific decorators (e.g. shimmer overlay,
+ * slide arrow) can be injected without callers caring.
+ */
+function CtaInner({
+  ctaStyle,
+  label,
+}: {
+  ctaStyle: PromoCtaStyle;
+  label: string;
+}) {
+  if (ctaStyle === "shimmer") {
+    return (
+      <>
+        <span className="relative z-[1]">{label}</span>
+        <span className="cta-shimmer-overlay" aria-hidden="true" />
+      </>
+    );
   }
-  // solid + pill (default)
-  return `${base} ${radius} ${
-    light
-      ? "bg-navy-600 text-white hover:bg-navy-700 shadow-md"
-      : "bg-white text-navy-700 hover:bg-slate-100 shadow-md"
-  }`;
+  if (ctaStyle === "slide") {
+    return (
+      <span className="cta-slide-inner">
+        <span>{label}</span>
+        <span className="cta-slide-arrow" aria-hidden="true">→</span>
+      </span>
+    );
+  }
+  return <>{label}</>;
 }
 
 const ACCENT_FOR_NEUTRAL: Record<PromoTone, string> = {
@@ -268,7 +346,7 @@ export function SitePromoPopup(props: PopupProps) {
           <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
             {linkUrl && linkLabel && (
               <Link href={linkUrl} onClick={close} className={ctaClass(style, ctaStyle, true)}>
-                {linkLabel}
+                <CtaInner ctaStyle={ctaStyle} label={linkLabel} />
               </Link>
             )}
             {secondaryUrl && secondaryLabel && (
@@ -365,7 +443,7 @@ export function SitePromoFloating(props: FloatingProps) {
           )}
           {linkUrl && linkLabel && (
             <Link href={linkUrl} onClick={close} className={ctaClass(style, ctaStyle, true)}>
-              {linkLabel}
+              <CtaInner ctaStyle={ctaStyle} label={linkLabel} />
             </Link>
           )}
         </div>
@@ -450,7 +528,7 @@ export function SitePromoStickyBar(props: StickyBarProps) {
           <div className="flex items-center gap-2 sm:flex-shrink-0">
             {linkUrl && linkLabel && (
               <Link href={linkUrl} onClick={close} className={ctaClass(style, ctaStyle, true)}>
-                {linkLabel}
+                <CtaInner ctaStyle={ctaStyle} label={linkLabel} />
               </Link>
             )}
             {dismissible && (

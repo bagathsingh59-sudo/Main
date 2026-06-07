@@ -404,14 +404,24 @@ export function BannerEditor() {
             label="Show brand logo inside banner"
             description="Renders the logo you uploaded at /admin/branding in the popup, floating card and sticky bar."
           />
-          <Field label="CTA button style" hint="Affects all surfaces. Adapts colours to the chosen visual style.">
+          <Field label="CTA button style" hint="Affects all surfaces. Adapts colours to the chosen visual style. Inspired by hover.dev — hover on each preview to see the animation.">
             <Select value={b.ctaStyle ?? "solid"} onChange={(e) => patch({ ctaStyle: e.target.value as BannerDraft["ctaStyle"] })}>
-              <option value="solid">Solid — classic filled button (default)</option>
-              <option value="outline">Outline — border only, fills on hover</option>
-              <option value="glow">Glow — solid with animated brand glow</option>
-              <option value="pill">Pill — fully rounded, larger touch target</option>
+              <optgroup label="Classic">
+                <option value="solid">Solid — classic filled button (default)</option>
+                <option value="outline">Outline — border only, fills on hover</option>
+                <option value="glow">Glow — solid with brand glow halo</option>
+                <option value="pill">Pill — fully rounded, larger touch target</option>
+              </optgroup>
+              <optgroup label="Animated (hover.dev-inspired)">
+                <option value="shimmer">Shimmer — diagonal shine sweep on hover</option>
+                <option value="slide">Slide — content + arrow slide right on hover</option>
+                <option value="draw-outline">Draw outline — border traces around on hover</option>
+                <option value="gradient-shadow">Gradient shadow — brand-colored halo blooms on hover</option>
+                <option value="neubrutalism">Neubrutalism — bold offset shadow snaps in</option>
+              </optgroup>
             </Select>
           </Field>
+          <CtaPreviewRow current={b.ctaStyle ?? "solid"} onPick={(v) => patch({ ctaStyle: v })} />
         </div>
       </Card>
 
@@ -583,4 +593,106 @@ function BannerPreview({ banner, preset }: { banner: BannerDraft; preset: Preset
       </div>
     </div>
   );
+}
+
+/* ──────────────────────── CTA preview row ────────────────────────
+ * Lets the admin hover-test each animated variant before committing.
+ * Click any chip to select it — keeps the dropdown in sync.
+ * Uses the same .cta-* classes from globals.css so the previews
+ * match the production render exactly.
+ */
+
+const CTA_OPTIONS: Array<{ value: BannerDraft["ctaStyle"]; label: string }> = [
+  { value: "solid", label: "Solid" },
+  { value: "outline", label: "Outline" },
+  { value: "glow", label: "Glow" },
+  { value: "pill", label: "Pill" },
+  { value: "shimmer", label: "Shimmer" },
+  { value: "slide", label: "Slide" },
+  { value: "draw-outline", label: "Draw outline" },
+  { value: "gradient-shadow", label: "Gradient shadow" },
+  { value: "neubrutalism", label: "Neubrutalism" },
+];
+
+function CtaPreviewRow({
+  current,
+  onPick,
+}: {
+  current: BannerDraft["ctaStyle"];
+  onPick: (v: BannerDraft["ctaStyle"]) => void;
+}) {
+  return (
+    <div className="mt-4">
+      <div className="mb-2 text-[0.78rem] font-medium text-slate-600 dark:text-slate-400">
+        Hover any chip to preview the animation — click to select.
+      </div>
+      <div className="flex flex-wrap gap-2.5">
+        {CTA_OPTIONS.map((opt) => {
+          const active = current === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => onPick(opt.value)}
+              className={ctaPreviewClass(opt.value) + (active ? " ring-2 ring-navy-500 ring-offset-2" : "")}
+            >
+              <CtaPreviewLabel ctaStyle={opt.value} label={opt.label} />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ctaPreviewClass(ctaStyle: BannerDraft["ctaStyle"]): string {
+  const base =
+    "relative inline-flex items-center justify-center font-semibold text-[0.82rem] " +
+    "transition-all overflow-hidden " +
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+  const radius = ctaStyle === "pill" ? "rounded-full px-5 py-2.5" : "rounded-xl px-4 py-2";
+  switch (ctaStyle) {
+    case "outline":
+      return `${base} ${radius} border-2 border-navy-600 text-navy-700 hover:bg-navy-600 hover:text-white`;
+    case "glow":
+      return `${base} ${radius} bg-gradient-to-r from-navy-700 to-teal-500 text-white shadow-[0_8px_30px_-5px_rgba(20,184,166,0.55)] hover:shadow-[0_12px_40px_-5px_rgba(20,184,166,0.7)]`;
+    case "shimmer":
+      return `${base} ${radius} cta-shimmer bg-navy-600 text-white hover:bg-navy-700 shadow-md`;
+    case "slide":
+      return `${base} ${radius} cta-slide bg-navy-600 text-white hover:bg-navy-700 shadow-md`;
+    case "draw-outline":
+      return `${base} ${radius} cta-draw-outline text-navy-700 border border-transparent bg-transparent`;
+    case "gradient-shadow":
+      return `${base} ${radius} cta-gradient-shadow bg-navy-700 text-white z-[1]`;
+    case "neubrutalism":
+      return `${base} ${radius} cta-neubrutalism bg-white text-navy-700`;
+    default:
+      return `${base} ${radius} bg-navy-600 text-white hover:bg-navy-700 shadow-md`;
+  }
+}
+
+function CtaPreviewLabel({
+  ctaStyle,
+  label,
+}: {
+  ctaStyle: BannerDraft["ctaStyle"];
+  label: string;
+}) {
+  if (ctaStyle === "shimmer") {
+    return (
+      <>
+        <span className="relative z-[1]">{label}</span>
+        <span className="cta-shimmer-overlay" aria-hidden="true" />
+      </>
+    );
+  }
+  if (ctaStyle === "slide") {
+    return (
+      <span className="cta-slide-inner">
+        <span>{label}</span>
+        <span className="cta-slide-arrow" aria-hidden="true">→</span>
+      </span>
+    );
+  }
+  return <>{label}</>;
 }

@@ -260,3 +260,109 @@
   opacity: 0.85;
   animation: ui-ribbon-fall linear infinite;
 }
+
+/* ─────────── Banner CTA hover-dev-inspired animations ─────────── */
+
+/* Shimmer — diagonal shine sweep */
+@keyframes cta-shimmer {
+  0%   { transform: translateX(-150%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+.cta-shimmer-overlay {
+  position: absolute; top: 0; left: 0;
+  width: 35%; height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  transform: translateX(-150%) skewX(-15deg);
+  pointer-events: none;
+}
+.cta-shimmer:hover .cta-shimmer-overlay {
+  animation: cta-shimmer 0.9s ease-out;
+}
+
+/* Slide — content + arrow drift right on hover */
+.cta-slide-inner {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cta-slide:hover .cta-slide-inner {
+  transform: translateX(0.35rem);
+}
+.cta-slide-arrow {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cta-slide:hover .cta-slide-arrow {
+  transform: translateX(0.3rem);
+}
+
+/* Draw outline — pseudo-element border traces around the button */
+.cta-draw-outline {
+  position: relative;
+  overflow: visible;
+}
+.cta-draw-outline::before,
+.cta-draw-outline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 2px solid currentColor;
+  opacity: 0;
+  transition: clip-path 0.35s ease, opacity 0.2s ease;
+}
+.cta-draw-outline::before {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+}
+.cta-draw-outline::after {
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+}
+.cta-draw-outline:hover::before {
+  opacity: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+}
+.cta-draw-outline:hover::after {
+  opacity: 1;
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+}
+
+/* Gradient shadow — brand gradient blooms underneath on hover */
+.cta-gradient-shadow {
+  position: relative;
+}
+.cta-gradient-shadow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #1d4ed8 0%, #0ea5e9 50%, #14b8a6 100%);
+  filter: blur(18px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  transform: scale(0.9);
+}
+.cta-gradient-shadow:hover::before {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+/* Neubrutalism — offset shadow snaps in on hover */
+.cta-neubrutalism {
+  border: 2px solid currentColor;
+  box-shadow: 0 0 0 0 currentColor;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.cta-neubrutalism:hover {
+  box-shadow: 5px 5px 0 0 currentColor;
+  transform: translate(-2px, -2px);
+}
+.cta-neubrutalism:active {
+  box-shadow: 0 0 0 0 currentColor;
+  transform: translate(0, 0);
+}

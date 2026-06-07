@@ -86,20 +86,28 @@ export function Toggle({
   onChange,
   label,
   description,
+  disabled,
 }: {
   checked: boolean;
   onChange: (b: boolean) => void;
   label: string;
   description?: string;
+  /** When true, the switch is greyed out and click is suppressed. */
+  disabled?: boolean;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3">
+    <label className={`flex items-start gap-3 ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}>
       <button
         type="button"
         role="switch"
         aria-checked={checked}
-        onClick={() => onChange(!checked)}
-        className={`relative mt-0.5 inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
+        aria-disabled={disabled || undefined}
+        disabled={disabled}
+        onClick={() => {
+          if (disabled) return;
+          onChange(!checked);
+        }}
+        className={`relative mt-0.5 inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors disabled:cursor-not-allowed ${
           checked ? "bg-navy-600" : "bg-slate-300"
         }`}
       >

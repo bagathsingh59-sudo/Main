@@ -89,12 +89,19 @@ export const formConfigSchema = z.object({
  */
 export const bannerSchema = z.object({
   enabled: z.boolean(),
-  kind: z.enum(["strip", "popup", "floating"]).default("strip"),
+  kind: z.enum(["strip", "popup", "floating", "sticky-bar"]).default("strip"),
   style: z.enum(["neutral", "gradient", "glass", "branded"]).default("neutral"),
   message: z.string().max(400),
   linkUrl: z.string(),
   linkLabel: z.string().max(40),
   tone: z.enum(["info", "warning", "success"]),
+  /**
+   * Whether the visitor can dismiss the banner. The admin UI forces this
+   * to false (and disables the toggle) when tone === "info" — informational
+   * banners must remain visible per the user's editorial rule. Warning and
+   * success tones may opt into a × close button.
+   */
+  dismissible: z.boolean().default(true),
   popupHeadline: z.string().max(80).default(""),
   popupEyebrow: z.string().max(40).default(""),
   popupCtaSecondaryLabel: z.string().max(40).default(""),

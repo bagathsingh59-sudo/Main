@@ -38,10 +38,12 @@ export const COMPANY = {
     hours: "Mon – Sat · 9:30 AM – 7:00 PM IST",
   },
   social: {
+    // Only LinkedIn is being claimed and published. Empty strings cause
+    // the Footer to drop the icon entirely — no dead links rendered.
     linkedin: "https://www.linkedin.com/company/vaishnavi-consultant",
-    twitter: "https://twitter.com/vaishnaviconsult",
-    instagram: "https://instagram.com/vaishnaviconsultant",
-    youtube: "https://youtube.com/@vaishnaviconsultant",
+    twitter: "",
+    instagram: "",
+    youtube: "",
   },
   stats: {
     clients: "250+",

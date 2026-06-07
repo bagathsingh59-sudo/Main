@@ -4,7 +4,11 @@ import { Footer } from "@/components/shared/Footer";
 import { ScrollProgress } from "@/components/shared/ScrollProgress";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
 import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
-import { SitePromoFloating, SitePromoPopup } from "@/components/shared/SitePromo";
+import {
+  SitePromoFloating,
+  SitePromoPopup,
+  SitePromoStickyBar,
+} from "@/components/shared/SitePromo";
 import { getSiteSettings } from "@/services/settings";
 
 export async function MainLayout({ children }: { children: ReactNode }) {
@@ -15,6 +19,10 @@ export async function MainLayout({ children }: { children: ReactNode }) {
 
   // Only feed the strip surface to the Navbar when kind === "strip".
   // Popup / floating are rendered as their own surfaces below.
+  // Storage key is hashed below from message+url+label so a refreshed
+  // campaign re-engages users who dismissed the previous run.
+  const promoStorageKey = `vc-promo:${kind}:${hashString(b.message + b.linkUrl + b.linkLabel)}`;
+
   const banner =
     showAny && kind === "strip"
       ? {
@@ -23,15 +31,14 @@ export async function MainLayout({ children }: { children: ReactNode }) {
           linkLabel: b.linkLabel || undefined,
           tone: b.tone,
           style: b.style ?? "neutral",
+          // Info tones are always permanent — enforce here too, not just admin.
+          dismissible: (b.dismissible ?? false) && b.tone !== "info",
+          storageKey: promoStorageKey,
         }
       : null;
   const maintenance = settings.maintenance.formsDisabled
     ? { message: settings.maintenance.message }
     : null;
-
-  // Storage key changes whenever the operator updates the message — so a
-  // refreshed campaign re-engages users who dismissed the previous run.
-  const promoStorageKey = `vc-promo:${kind}:${hashString(b.message + b.linkUrl + b.linkLabel)}`;
 
   return (
     <SmoothScrollProvider>
@@ -63,6 +70,7 @@ export async function MainLayout({ children }: { children: ReactNode }) {
           frequency={b.popupFrequency ?? "session"}
           showDelaySec={b.popupShowDelaySec ?? 4}
           storageKey={promoStorageKey}
+          dismissible={(b.dismissible ?? true) && b.tone !== "info"}
         />
       )}
       {showAny && kind === "floating" && (
@@ -77,6 +85,21 @@ export async function MainLayout({ children }: { children: ReactNode }) {
           frequency={b.popupFrequency ?? "session"}
           position={b.floatingPosition ?? "bottom-right"}
           storageKey={promoStorageKey}
+          dismissible={(b.dismissible ?? true) && b.tone !== "info"}
+        />
+      )}
+      {showAny && kind === "sticky-bar" && (
+        <SitePromoStickyBar
+          eyebrow={b.popupEyebrow}
+          headline={b.popupHeadline || ""}
+          message={b.message}
+          linkUrl={b.linkUrl || undefined}
+          linkLabel={b.linkLabel || undefined}
+          style={b.style ?? "gradient"}
+          tone={b.tone}
+          frequency={b.popupFrequency ?? "session"}
+          storageKey={promoStorageKey}
+          dismissible={(b.dismissible ?? true) && b.tone !== "info"}
         />
       )}
     </SmoothScrollProvider>

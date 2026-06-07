@@ -57,15 +57,15 @@ export default async function ContactPage() {
       />
 
       <ImageBanner
-        src="https://images.unsplash.com/photo-1582719188393-bb71ca45dbb9?w=1800&q=80&auto=format&fit=crop"
-        alt="Bengaluru office building"
+        src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&q=80&auto=format&fit=crop"
+        alt="Vaishnavi Consultant — Kalaburagi office"
         eyebrow="Head office"
         title={
           <>
-            12th Floor, Prestige Trade Tower. <em className="not-italic">Bengaluru.</em>
+            Milan Chowk, <em className="not-italic">Kalaburagi.</em>
           </>
         }
-        description="Walk-ins by appointment, Monday to Saturday, 9:30 AM – 7:00 PM IST."
+        description="Walk-ins by appointment, Monday to Saturday, 9:30 AM – 7:00 PM IST. Pan-India clients served remotely."
         height="sm"
         overlay="brand"
       />

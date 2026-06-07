@@ -30,6 +30,11 @@ interface PromoCommon {
   tone: PromoTone;
   frequency: PromoFrequency;
   storageKey: string;
+  /**
+   * Whether the visitor can dismiss the surface. Info-toned banners are
+   * forced permanent upstream; passing `false` here also hides the × button.
+   */
+  dismissible?: boolean;
 }
 
 interface PopupProps extends PromoCommon {
@@ -44,6 +49,11 @@ interface FloatingProps extends PromoCommon {
   headline: string;
   eyebrow: string;
   position: "bottom-right" | "bottom-left";
+}
+
+interface StickyBarProps extends PromoCommon {
+  headline: string;
+  eyebrow: string;
 }
 
 /* ────────────────────────── shared helpers ────────────────────────── */
@@ -102,6 +112,7 @@ export function SitePromoPopup(props: PopupProps) {
     frequency,
     storageKey,
     showDelaySec,
+    dismissible = true,
   } = props;
 
   const [open, setOpen] = useState(false);
@@ -157,18 +168,20 @@ export function SitePromoPopup(props: PopupProps) {
       <div
         className={`relative w-full max-w-md overflow-hidden rounded-2xl ${surface} animate-in fade-in zoom-in-95 duration-200`}
       >
-        <button
-          type="button"
-          onClick={close}
-          aria-label="Close"
-          className={`absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-[1.1rem] transition ${
-            style === "neutral" || style === "glass"
-              ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
-              : "bg-white/15 text-white/80 hover:bg-white/25"
-          }`}
-        >
-          ×
-        </button>
+        {dismissible && (
+          <button
+            type="button"
+            onClick={close}
+            aria-label="Close"
+            className={`absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-[1.1rem] transition ${
+              style === "neutral" || style === "glass"
+                ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                : "bg-white/15 text-white/80 hover:bg-white/25"
+            }`}
+          >
+            ×
+          </button>
+        )}
         <div className="px-7 pt-8 pb-7 sm:px-8 sm:pt-9 sm:pb-8">
           {eyebrow && (
             <div className={`mb-3 text-[0.72rem] font-bold uppercase tracking-[0.14em] ${accent}`}>
@@ -234,6 +247,7 @@ export function SitePromoFloating(props: FloatingProps) {
     frequency,
     storageKey,
     position,
+    dismissible = true,
   } = props;
 
   const [open, setOpen] = useState(false);
@@ -264,18 +278,20 @@ export function SitePromoFloating(props: FloatingProps) {
       aria-label="Site promo"
     >
       <div className={`relative overflow-hidden rounded-xl p-5 ${surface}`}>
-        <button
-          type="button"
-          onClick={close}
-          aria-label="Dismiss"
-          className={`absolute right-2.5 top-2.5 flex h-6 w-6 items-center justify-center rounded-full text-[0.85rem] transition ${
-            style === "neutral" || style === "glass"
-              ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
-              : "bg-white/15 text-white/80 hover:bg-white/25"
-          }`}
-        >
-          ×
-        </button>
+        {dismissible && (
+          <button
+            type="button"
+            onClick={close}
+            aria-label="Dismiss"
+            className={`absolute right-2.5 top-2.5 flex h-6 w-6 items-center justify-center rounded-full text-[0.85rem] transition ${
+              style === "neutral" || style === "glass"
+                ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                : "bg-white/15 text-white/80 hover:bg-white/25"
+            }`}
+          >
+            ×
+          </button>
+        )}
         {eyebrow && (
           <div className={`mb-1.5 text-[0.68rem] font-bold uppercase tracking-[0.14em] ${accent}`}>
             {eyebrow}
@@ -302,6 +318,107 @@ export function SitePromoFloating(props: FloatingProps) {
             {linkLabel} →
           </Link>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* ────────────────────────── sticky bottom bar ────────────────────────── */
+
+/**
+ * Full-width bar pinned to the bottom of the viewport.
+ * Perfect for evergreen lead-capture ("Free 45-min audit") that should
+ * sit alongside, but never block, the page content.
+ */
+export function SitePromoStickyBar(props: StickyBarProps) {
+  const {
+    headline,
+    eyebrow,
+    message,
+    linkUrl,
+    linkLabel,
+    style,
+    tone,
+    frequency,
+    storageKey,
+    dismissible = true,
+  } = props;
+
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (alreadyDismissed(storageKey, frequency)) return;
+    const timer = setTimeout(() => setOpen(true), 800);
+    return () => clearTimeout(timer);
+  }, [storageKey, frequency]);
+
+  if (!open) return null;
+
+  const surface = SURFACE_STYLES[style] ?? SURFACE_STYLES.gradient;
+  const accent = style === "neutral" ? ACCENT_FOR_NEUTRAL[tone] : "text-white/85";
+  const titleClass = style === "neutral" || style === "glass" ? "text-slate-900" : "text-white";
+  const bodyClass = style === "neutral" || style === "glass" ? "text-slate-600" : "text-white/85";
+
+  function close() {
+    setOpen(false);
+    markDismissed(storageKey, frequency);
+  }
+
+  return (
+    <div
+      className="fixed inset-x-0 bottom-0 z-[180] animate-in slide-in-from-bottom-2 fade-in duration-300"
+      role="complementary"
+      aria-label="Site promo"
+    >
+      <div className={`mx-auto max-w-7xl ${surface} overflow-hidden rounded-t-2xl mx-3 sm:mx-6`}>
+        <div className="relative flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:gap-6 sm:px-7 sm:py-4">
+          <div className="min-w-0 flex-1">
+            {eyebrow && (
+              <div className={`mb-0.5 text-[0.62rem] font-bold uppercase tracking-[0.14em] ${accent}`}>
+                {eyebrow}
+              </div>
+            )}
+            {headline && (
+              <div className={`text-[0.95rem] font-bold leading-snug sm:text-[1.05rem] ${titleClass}`}>
+                {headline}
+              </div>
+            )}
+            {message && (
+              <p className={`mt-0.5 text-[0.78rem] leading-[1.5] sm:text-[0.85rem] ${bodyClass}`}>
+                {message}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-2 sm:flex-shrink-0">
+            {linkUrl && linkLabel && (
+              <Link
+                href={linkUrl}
+                onClick={close}
+                className={`inline-flex flex-1 items-center justify-center rounded-lg px-4 py-2 text-[0.82rem] font-semibold transition sm:flex-initial sm:px-5 ${
+                  style === "neutral" || style === "glass"
+                    ? "bg-navy-600 text-white hover:bg-navy-700"
+                    : "bg-white text-navy-700 hover:bg-slate-100"
+                }`}
+              >
+                {linkLabel}
+              </Link>
+            )}
+            {dismissible && (
+              <button
+                type="button"
+                onClick={close}
+                aria-label="Dismiss"
+                className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-[1rem] transition ${
+                  style === "neutral" || style === "glass"
+                    ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                    : "bg-white/15 text-white/80 hover:bg-white/25"
+                }`}
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

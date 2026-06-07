@@ -79,6 +79,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     linkUrl: "",
     linkLabel: "",
     tone: "info" as const,
+    dismissible: false, // tone defaults to "info" → permanent
     popupHeadline: "",
     popupEyebrow: "",
     popupCtaSecondaryLabel: "",
@@ -168,7 +169,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
           { label: "Founder's Message", href: "/about#founder", visible: true },
           { label: "Our Journey", href: "/about#journey", visible: true },
           { label: "Team", href: "/about#team", visible: true },
-          { label: "Awards", href: "/about#awards", visible: true },
+          // "Awards" footer link removed — fictional entries cleared from
+          // constants/certifications.ts; re-add when real awards are issued.
           { label: "Trust & Security", href: "/about#trust", visible: true },
         ],
       },

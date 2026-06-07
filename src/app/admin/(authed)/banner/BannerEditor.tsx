@@ -6,15 +6,90 @@ import { useSettings } from "../../_components/useSettings";
 import type { SiteSettings } from "@/services/settings";
 
 type BannerDraft = SiteSettings["banner"];
+type Preset = "classic" | "modern" | "popup" | "floating" | "sticky";
+
+/**
+ * Preset library — each preset is a starting point with pre-tuned
+ * defaults that suit a particular use case. Operators pick one, then
+ * tweak. Underneath they all write to the same banner schema.
+ */
+const PRESETS: Array<{
+  id: Preset;
+  label: string;
+  blurb: string;
+  emoji: string;
+  defaults: Partial<BannerDraft>;
+}> = [
+  {
+    id: "classic",
+    label: "Classic strip",
+    blurb: "Calm, single-line top strip in your existing minimalist style. Best for permanent notices.",
+    emoji: "📌",
+    defaults: { kind: "strip", style: "neutral", tone: "info", dismissible: false },
+  },
+  {
+    id: "modern",
+    label: "Modern strip",
+    blurb: "Branded gradient or glass-frosted top strip. High polish, attention-grabbing.",
+    emoji: "✨",
+    defaults: { kind: "strip", style: "gradient", tone: "success", dismissible: true },
+  },
+  {
+    id: "popup",
+    label: "Popup ad",
+    blurb: "Centered modal with timer + frequency control. Best for lead capture and sales.",
+    emoji: "🎯",
+    defaults: {
+      kind: "popup",
+      style: "gradient",
+      tone: "success",
+      dismissible: true,
+      popupShowDelaySec: 6,
+      popupFrequency: "session",
+    },
+  },
+  {
+    id: "floating",
+    label: "Floating card",
+    blurb: "Corner card that sits alongside content. Persistent CTA without blocking the page.",
+    emoji: "💬",
+    defaults: {
+      kind: "floating",
+      style: "branded",
+      tone: "info",
+      dismissible: true,
+      floatingPosition: "bottom-right",
+    },
+  },
+  {
+    id: "sticky",
+    label: "Sticky bottom bar",
+    blurb: "Full-width bar pinned to the bottom. Evergreen lead-capture without interruption.",
+    emoji: "📣",
+    defaults: { kind: "sticky-bar", style: "gradient", tone: "info", dismissible: true },
+  },
+];
+
+function detectPreset(b: BannerDraft): Preset {
+  const k = b.kind ?? "strip";
+  if (k === "popup") return "popup";
+  if (k === "floating") return "floating";
+  if (k === "sticky-bar") return "sticky";
+  return (b.style ?? "neutral") === "neutral" ? "classic" : "modern";
+}
 
 export function BannerEditor() {
   const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
+  const [preset, setPreset] = useState<Preset>("classic");
 
   useEffect(() => {
-    if (settings) setDraft(settings);
+    if (settings) {
+      setDraft(settings);
+      setPreset(detectPreset(settings.banner));
+    }
   }, [settings]);
 
   if (loading) return <p className="text-slate-500">Loading…</p>;
@@ -29,12 +104,22 @@ export function BannerEditor() {
     setStatus({ kind: "idle" });
   }
 
+  function applyPreset(id: Preset) {
+    const p = PRESETS.find((x) => x.id === id);
+    if (!p) return;
+    setPreset(id);
+    patch(p.defaults);
+  }
+
   async function onSave() {
     if (!draft) return;
     setSaving(true);
     setStatus({ kind: "idle" });
     try {
-      await savePartial({ banner: draft.banner });
+      // Editorial rule: info-toned banners are always permanent.
+      const safeDraft: BannerDraft =
+        draft.banner.tone === "info" ? { ...draft.banner, dismissible: false } : draft.banner;
+      await savePartial({ banner: safeDraft });
       setStatus({ kind: "ok", message: "Banner saved. Live within ~30 seconds." });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Save failed" });
@@ -43,14 +128,13 @@ export function BannerEditor() {
     }
   }
 
-  const kind = b.kind ?? "strip";
-  const style = b.style ?? "neutral";
+  const infoLockedPermanent = b.tone === "info";
 
   return (
     <div>
       <PageHeader
-        title="Site banner & popups"
-        description="Sitewide promotion surfaces. Choose a top strip, a centered popup, or a floating corner card — each has style + tone controls."
+        title="Site banner & promotions"
+        description="Five preset surfaces — pick one, tune it, save. Info-toned banners are kept permanent; warning and success tones can be set dismissible."
       />
 
       <Card>
@@ -58,84 +142,73 @@ export function BannerEditor() {
           checked={b.enabled}
           onChange={(v) => patch({ enabled: v })}
           label="Enable site banner / popup"
-          description="When off, nothing renders regardless of the message below."
+          description="Master switch. When off, nothing renders regardless of the preset below."
         />
       </Card>
 
-      <Card
-        title="Surface"
-        description="What the user sees and where. Strip is calm and always-on; popup demands attention; floating sits at the corner."
-      >
-        <div className="space-y-4">
-          <Field label="Banner kind" hint="Switch between the three surfaces.">
-            <Select
-              value={kind}
-              onChange={(e) => patch({ kind: e.target.value as BannerDraft["kind"] })}
-            >
-              <option value="strip">Top strip — slim, full width, always visible</option>
-              <option value="popup">Popup — centered modal, opens after a delay</option>
-              <option value="floating">Floating card — bottom corner, dismissible</option>
+      <Card title="Preset" description="Click a card to load its tuned defaults. You can fine-tune everything afterwards.">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {PRESETS.map((p) => {
+            const active = preset === p.id;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => applyPreset(p.id)}
+                className={`group flex flex-col items-start gap-2 rounded-xl border p-4 text-left transition ${
+                  active
+                    ? "border-navy-500 bg-navy-50/60 ring-2 ring-navy-500/20 dark:border-navy-400 dark:bg-navy-950/40"
+                    : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-600"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-[1.3rem]" aria-hidden="true">
+                    {p.emoji}
+                  </span>
+                  <span
+                    className={`text-[0.92rem] font-semibold ${active ? "text-navy-700 dark:text-navy-200" : "text-slate-900 dark:text-slate-100"}`}
+                  >
+                    {p.label}
+                  </span>
+                  {active && (
+                    <span className="ml-auto rounded-full bg-navy-600 px-2 py-0.5 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-white">
+                      Active
+                    </span>
+                  )}
+                </div>
+                <p className="text-[0.78rem] leading-[1.5] text-slate-600 dark:text-slate-400">{p.blurb}</p>
+              </button>
+            );
+          })}
+        </div>
+      </Card>
+
+      <Card title="Style & tone" description="Visual variant and editorial colour. Tone also drives the permanence rule below.">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Visual style">
+            <Select value={b.style ?? "neutral"} onChange={(e) => patch({ style: e.target.value as BannerDraft["style"] })}>
+              <option value="neutral">Neutral — solid tone, classic minimalist</option>
+              <option value="gradient">Gradient — navy → teal sweep</option>
+              <option value="glass">Glass — translucent frosted</option>
+              <option value="branded">Branded — solid brand colour</option>
             </Select>
           </Field>
-          <Field label="Visual style" hint='"Neutral" preserves the calm legacy look. The other three add brand polish.'>
-            <Select
-              value={style}
-              onChange={(e) => patch({ style: e.target.value as BannerDraft["style"] })}
-            >
-              <option value="neutral">Neutral — solid tone, classic minimalist (default)</option>
-              <option value="gradient">Gradient — navy → teal sweep, high impact</option>
-              <option value="glass">Glass — translucent frosted surface (premium)</option>
-              <option value="branded">Branded — solid brand colour with subtle ring</option>
-            </Select>
-          </Field>
-          <Field label="Tone" hint="Used by neutral + branded styles to colour-code the message.">
-            <Select
-              value={b.tone}
-              onChange={(e) => patch({ tone: e.target.value as BannerDraft["tone"] })}
-            >
-              <option value="info">Info — navy (calm, informational)</option>
-              <option value="warning">Warning — amber (deadlines, alerts)</option>
-              <option value="success">Success — emerald (campaigns, wins)</option>
+          <Field
+            label="Tone"
+            hint="Info banners are always permanent (no × button). Warning and success can be dismissible."
+          >
+            <Select value={b.tone} onChange={(e) => patch({ tone: e.target.value as BannerDraft["tone"] })}>
+              <option value="info">Info — navy (informational, permanent)</option>
+              <option value="warning">Warning — amber (deadline, alert)</option>
+              <option value="success">Success — emerald (campaign, offer)</option>
             </Select>
           </Field>
         </div>
       </Card>
 
-      <Card
-        title="Content"
-        description="The headline + body + primary CTA. Popup/floating also use the headline + eyebrow fields below."
-      >
+      <Card title="Content" description="The headline, body, and primary call-to-action.">
         <div className="space-y-4">
-          <Field label="Message / body" hint="Strip = one line. Popup/floating = up to 2-3 lines.">
-            <Textarea
-              value={b.message}
-              onChange={(e) => patch({ message: e.target.value })}
-              placeholder={
-                kind === "strip"
-                  ? "GST annual return deadline — book a consultation before 30 Sept."
-                  : "Free 45-minute compliance audit for businesses with 20+ employees. We'll review your last six filings and flag the priority fixes."
-              }
-              maxLength={400}
-              rows={kind === "strip" ? 2 : 3}
-            />
-          </Field>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Primary CTA URL" hint="Where the button click goes.">
-              <Input value={b.linkUrl} onChange={(e) => patch({ linkUrl: e.target.value })} placeholder="/contact" />
-            </Field>
-            <Field label="Primary CTA label" hint="Button text. Empty = no button.">
-              <Input value={b.linkLabel} onChange={(e) => patch({ linkLabel: e.target.value })} placeholder="Book your free audit" />
-            </Field>
-          </div>
-        </div>
-      </Card>
-
-      {(kind === "popup" || kind === "floating") && (
-        <Card
-          title="Popup & floating extras"
-          description="Headline + eyebrow + secondary CTA fields specific to popup/floating surfaces. Ignored when kind = Strip."
-        >
-          <div className="space-y-4">
+          {(preset === "popup" || preset === "floating" || preset === "sticky") && (
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Eyebrow" hint="Small uppercase label above the headline.">
                 <Input
@@ -154,50 +227,70 @@ export function BannerEditor() {
                 />
               </Field>
             </div>
-            {kind === "popup" && (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Secondary CTA URL" hint="Optional second button. Empty = single CTA.">
-                  <Input
-                    value={b.popupCtaSecondaryUrl}
-                    onChange={(e) => patch({ popupCtaSecondaryUrl: e.target.value })}
-                    placeholder="/services"
-                  />
-                </Field>
-                <Field label="Secondary CTA label">
-                  <Input
-                    value={b.popupCtaSecondaryLabel}
-                    onChange={(e) => patch({ popupCtaSecondaryLabel: e.target.value })}
-                    placeholder="Browse services"
-                    maxLength={40}
-                  />
-                </Field>
-              </div>
-            )}
+          )}
+          <Field label="Message / body" hint="Strip = one line. Popup/floating/sticky = up to 2–3 lines.">
+            <Textarea
+              value={b.message}
+              onChange={(e) => patch({ message: e.target.value })}
+              placeholder={
+                preset === "classic" || preset === "modern"
+                  ? "GST annual return deadline — book a consultation before 30 Sept."
+                  : "Free 45-minute compliance audit for businesses with 20+ employees."
+              }
+              maxLength={400}
+              rows={preset === "classic" || preset === "modern" ? 2 : 3}
+            />
+          </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Primary CTA URL">
+              <Input value={b.linkUrl} onChange={(e) => patch({ linkUrl: e.target.value })} placeholder="/contact" />
+            </Field>
+            <Field label="Primary CTA label">
+              <Input value={b.linkLabel} onChange={(e) => patch({ linkLabel: e.target.value })} placeholder="Book your free audit" />
+            </Field>
+          </div>
+          {preset === "popup" && (
             <div className="grid gap-4 sm:grid-cols-2">
-              {kind === "popup" && (
-                <Field label="Show delay (seconds)" hint="How long before the popup opens. 0 = immediately. Recommended: 4-8.">
-                  <Input
-                    type="number"
-                    min={0}
-                    max={60}
-                    value={String(b.popupShowDelaySec ?? 4)}
-                    onChange={(e) => patch({ popupShowDelaySec: Math.max(0, Math.min(60, Number(e.target.value) || 0)) })}
-                  />
-                </Field>
-              )}
-              <Field label="Frequency" hint="Once per session = re-shows after browser restart. Once per device = sticky until storage cleared.">
-                <Select
-                  value={b.popupFrequency ?? "session"}
-                  onChange={(e) => patch({ popupFrequency: e.target.value as BannerDraft["popupFrequency"] })}
-                >
-                  <option value="session">Once per session (recommended)</option>
-                  <option value="once">Once per device</option>
-                  <option value="always">Every page load (test only)</option>
-                </Select>
+              <Field label="Secondary CTA URL" hint="Optional. Empty = single CTA.">
+                <Input value={b.popupCtaSecondaryUrl} onChange={(e) => patch({ popupCtaSecondaryUrl: e.target.value })} placeholder="/services" />
+              </Field>
+              <Field label="Secondary CTA label">
+                <Input value={b.popupCtaSecondaryLabel} onChange={(e) => patch({ popupCtaSecondaryLabel: e.target.value })} placeholder="Browse services" maxLength={40} />
               </Field>
             </div>
-            {kind === "floating" && (
-              <Field label="Floating card position">
+          )}
+        </div>
+      </Card>
+
+      {(preset === "popup" || preset === "floating" || preset === "sticky") && (
+        <Card title="Timer & frequency" description="Control when and how often the surface appears.">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {preset === "popup" && (
+              <Field label="Show delay (seconds)" hint="How long after page load before the popup opens. Recommended: 4–8.">
+                <Input
+                  type="number"
+                  min={0}
+                  max={60}
+                  value={String(b.popupShowDelaySec ?? 4)}
+                  onChange={(e) => patch({ popupShowDelaySec: Math.max(0, Math.min(60, Number(e.target.value) || 0)) })}
+                />
+              </Field>
+            )}
+            <Field
+              label="Frequency"
+              hint="Session = re-shows after browser restart. Once = sticky until storage is cleared. Always = test only."
+            >
+              <Select
+                value={b.popupFrequency ?? "session"}
+                onChange={(e) => patch({ popupFrequency: e.target.value as BannerDraft["popupFrequency"] })}
+              >
+                <option value="session">Once per session (recommended)</option>
+                <option value="once">Once per device</option>
+                <option value="always">Every page load (test only)</option>
+              </Select>
+            </Field>
+            {preset === "floating" && (
+              <Field label="Card position">
                 <Select
                   value={b.floatingPosition ?? "bottom-right"}
                   onChange={(e) => patch({ floatingPosition: e.target.value as BannerDraft["floatingPosition"] })}
@@ -211,8 +304,22 @@ export function BannerEditor() {
         </Card>
       )}
 
-      <Card title="Preview">
-        <BannerPreview banner={b} />
+      <Card title="Dismiss behaviour" description="Whether the visitor can close the banner.">
+        <Toggle
+          checked={infoLockedPermanent ? false : b.dismissible ?? true}
+          onChange={(v) => patch({ dismissible: v })}
+          label={infoLockedPermanent ? "Permanent (locked because tone is Info)" : "Allow visitor to dismiss with × button"}
+          description={
+            infoLockedPermanent
+              ? "Info-toned banners stay visible — they carry information visitors should not be able to hide. Switch tone to Warning or Success to enable dismissal."
+              : "When on, the banner shows a × close button. Dismissal is remembered per browser session (or device, if Frequency is set to 'Once per device')."
+          }
+          disabled={infoLockedPermanent}
+        />
+      </Card>
+
+      <Card title="Live preview">
+        <BannerPreview banner={b} preset={preset} />
       </Card>
 
       <SaveBar
@@ -222,6 +329,7 @@ export function BannerEditor() {
         onSave={onSave}
         onReset={() => {
           setDraft(settings);
+          setPreset(detectPreset(settings.banner));
           setStatus({ kind: "idle" });
         }}
       />
@@ -229,21 +337,21 @@ export function BannerEditor() {
   );
 }
 
-/* ──────────────────────── inline preview ──────────────────────── */
+/* ──────────────────────── live preview ──────────────────────── */
 
-function BannerPreview({ banner }: { banner: BannerDraft }) {
-  const kind = banner.kind ?? "strip";
+function BannerPreview({ banner, preset }: { banner: BannerDraft; preset: Preset }) {
   const style = banner.style ?? "neutral";
   const tone = banner.tone;
   const message = banner.message || "Your message will appear here…";
   const headline = banner.popupHeadline || "Your headline here";
   const eyebrow = banner.popupEyebrow;
+  const showDismiss = (banner.dismissible ?? true) && tone !== "info";
 
   const stripBg =
     style === "gradient"
       ? "bg-gradient-to-r from-navy-700 via-navy-600 to-teal-500 text-white"
       : style === "glass"
-        ? "bg-white/80 text-navy-900 backdrop-blur-xl border border-slate-200"
+        ? "bg-white/85 text-navy-900 backdrop-blur-xl border border-slate-200"
         : tone === "warning"
           ? "bg-amber-500 text-white"
           : tone === "success"
@@ -254,32 +362,40 @@ function BannerPreview({ banner }: { banner: BannerDraft }) {
     style === "gradient"
       ? "bg-gradient-to-br from-navy-700 via-navy-600 to-teal-500 text-white"
       : style === "glass"
-        ? "bg-white/85 text-slate-900 backdrop-blur-xl border border-white/40"
+        ? "bg-white/90 text-slate-900 backdrop-blur-xl border border-white/40 shadow-xl"
         : style === "branded"
           ? `${tone === "warning" ? "bg-amber-500" : tone === "success" ? "bg-emerald-600" : "bg-navy-700"} text-white`
           : "bg-white text-slate-900 border border-slate-200 shadow";
 
-  if (kind === "strip") {
+  if (preset === "classic" || preset === "modern") {
     return (
-      <div className={`${stripBg} rounded-lg px-4 py-2.5 text-center text-[0.88rem]`}>
+      <div className={`${stripBg} relative rounded-lg px-4 py-2 text-center text-[0.78rem] sm:text-[0.86rem]`}>
         {message}
         {banner.linkUrl && banner.linkLabel && (
-          <a href={banner.linkUrl} className="ml-2 inline-block underline opacity-90">
-            {banner.linkLabel}
+          <a href={banner.linkUrl} className="ml-2 inline-block font-semibold underline opacity-95">
+            {banner.linkLabel} →
           </a>
+        )}
+        {showDismiss && (
+          <span className="ml-3 inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[0.8rem] leading-none opacity-80">
+            ×
+          </span>
         )}
       </div>
     );
   }
 
-  if (kind === "popup") {
+  if (preset === "popup") {
     return (
       <div className="flex justify-center rounded-xl bg-slate-100 px-4 py-8 dark:bg-slate-900">
-        <div className={`w-full max-w-md overflow-hidden rounded-2xl ${cardBg} p-6`}>
+        <div className={`relative w-full max-w-md overflow-hidden rounded-2xl ${cardBg} p-6`}>
+          {showDismiss && (
+            <span className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/20 text-[0.95rem] leading-none opacity-90">
+              ×
+            </span>
+          )}
           {eyebrow && (
-            <div className="mb-2 text-[0.7rem] font-bold uppercase tracking-[0.14em] opacity-75">
-              {eyebrow}
-            </div>
+            <div className="mb-2 text-[0.7rem] font-bold uppercase tracking-[0.14em] opacity-75">{eyebrow}</div>
           )}
           <div className="mb-2 text-[1.2rem] font-bold leading-tight">{headline}</div>
           <p className="mb-4 text-[0.88rem] opacity-85">{message}</p>
@@ -308,28 +424,65 @@ function BannerPreview({ banner }: { banner: BannerDraft }) {
     );
   }
 
-  // floating
+  if (preset === "floating") {
+    return (
+      <div className="relative h-52 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-900">
+        <div
+          className={`absolute bottom-4 ${
+            (banner.floatingPosition ?? "bottom-right") === "bottom-left" ? "left-4" : "right-4"
+          } w-72 overflow-hidden rounded-xl p-4 ${cardBg}`}
+        >
+          {showDismiss && (
+            <span className="absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[0.75rem] leading-none opacity-90">
+              ×
+            </span>
+          )}
+          {eyebrow && (
+            <div className="mb-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] opacity-75">{eyebrow}</div>
+          )}
+          <div className="mb-1 text-[0.95rem] font-bold leading-snug">{headline}</div>
+          <p className="mb-2.5 text-[0.78rem] opacity-85">{message}</p>
+          {banner.linkLabel && (
+            <span
+              className={`inline-flex items-center rounded-lg px-3 py-1.5 text-[0.78rem] font-semibold ${
+                style === "neutral" || style === "glass" ? "bg-navy-600 text-white" : "bg-white text-navy-700"
+              }`}
+            >
+              {banner.linkLabel} →
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // sticky bottom bar
   return (
     <div className="relative h-44 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-900">
-      <div
-        className={`absolute bottom-4 ${
-          (banner.floatingPosition ?? "bottom-right") === "bottom-left" ? "left-4" : "right-4"
-        } w-72 overflow-hidden rounded-xl p-4 ${cardBg}`}
-      >
-        {eyebrow && (
-          <div className="mb-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] opacity-75">{eyebrow}</div>
-        )}
-        <div className="mb-1 text-[0.95rem] font-bold leading-snug">{headline}</div>
-        <p className="mb-2.5 text-[0.78rem] opacity-85">{message}</p>
-        {banner.linkLabel && (
-          <span
-            className={`inline-flex items-center rounded-lg px-3 py-1.5 text-[0.78rem] font-semibold ${
-              style === "neutral" || style === "glass" ? "bg-navy-600 text-white" : "bg-white text-navy-700"
-            }`}
-          >
-            {banner.linkLabel} →
-          </span>
-        )}
+      <div className={`absolute inset-x-3 bottom-3 overflow-hidden rounded-xl px-5 py-3 ${cardBg}`}>
+        <div className="flex items-center gap-3 sm:gap-5">
+          <div className="min-w-0 flex-1">
+            {eyebrow && (
+              <div className="text-[0.62rem] font-bold uppercase tracking-[0.14em] opacity-75">{eyebrow}</div>
+            )}
+            {headline && <div className="text-[0.95rem] font-bold leading-snug">{headline}</div>}
+            {message && <p className="mt-0.5 line-clamp-1 text-[0.78rem] opacity-85">{message}</p>}
+          </div>
+          {banner.linkLabel && (
+            <span
+              className={`inline-flex flex-shrink-0 items-center rounded-lg px-3.5 py-1.5 text-[0.78rem] font-semibold ${
+                style === "neutral" || style === "glass" ? "bg-navy-600 text-white" : "bg-white text-navy-700"
+              }`}
+            >
+              {banner.linkLabel}
+            </span>
+          )}
+          {showDismiss && (
+            <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-[0.9rem] leading-none opacity-90">
+              ×
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

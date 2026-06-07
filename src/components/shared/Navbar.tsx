@@ -16,6 +16,10 @@ interface BannerData {
   tone: "info" | "warning" | "success";
   /** Visual style. Defaults to "neutral" for backwards compatibility. */
   style?: "neutral" | "gradient" | "glass" | "branded";
+  /** When true and tone !== "info", show an × dismiss button. */
+  dismissible?: boolean;
+  /** Stable key used for sessionStorage dismissal tracking. */
+  storageKey?: string;
 }
 
 interface MaintenanceData {
@@ -59,7 +63,33 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
   const navLinks = source.filter((l) => l.visible !== false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
   const pathname = usePathname();
+
+  // Restore banner dismissal from sessionStorage on mount.
+  useEffect(() => {
+    if (!banner?.storageKey || !banner.dismissible || banner.tone === "info") return;
+    try {
+      if (sessionStorage.getItem(banner.storageKey) === "1") setBannerDismissed(true);
+    } catch {
+      /* swallow */
+    }
+  }, [banner?.storageKey, banner?.dismissible, banner?.tone]);
+
+  function dismissBanner() {
+    if (!banner?.storageKey) return;
+    try {
+      sessionStorage.setItem(banner.storageKey, "1");
+    } catch {
+      /* swallow */
+    }
+    setBannerDismissed(true);
+  }
+
+  // Info-toned banners are editorially permanent — admin already forces
+  // dismissible=false, but enforce here as a safety net.
+  const canDismiss = banner?.dismissible === true && banner.tone !== "info";
+  const showBanner = banner && banner.message && !bannerDismissed;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -101,23 +131,43 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
         </div>
       )}
 
-      {/* Announcement strip — rendered above the nav row. */}
-      {banner && banner.message && (
-        <div className={cn(BANNER_STYLE[banner.style ?? "neutral"](banner.tone))}>
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-1.5 text-center text-[0.82rem] sm:px-8">
-            <span className="font-medium">{banner.message}</span>
-            {banner.linkUrl && banner.linkLabel && (
-              <a
-                href={banner.linkUrl}
+      {/* Announcement strip — rendered above the nav row.
+          Mobile-first: tighter typography, two-row layout with link
+          stacking below message on narrow screens; dismiss button when
+          allowed by editor + non-info tone. */}
+      {showBanner && (
+        <div className={cn(BANNER_STYLE[banner.style ?? "neutral"](banner.tone), "relative")}>
+          <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-3 py-1.5 sm:gap-3 sm:px-8 sm:py-2">
+            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-center text-[0.72rem] leading-snug sm:text-[0.82rem]">
+              <span className="font-medium">{banner.message}</span>
+              {banner.linkUrl && banner.linkLabel && (
+                <a
+                  href={banner.linkUrl}
+                  className={cn(
+                    "font-semibold underline-offset-2 whitespace-nowrap",
+                    banner.style === "glass"
+                      ? "text-navy-700 underline decoration-navy-400/60 hover:decoration-navy-700"
+                      : "underline decoration-white/60 hover:decoration-white",
+                  )}
+                >
+                  {banner.linkLabel} →
+                </a>
+              )}
+            </div>
+            {canDismiss && (
+              <button
+                type="button"
+                onClick={dismissBanner}
+                aria-label="Dismiss announcement"
                 className={cn(
-                  "font-semibold underline-offset-2",
+                  "flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-[0.9rem] leading-none transition",
                   banner.style === "glass"
-                    ? "text-navy-700 underline decoration-navy-400/60 hover:decoration-navy-700"
-                    : "underline decoration-white/60 hover:decoration-white",
+                    ? "text-navy-700/70 hover:bg-navy-700/10"
+                    : "text-white/70 hover:bg-white/15",
                 )}
               >
-                {banner.linkLabel}
-              </a>
+                ×
+              </button>
             )}
           </div>
         </div>

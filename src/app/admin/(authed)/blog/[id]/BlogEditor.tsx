@@ -25,6 +25,7 @@ export function BlogEditor({ postId }: Props) {
   const { settings, loading, error, savePartial } = useSettings();
   const [draft, setDraft] = useState<BlogPost | null>(null);
   const [resolved, setResolved] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const [tab, setTab] = useState<Tab>("Content");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -37,12 +38,45 @@ export function BlogEditor({ postId }: Props) {
     setResolved(true);
   }, [settings, postId]);
 
+  // Vercel Blob has a brief CDN propagation window after a write — the
+  // settings GET on the editor page might land before the new post is
+  // visible. If we've resolved but the post wasn't found, silently re-
+  // fetch up to 3 times with backoff before showing "Post not found".
+  useEffect(() => {
+    if (!resolved || draft || retryCount >= 3) return;
+    const delay = 600 * (retryCount + 1); // 600ms, 1.2s, 1.8s
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch("/api/admin/settings", { cache: "no-store" });
+        const json = (await res.json()) as { ok: boolean; settings?: { blog: { posts: BlogPost[] } } };
+        if (json.ok && json.settings) {
+          const post = json.settings.blog.posts.find((p) => p.id === postId);
+          if (post) {
+            setDraft(post);
+            return;
+          }
+        }
+      } catch {
+        /* swallow — retry counter will progress */
+      }
+      setRetryCount((c) => c + 1);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [resolved, draft, retryCount, postId]);
+
   if (loading || !settings || !resolved) return <p className="p-6 text-slate-500">Loading…</p>;
   if (error) return <p className="p-6 text-rose-600">Couldn&apos;t load: {error}</p>;
   if (!draft) {
+    // Still retrying — propagation window in progress.
+    if (retryCount < 3) {
+      return <p className="p-6 text-slate-500">Loading post…</p>;
+    }
     return (
       <div className="p-6">
         <p className="text-rose-600">Post not found.</p>
+        <p className="mt-2 text-[0.85rem] text-slate-500">
+          If you just created this post, wait 5 seconds and reload — Vercel Blob may still be propagating.
+        </p>
         <Link href="/admin/blog" className="mt-3 inline-block text-[0.85rem] font-medium text-navy-600 hover:underline">
           ← Back to all posts
         </Link>

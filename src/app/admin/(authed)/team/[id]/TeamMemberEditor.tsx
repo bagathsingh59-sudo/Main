@@ -14,10 +14,37 @@ export function TeamMemberEditor({ memberId }: { memberId: string }) {
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
   const [deleting, setDeleting] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     if (settings) setDraft(settings);
   }, [settings]);
+
+  // Same Vercel Blob propagation safety net as BlogEditor — silently
+  // re-fetch up to 3 times if a freshly-created member isn't visible yet.
+  useEffect(() => {
+    if (!draft || retryCount >= 3) return;
+    const exists = draft.team.members.some((m) => m.id === memberId);
+    if (exists) return;
+    const delay = 600 * (retryCount + 1);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch("/api/admin/settings", { cache: "no-store" });
+        const json = (await res.json()) as { ok: boolean; settings?: SiteSettings };
+        if (json.ok && json.settings) {
+          const hit = json.settings.team.members.some((m) => m.id === memberId);
+          if (hit) {
+            setDraft(json.settings);
+            return;
+          }
+        }
+      } catch {
+        /* swallow */
+      }
+      setRetryCount((c) => c + 1);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [draft, retryCount, memberId]);
 
   if (loading) return <p className="text-slate-500">Loading…</p>;
   if (error) return <p className="text-rose-600">Couldn&apos;t load settings: {error}</p>;
@@ -27,6 +54,7 @@ export function TeamMemberEditor({ memberId }: { memberId: string }) {
   const original = settings.team.members.find((m) => m.id === memberId);
 
   if (!member) {
+    if (retryCount < 3) return <p className="text-slate-500">Loading member…</p>;
     return (
       <div>
         <PageHeader title="Member not found" description="This team member no longer exists." />

@@ -15,10 +15,62 @@ export function UpdateEditor({ updateId }: { updateId: string }) {
   const [deleting, setDeleting] = useState(false);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message?: string }>({ kind: "idle" });
   const [autoSlug, setAutoSlug] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    if (settings) setDraft(settings);
-  }, [settings]);
+    if (!settings) return;
+    const has = settings.updates.items.some((u) => u.id === updateId);
+    if (has) {
+      setDraft(settings);
+      return;
+    }
+    // Fallback: UpdatesList just created this update and stashed it in
+    // sessionStorage. Merge it into the local draft so the editor renders
+    // immediately, sidestepping the Blob CDN propagation window.
+    try {
+      const stashed = sessionStorage.getItem(`vc-fresh-update-${updateId}`);
+      if (stashed) {
+        const parsed = JSON.parse(stashed) as UpdateItem;
+        if (parsed && parsed.id === updateId) {
+          setDraft({
+            ...settings,
+            updates: { ...settings.updates, items: [parsed, ...settings.updates.items] },
+          });
+          sessionStorage.removeItem(`vc-fresh-update-${updateId}`);
+          return;
+        }
+      }
+    } catch {
+      /* swallow */
+    }
+    setDraft(settings);
+  }, [settings, updateId]);
+
+  // Blob CDN propagation safety net — silently re-fetch up to 3 times
+  // if the update isn't visible yet, before showing "Update not found".
+  useEffect(() => {
+    if (!draft || retryCount >= 3) return;
+    const exists = draft.updates.items.some((u) => u.id === updateId);
+    if (exists) return;
+    const delay = 600 * (retryCount + 1);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch("/api/admin/settings", { cache: "no-store" });
+        const json = (await res.json()) as { ok: boolean; settings?: SiteSettings };
+        if (json.ok && json.settings) {
+          const hit = json.settings.updates.items.some((u) => u.id === updateId);
+          if (hit) {
+            setDraft(json.settings);
+            return;
+          }
+        }
+      } catch {
+        /* swallow */
+      }
+      setRetryCount((c) => c + 1);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [draft, retryCount, updateId]);
 
   if (loading) return <p className="text-slate-500">Loading…</p>;
   if (error) return <p className="text-rose-600">Couldn&apos;t load settings: {error}</p>;
@@ -28,6 +80,7 @@ export function UpdateEditor({ updateId }: { updateId: string }) {
   const original = settings.updates.items.find((u) => u.id === updateId);
 
   if (!update) {
+    if (retryCount < 3) return <p className="text-slate-500">Loading update…</p>;
     return (
       <div>
         <PageHeader title="Update not found" description="This compliance update no longer exists." />

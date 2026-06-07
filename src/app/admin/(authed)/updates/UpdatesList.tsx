@@ -49,6 +49,14 @@ export function UpdatesList() {
     };
     try {
       await savePartial({ updates: { items: [item, ...settings.updates.items] } });
+      // Hand the editor the freshly-created update so it renders instantly,
+      // sidestepping the Vercel Blob CDN propagation window. (Same pattern
+      // used by Blog + Team — see commit a27e9ae for the rationale.)
+      try {
+        sessionStorage.setItem(`vc-fresh-update-${id}`, JSON.stringify(item));
+      } catch {
+        /* sessionStorage unavailable — editor retries via Blob */
+      }
       window.location.href = `/admin/updates/${id}`;
     } catch (err) {
       alert(err instanceof Error ? err.message : "Couldn't create update");

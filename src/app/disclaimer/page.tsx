@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { MainLayout } from "@/layouts/MainLayout";
 import { LegalStub } from "@/sections/LegalStub";
 import { JsonLd } from "@/components/shared/JsonLd";
+import { LicenseCard } from "@/components/shared/LicenseCard";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadata } from "@/utils/seo";
 
@@ -53,6 +54,29 @@ export default function DisclaimerPage() {
           },
         ]}
       />
+      {/* Government registration — verifiable proof of identity that
+          supports every disclaimer above. The full license card sits
+          here so a sceptical visitor finishing the disclaimer text
+          immediately sees credentials. */}
+      <section className="bg-mist py-16 sm:py-20">
+        <div className="mx-auto max-w-4xl px-5 sm:px-8">
+          <div className="mb-7 text-center">
+            <div className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-navy-600">
+              Statutory credentials
+            </div>
+            <h2 className="mt-2 font-display text-2xl text-navy-900 sm:text-3xl">
+              Government registration
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-[0.92rem] leading-relaxed text-slate-600">
+              We are a registered commercial establishment under the
+              Karnataka Shops &amp; Commercial Establishments Act. The
+              certificate below is the digital rendering of our active
+              registration — the original PDF is available for download.
+            </p>
+          </div>
+          <LicenseCard variant="full" />
+        </div>
+      </section>
     </MainLayout>
   );
 }

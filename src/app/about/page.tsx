@@ -13,6 +13,7 @@ import { TrustSecurity } from "@/sections/TrustSecurity";
 import { Partners } from "@/sections/Partners";
 import { ClientMetrics } from "@/sections/ClientMetrics";
 import { CTABanner } from "@/sections/CTABanner";
+import { LicenseCard } from "@/components/shared/LicenseCard";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
@@ -98,6 +99,29 @@ export default async function AboutPage() {
         overlay="brand"
         align="center"
       />
+
+      {/* Govt registration card — the strongest trust signal we
+          have. Lives above other certifications because it's a real,
+          verifiable, government-issued credential. */}
+      <section className="bg-mist py-16 sm:py-20" id="government-registration">
+        <div className="mx-auto max-w-4xl px-5 sm:px-8">
+          <div className="mb-7">
+            <div className="text-[0.72rem] font-bold uppercase tracking-[0.16em] text-navy-600">
+              Statutory credentials
+            </div>
+            <h2 className="mt-2 font-display text-3xl text-navy-900 sm:text-4xl">
+              Government registered since 2018
+            </h2>
+            <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-slate-600">
+              Vaishnavi Consultant is a registered commercial establishment
+              under the Karnataka Shops &amp; Commercial Establishments Act,
+              1961. The digital card below renders our active Form &lsquo;C&rsquo;
+              certificate. The original is available for download.
+            </p>
+          </div>
+          <LicenseCard variant="full" />
+        </div>
+      </section>
 
       <Certifications />
       <Awards />

@@ -5,6 +5,7 @@ import { SectionDots } from "@/components/shared/SectionDots";
 import { ImageBanner } from "@/components/shared/ImageBanner";
 import { BookConsultation } from "@/sections/BookConsultation";
 import { Contact } from "@/sections/Contact";
+import { LicenseCard } from "@/components/shared/LicenseCard";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
@@ -69,6 +70,16 @@ export default async function ContactPage() {
         height="sm"
         overlay="brand"
       />
+
+      {/* Compact verified-business card above the contact form —
+          reduces lead-form hesitation by proving we're a real,
+          government-registered firm before the visitor parts with
+          their email + phone. */}
+      <section className="bg-mist pt-12 pb-2 sm:pt-16">
+        <div className="mx-auto max-w-3xl px-5 sm:px-8">
+          <LicenseCard variant="compact" />
+        </div>
+      </section>
 
       <Contact
         services={settings.formConfig.services}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { COMPANY } from "@/constants/company";
 import { LogoMark3D } from "@/components/three/LogoMark3D";
 import { Logo } from "./Logo";
+import { LicenseCard } from "./LicenseCard";
 import type { ContactInfo, Navigation } from "@/services/settings";
 
 interface FooterProps {
@@ -56,9 +57,11 @@ export function Footer({ navigation, logoUrl, contactInfo }: FooterProps = {}) {
         </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-7 md:flex-row md:items-center">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <LogoMark3D />
             <div className="text-[0.78rem] text-navy-100/45">{copyright}</div>
+            {/* Sitewide trust signal — links to the full license card. */}
+            <LicenseCard variant="chip" />
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.78rem] text-navy-100/45">
             {COMPANY.registration.cin && (

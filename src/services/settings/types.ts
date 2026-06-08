@@ -118,7 +118,61 @@ export const uiEffectEnum = z.enum([
   "ribbons-celebration",
 ]);
 
+/**
+ * Per-kind banner config — each banner surface (strip, popup, floating,
+ * sticky bar) has a completely independent instance of this. All four
+ * may be enabled simultaneously; settings never cascade between them.
+ *
+ * Some fields are only meaningful on certain surfaces:
+ *   - headline / eyebrow     → popup, floating, sticky (strip ignores)
+ *   - secondaryUrl / Label   → popup only
+ *   - showDelaySec           → popup only
+ *   - frequency              → popup, floating, sticky (strip uses session)
+ *   - floatingPosition       → floating only
+ * Strip surfaces ignore the irrelevant fields at render time.
+ */
+const ctaStyleEnum = z.enum([
+  "solid",
+  "outline",
+  "glow",
+  "pill",
+  "shimmer",
+  "slide",
+  "draw-outline",
+  "gradient-shadow",
+  "neubrutalism",
+]);
+
+export const bannerKindConfigSchema = z.object({
+  enabled: z.boolean().default(false),
+  style: z.enum(["neutral", "gradient", "glass", "apple-glass", "branded"]).default("neutral"),
+  tone: z.enum(["info", "warning", "success"]).default("info"),
+  message: z.string().max(400).default(""),
+  linkUrl: z.string().default(""),
+  linkLabel: z.string().max(40).default(""),
+  dismissible: z.boolean().default(false),
+  uiEffect: uiEffectEnum.default("none"),
+  showLogo: z.boolean().default(false),
+  ctaStyle: ctaStyleEnum.default("solid"),
+  headline: z.string().max(80).default(""),
+  eyebrow: z.string().max(40).default(""),
+  secondaryLabel: z.string().max(40).default(""),
+  secondaryUrl: z.string().default(""),
+  showDelaySec: z.number().int().min(0).max(60).default(4),
+  frequency: z.enum(["session", "once", "always"]).default("session"),
+  floatingPosition: z.enum(["bottom-right", "bottom-left"]).default("bottom-right"),
+});
+
 export const bannerSchema = z.object({
+  // Four fully-independent surface configs. Each carries its own
+  // enabled flag and all visual + content fields.
+  strip: bannerKindConfigSchema.default({} as never),
+  popup: bannerKindConfigSchema.default({} as never),
+  floating: bannerKindConfigSchema.default({} as never),
+  stickyBar: bannerKindConfigSchema.default({} as never),
+  // ── Legacy flat fields (kept for backwards-compatible reads of
+  // older saved settings). New code paths use the four sub-objects
+  // above; these are no longer touched by the admin editor.
   enabled: z.boolean(),
   kind: z.enum(["strip", "popup", "floating", "sticky-bar"]).default("strip"),
   style: z.enum(["neutral", "gradient", "glass", "apple-glass", "branded"]).default("neutral"),
@@ -526,6 +580,7 @@ export type RateLimitSettings = z.infer<typeof rateLimitSchema>;
 export type ContactInfo = z.infer<typeof contactInfoSchema>;
 export type FormConfig = z.infer<typeof formConfigSchema>;
 export type Banner = z.infer<typeof bannerSchema>;
+export type BannerKindConfig = z.infer<typeof bannerKindConfigSchema>;
 export type Maintenance = z.infer<typeof maintenanceSchema>;
 export type PageSeo = z.infer<typeof pageSeoSchema>;
 export type Seo = z.infer<typeof seoSchema>;

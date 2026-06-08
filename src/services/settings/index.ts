@@ -40,6 +40,7 @@ export {
   type ContactInfo,
   type FormConfig,
   type Banner,
+  type BannerKindConfig,
   type Maintenance,
   type Seo,
   type PageSeo,

@@ -9,45 +9,40 @@ import {
   SitePromoPopup,
   SitePromoStickyBar,
 } from "@/components/shared/SitePromo";
-import type { UiEffectKind } from "@/components/shared/UiEffectOverlay";
-import { getSiteSettings } from "@/services/settings";
+import { getSiteSettings, type BannerKindConfig } from "@/services/settings";
 
 export async function MainLayout({ children }: { children: ReactNode }) {
   const settings = await getSiteSettings();
   const b = settings.banner;
-  const enabledMaster = b.enabled && b.message.trim();
 
-  // Simplified single-kind model — one banner surface at a time, chosen
-  // by `b.kind`. Per-kind toggles and the global effect cascade were
-  // removed because they confused operators. Legacy stored values for
-  // those fields are simply ignored.
-  const effectiveEffect: UiEffectKind =
-    b.uiEffect && b.uiEffect !== "default" ? (b.uiEffect as UiEffectKind) : "none";
+  /**
+   * Each surface reads from its OWN config. The four are completely
+   * independent — settings never cascade. All four may render at the
+   * same time when each has `enabled: true` and a non-empty message.
+   */
+  const strip = b.strip;
+  const popup = b.popup;
+  const floating = b.floating;
+  const sticky = b.stickyBar;
 
-  const ctaStyle = b.ctaStyle ?? "solid";
-  const logoUrl = b.showLogo ? settings.branding.logoUrl : undefined;
-
-  const stripActive = enabledMaster && b.kind === "strip";
-  const popupActive = enabledMaster && b.kind === "popup";
-  const floatingActive = enabledMaster && b.kind === "floating";
-  const stickyActive = enabledMaster && b.kind === "sticky-bar";
-
-  function keyFor(kind: string): string {
-    return `vc-promo:${kind}:${hashString(b.message + b.linkUrl + b.linkLabel + b.popupHeadline)}`;
-  }
+  const stripActive = isActive(strip);
+  const popupActive = isActive(popup);
+  const floatingActive = isActive(floating);
+  const stickyActive = isActive(sticky);
 
   const stripData = stripActive
     ? {
-        message: b.message,
-        linkUrl: b.linkUrl || undefined,
-        linkLabel: b.linkLabel || undefined,
-        tone: b.tone,
-        style: b.style ?? "neutral",
+        message: strip.message,
+        linkUrl: strip.linkUrl || undefined,
+        linkLabel: strip.linkLabel || undefined,
+        tone: strip.tone,
+        style: strip.style,
         // Info tones are always permanent — runtime safety net.
-        dismissible: (b.dismissible ?? false) && b.tone !== "info",
-        storageKey: keyFor("strip"),
+        dismissible: (strip.dismissible ?? false) && strip.tone !== "info",
+        storageKey: storageKeyFor("strip", strip),
       }
     : null;
+
   const maintenance = settings.maintenance.formsDisabled
     ? { message: settings.maintenance.message }
     : null;
@@ -70,64 +65,77 @@ export async function MainLayout({ children }: { children: ReactNode }) {
       />
       {popupActive && (
         <SitePromoPopup
-          eyebrow={b.popupEyebrow}
-          headline={b.popupHeadline || "An update from our compliance desk"}
-          message={b.message}
-          linkUrl={b.linkUrl || undefined}
-          linkLabel={b.linkLabel || undefined}
-          secondaryLabel={b.popupCtaSecondaryLabel || undefined}
-          secondaryUrl={b.popupCtaSecondaryUrl || undefined}
-          style={b.style ?? "neutral"}
-          tone={b.tone}
-          frequency={b.popupFrequency ?? "session"}
-          showDelaySec={b.popupShowDelaySec ?? 4}
-          storageKey={keyFor("popup")}
-          dismissible={(b.dismissible ?? true) && b.tone !== "info"}
-          uiEffect={effectiveEffect}
-          logoUrl={logoUrl}
-          ctaStyle={ctaStyle}
+          eyebrow={popup.eyebrow}
+          headline={popup.headline || "An update from our compliance desk"}
+          message={popup.message}
+          linkUrl={popup.linkUrl || undefined}
+          linkLabel={popup.linkLabel || undefined}
+          secondaryLabel={popup.secondaryLabel || undefined}
+          secondaryUrl={popup.secondaryUrl || undefined}
+          style={popup.style}
+          tone={popup.tone}
+          frequency={popup.frequency}
+          showDelaySec={popup.showDelaySec}
+          storageKey={storageKeyFor("popup", popup)}
+          dismissible={(popup.dismissible ?? true) && popup.tone !== "info"}
+          uiEffect={popup.uiEffect}
+          logoUrl={popup.showLogo ? settings.branding.logoUrl : undefined}
+          ctaStyle={popup.ctaStyle}
         />
       )}
       {floatingActive && (
         <SitePromoFloating
-          eyebrow={b.popupEyebrow}
-          headline={b.popupHeadline || "Talk to our desk"}
-          message={b.message}
-          linkUrl={b.linkUrl || undefined}
-          linkLabel={b.linkLabel || undefined}
-          style={b.style ?? "neutral"}
-          tone={b.tone}
-          frequency={b.popupFrequency ?? "session"}
-          position={b.floatingPosition ?? "bottom-right"}
-          storageKey={keyFor("floating")}
-          dismissible={(b.dismissible ?? true) && b.tone !== "info"}
-          uiEffect={effectiveEffect}
-          logoUrl={logoUrl}
-          ctaStyle={ctaStyle}
+          eyebrow={floating.eyebrow}
+          headline={floating.headline || "Talk to our desk"}
+          message={floating.message}
+          linkUrl={floating.linkUrl || undefined}
+          linkLabel={floating.linkLabel || undefined}
+          style={floating.style}
+          tone={floating.tone}
+          frequency={floating.frequency}
+          position={floating.floatingPosition}
+          storageKey={storageKeyFor("floating", floating)}
+          dismissible={(floating.dismissible ?? true) && floating.tone !== "info"}
+          uiEffect={floating.uiEffect}
+          logoUrl={floating.showLogo ? settings.branding.logoUrl : undefined}
+          ctaStyle={floating.ctaStyle}
         />
       )}
       {stickyActive && (
         <SitePromoStickyBar
-          eyebrow={b.popupEyebrow}
-          headline={b.popupHeadline || ""}
-          message={b.message}
-          linkUrl={b.linkUrl || undefined}
-          linkLabel={b.linkLabel || undefined}
-          style={b.style ?? "gradient"}
-          tone={b.tone}
-          frequency={b.popupFrequency ?? "session"}
-          storageKey={keyFor("sticky-bar")}
-          dismissible={(b.dismissible ?? true) && b.tone !== "info"}
-          uiEffect={effectiveEffect}
-          logoUrl={logoUrl}
-          ctaStyle={ctaStyle}
+          eyebrow={sticky.eyebrow}
+          headline={sticky.headline || ""}
+          message={sticky.message}
+          linkUrl={sticky.linkUrl || undefined}
+          linkLabel={sticky.linkLabel || undefined}
+          style={sticky.style}
+          tone={sticky.tone}
+          frequency={sticky.frequency}
+          storageKey={storageKeyFor("sticky", sticky)}
+          dismissible={(sticky.dismissible ?? true) && sticky.tone !== "info"}
+          uiEffect={sticky.uiEffect}
+          logoUrl={sticky.showLogo ? settings.branding.logoUrl : undefined}
+          ctaStyle={sticky.ctaStyle}
         />
       )}
     </SmoothScrollProvider>
   );
 }
 
-/** Tiny string hash so the storage key is short + deterministic. */
+function isActive(cfg: BannerKindConfig): boolean {
+  return cfg.enabled && cfg.message.trim().length > 0;
+}
+
+/**
+ * Hashed storage key includes the content + surface so each surface
+ * tracks its own dismissal independently, and a refreshed campaign
+ * (any field change) re-engages users who dismissed the previous run.
+ */
+function storageKeyFor(kind: string, cfg: BannerKindConfig): string {
+  const seed = cfg.message + cfg.linkUrl + cfg.linkLabel + cfg.headline;
+  return `vc-promo:${kind}:${hashString(seed)}`;
+}
+
 function hashString(s: string): string {
   let h = 0;
   for (let i = 0; i < s.length; i++) {

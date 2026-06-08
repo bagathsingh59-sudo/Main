@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const settings = await getSiteSettings();
   const publishedPosts = settings.blog.posts.filter((p) => !p.isDraft && p.slug);
+  const publishedUpdates = settings.updates.items.filter((u) => !u.isDraft && u.slug);
 
   return [
     // ── Marketing core ──
@@ -37,9 +38,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     make("/insights", 0.75, "weekly"),
     make("/contact", 0.9, "monthly"),
 
-    // ── Blog posts (highest crawl signal — fresh content) ──
+    // ── Blog posts (long-form briefings) ──
     ...publishedPosts.map((p) =>
       make(`/insights/${p.slug}`, 0.7, "monthly", new Date(p.updatedAt || p.publishedAt)),
+    ),
+
+    // ── Compliance updates (regulatory news) — these refresh more
+    //    frequently than long-form blog posts, so we signal weekly
+    //    changeFrequency to encourage faster recrawls. ──
+    ...publishedUpdates.map((u) =>
+      make(`/insights/updates/${u.slug}`, 0.65, "weekly", new Date(u.updatedAt || u.publishedAt)),
     ),
 
     // ── Legal ──

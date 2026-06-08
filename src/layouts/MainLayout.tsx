@@ -40,6 +40,10 @@ export async function MainLayout({ children }: { children: ReactNode }) {
         // Info tones are always permanent — runtime safety net.
         dismissible: (strip.dismissible ?? false) && strip.tone !== "info",
         storageKey: storageKeyFor("strip", strip),
+        // Feature parity with popup/floating/sticky surfaces:
+        uiEffect: strip.uiEffect,
+        logoUrl: strip.showLogo ? settings.branding.logoUrl : undefined,
+        ctaStyle: strip.ctaStyle,
       }
     : null;
 

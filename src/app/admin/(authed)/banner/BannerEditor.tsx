@@ -486,7 +486,7 @@ function StepTwoConfigure({
             checked={config.showLogo}
             onChange={(v) => patch({ showLogo: v })}
             label="Show brand logo inside this banner"
-            description={isStrip ? "Not rendered on the strip — only popup, floating and sticky surfaces show the logo." : "Pulls the logo from /admin/branding."}
+            description="Pulls the logo from /admin/branding. Renders on every surface — top-left for popup / floating / sticky, leading edge for the strip."
           />
           <Field label="Button style" hint="Hover any chip below to preview the animation. Click to select.">
             <Select value={config.ctaStyle} onChange={(e) => patch({ ctaStyle: e.target.value as BannerKindConfig["ctaStyle"] })}>
@@ -574,18 +574,23 @@ function BannerPreview({
     return (
       <div className="relative overflow-hidden rounded-xl">
         <PreviewBackdrop />
-        <div className={`${stripBg} relative z-[1] flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-center text-[0.78rem] sm:text-[0.86rem]`}>
-          <span className="font-medium">{message}</span>
-          {config.linkUrl && config.linkLabel && (
-            <a href={config.linkUrl} className="font-semibold underline whitespace-nowrap opacity-95">
-              {config.linkLabel} →
-            </a>
-          )}
-          {showDismiss && (
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[0.8rem] leading-none opacity-80">
-              ×
-            </span>
-          )}
+        <div className={`${stripBg} relative z-[1] overflow-hidden rounded-lg`}>
+          <UiEffectOverlay effect={uiEffect} surface={light ? "light" : "dark"} />
+          <div className="relative z-[1] flex items-center gap-2 px-3 py-2 text-[0.78rem] sm:text-[0.86rem]">
+            {logoUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logoUrl} alt="" className="h-5 w-auto flex-shrink-0 opacity-90" />
+            )}
+            <div className="flex flex-1 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center">
+              <span className="font-medium">{message}</span>
+              {config.linkLabel && <span className={ctaCls}><CtaPreviewLabel ctaStyle={config.ctaStyle} label={config.linkLabel} /></span>}
+            </div>
+            {showDismiss && (
+              <span className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-white/20 text-[0.8rem] leading-none opacity-80">
+                ×
+              </span>
+            )}
+          </div>
         </div>
       </div>
     );

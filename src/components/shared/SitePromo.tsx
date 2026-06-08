@@ -101,15 +101,15 @@ const SURFACE_STYLES: Record<PromoStyle, string> = {
   // Legacy "glass" (kept for backwards compat with saved settings)
   glass:
     "bg-white/85 text-slate-900 backdrop-blur-xl border border-white/40 shadow-[0_25px_60px_-25px_rgba(15,23,42,0.4)]",
-  // True Apple-style glassmorphism — content BEHIND the card visibly
-  // blurs through. Background is low-opacity blue-tinted (not a solid
-  // gradient), backdrop-blur-3xl + saturate-200 do the heavy frosted-
-  // glass work. Inner highlight + soft shadow add depth.
+  // Apple-style glassmorphism with stronger blue tint so the card
+  // separates clearly from any background. backdrop-blur-3xl +
+  // saturate-200 frost whatever's behind, layered shadows + brighter
+  // inner highlight give the "glass behind glass" depth.
   "apple-glass":
     "text-slate-900 backdrop-blur-3xl backdrop-saturate-200 " +
-    "bg-[rgba(219,234,254,0.35)] " +
-    "ring-1 ring-inset ring-white/40 " +
-    "shadow-[0_28px_70px_-25px_rgba(13,42,84,0.35),inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(96,165,250,0.15)]",
+    "bg-[linear-gradient(180deg,rgba(191,219,254,0.7)_0%,rgba(147,197,253,0.55)_100%)] " +
+    "ring-1 ring-inset ring-white/70 " +
+    "shadow-[0_30px_80px_-20px_rgba(37,99,235,0.45),0_4px_12px_-2px_rgba(13,42,84,0.25),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(96,165,250,0.35)]",
   branded:
     "bg-navy-700 text-white shadow-[0_25px_60px_-20px_rgba(13,42,84,0.55)]",
 };

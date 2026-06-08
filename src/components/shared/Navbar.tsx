@@ -7,7 +7,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { NAV_LINKS } from "@/constants/nav";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "./Logo";
+import { UiEffectOverlay, type UiEffectKind } from "./UiEffectOverlay";
 import { cn } from "@/utils/cn";
+
+type StripCtaStyle =
+  | "solid"
+  | "outline"
+  | "glow"
+  | "pill"
+  | "shimmer"
+  | "slide"
+  | "draw-outline"
+  | "gradient-shadow"
+  | "neubrutalism";
 
 interface BannerData {
   message: string;
@@ -20,6 +32,12 @@ interface BannerData {
   dismissible?: boolean;
   /** Stable key used for sessionStorage dismissal tracking. */
   storageKey?: string;
+  /** CSS-only decorative overlay matched to a marketing moment. */
+  uiEffect?: UiEffectKind;
+  /** When set, renders inline at the leading edge of the strip. */
+  logoUrl?: string;
+  /** CTA button variant — same library as popup/floating/sticky. */
+  ctaStyle?: StripCtaStyle;
 }
 
 interface MaintenanceData {
@@ -54,9 +72,13 @@ const BANNER_STYLE: Record<NonNullable<BannerData["style"]>, (tone: BannerData["
   glass: () =>
     "bg-white/80 text-navy-900 backdrop-blur-xl border-b border-slate-200/70",
   "apple-glass": () =>
+    // Stronger frosted look — higher opacity blue tint + heavier
+    // saturation, layered blue under-shadow + brighter top highlight
+    // so it pops away from the white nav row underneath.
     "text-navy-900 backdrop-blur-3xl backdrop-saturate-200 " +
-    "bg-[rgba(219,234,254,0.35)] " +
-    "border-b border-white/40 shadow-[0_2px_18px_-8px_rgba(13,42,84,0.25),inset_0_1px_0_rgba(255,255,255,0.7)]",
+    "bg-[linear-gradient(180deg,rgba(191,219,254,0.7)_0%,rgba(147,197,253,0.55)_100%)] " +
+    "border-b-2 border-white/70 " +
+    "shadow-[0_8px_24px_-6px_rgba(37,99,235,0.35),0_2px_4px_-1px_rgba(13,42,84,0.15),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(96,165,250,0.3)]",
   branded: (tone) =>
     `${BANNER_TONE[tone] ?? BANNER_TONE.info} text-white ring-1 ring-inset ring-white/15`,
 };
@@ -135,27 +157,33 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
         </div>
       )}
 
-      {/* Announcement strip — rendered above the nav row.
-          Mobile-first: tighter typography, two-row layout with link
-          stacking below message on narrow screens; dismiss button when
-          allowed by editor + non-info tone. */}
+      {/* Announcement strip — full feature parity with popup/floating/sticky:
+          UI effect overlay, logo, real button styles (ctaStyle), dismiss.
+          Mobile: tightened typography + stack layout. */}
       {showBanner && (
-        <div className={cn(BANNER_STYLE[banner.style ?? "neutral"](banner.tone), "relative")}>
-          <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-3 py-1.5 sm:gap-3 sm:px-8 sm:py-2">
-            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-center text-[0.72rem] leading-snug sm:text-[0.82rem]">
+        <div className={cn(BANNER_STYLE[banner.style ?? "neutral"](banner.tone), "relative overflow-hidden")}>
+          <UiEffectOverlay
+            effect={banner.uiEffect ?? "none"}
+            surface={banner.style === "apple-glass" || banner.style === "glass" ? "light" : "dark"}
+          />
+          <div className="relative z-[1] mx-auto flex max-w-7xl items-center gap-2 px-3 py-1.5 sm:gap-3 sm:px-8 sm:py-2">
+            {banner.logoUrl && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={banner.logoUrl}
+                alt=""
+                className="h-5 w-auto flex-shrink-0 opacity-90 sm:h-6"
+              />
+            )}
+            <div className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-[0.72rem] leading-snug sm:text-[0.82rem]">
               <span className="font-medium">{banner.message}</span>
               {banner.linkUrl && banner.linkLabel && (
-                <a
+                <Link
                   href={banner.linkUrl}
-                  className={cn(
-                    "font-semibold underline-offset-2 whitespace-nowrap",
-                    banner.style === "glass" || banner.style === "apple-glass"
-                      ? "text-navy-700 underline decoration-navy-400/60 hover:decoration-navy-700"
-                      : "underline decoration-white/60 hover:decoration-white",
-                  )}
+                  className={stripCtaClass(banner.style ?? "neutral", banner.ctaStyle ?? "solid")}
                 >
-                  {banner.linkLabel} →
-                </a>
+                  <StripCtaInner ctaStyle={banner.ctaStyle ?? "solid"} label={banner.linkLabel} />
+                </Link>
               )}
             </div>
             {canDismiss && (
@@ -270,5 +298,76 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
         )}
       </AnimatePresence>
     </header>
+  );
+}
+
+/* ──────────────────────── strip CTA helpers ──────────────────────── */
+
+/**
+ * Compact button variant for the strip — matches the same 9 ctaStyle
+ * options used by popup/floating/sticky, but with tighter padding so
+ * it fits inside a one-row strip.
+ */
+function stripCtaClass(style: BannerData["style"], ctaStyle: NonNullable<StripCtaStyle>): string {
+  const light = style === "neutral" || style === "apple-glass" || style === "glass";
+  // On dark strips (gradient/branded/info-navy) the button is white-on-dark,
+  // matching the legibility math from SitePromo's ctaClass.
+  const base =
+    "relative inline-flex items-center gap-1.5 text-[0.72rem] sm:text-[0.78rem] font-semibold whitespace-nowrap " +
+    "transition-all overflow-hidden " +
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent";
+  const radius = ctaStyle === "pill" ? "rounded-full px-3 py-1" : "rounded-md px-2.5 py-1";
+  const solid = light
+    ? "bg-navy-600 text-white hover:bg-navy-700"
+    : "bg-white text-navy-700 hover:bg-slate-100";
+  switch (ctaStyle) {
+    case "outline":
+      return `${base} ${radius} ${
+        light
+          ? "border border-navy-600 text-navy-700 hover:bg-navy-600 hover:text-white"
+          : "border border-white text-white hover:bg-white hover:text-navy-700"
+      }`;
+    case "glow":
+      return `${base} ${radius} ${
+        light
+          ? "bg-gradient-to-r from-navy-700 to-teal-500 text-white shadow-[0_4px_18px_-4px_rgba(20,184,166,0.6)] hover:shadow-[0_6px_22px_-4px_rgba(20,184,166,0.75)]"
+          : "bg-white text-navy-700 shadow-[0_4px_18px_-4px_rgba(255,255,255,0.5)] hover:shadow-[0_6px_22px_-4px_rgba(255,255,255,0.65)]"
+      }`;
+    case "shimmer":
+      return `${base} ${radius} cta-shimmer ${solid}`;
+    case "slide":
+      return `${base} ${radius} cta-slide ${solid}`;
+    case "draw-outline":
+      return `${base} ${radius} cta-draw-outline ${light ? "text-navy-700" : "text-white"} border border-transparent bg-transparent`;
+    case "gradient-shadow":
+      return `${base} ${radius} cta-gradient-shadow ${light ? "bg-navy-700 text-white" : "bg-white text-navy-700"} z-[1]`;
+    case "neubrutalism":
+      return `${base} ${radius} cta-neubrutalism ${light ? "bg-white text-navy-700" : "bg-navy-700 text-white"}`;
+    default:
+      return `${base} ${radius} ${solid}`;
+  }
+}
+
+function StripCtaInner({ ctaStyle, label }: { ctaStyle: NonNullable<StripCtaStyle>; label: string }) {
+  if (ctaStyle === "shimmer") {
+    return (
+      <>
+        <span className="relative z-[1]">{label}</span>
+        <span className="cta-shimmer-overlay" aria-hidden="true" />
+      </>
+    );
+  }
+  if (ctaStyle === "slide") {
+    return (
+      <span className="cta-slide-inner">
+        <span>{label}</span>
+        <span className="cta-slide-arrow" aria-hidden="true">→</span>
+      </span>
+    );
+  }
+  return (
+    <>
+      {label} <span aria-hidden="true">→</span>
+    </>
   );
 }

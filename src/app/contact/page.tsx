@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { MainLayout } from "@/layouts/MainLayout";
-import { PageHero } from "@/components/shared/PageHero";
-import { SectionDots } from "@/components/shared/SectionDots";
-import { ImageBanner } from "@/components/shared/ImageBanner";
-import { BookConsultation } from "@/sections/BookConsultation";
-import { Contact } from "@/sections/Contact";
-import { LicenseCard } from "@/components/shared/LicenseCard";
+import { OrisaLayout } from "@/components/orisa/OrisaLayout";
+import { LegacySection } from "@/components/orisa/legacy/LegacySection";
+import { ContactBlock } from "@/components/orisa/legacy/ContactBlock";
+import { ProcessTimeline } from "@/components/orisa/sections/ProcessTimeline";
+import { CtaPanel } from "@/components/orisa/sections/CtaPanel";
+import { LicenseStrip } from "@/components/orisa/sections/LicenseStrip";
+import { MapEmbed } from "@/components/shared/MapEmbed";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
@@ -19,15 +19,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("contact", "/contact");
 }
 
-const DOTS = [
-  { id: "book", label: "Book" },
-  { id: "contact", label: "Message" },
-];
+const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL;
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();
+  const ci = settings.contactInfo;
   return (
-    <MainLayout>
+    <OrisaLayout>
       <JsonLd
         data={[
           webPageSchema({ path: "/contact", title: PAGE_TITLE, description: PAGE_DESC }),
@@ -37,56 +35,59 @@ export default async function ContactPage() {
           ]),
         ]}
       />
-      <SectionDots dots={DOTS} />
 
-      <PageHero
-        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
-        eyebrow="Get in touch"
-        title={
-          <>
-            One short conversation, <em className="not-italic text-navy-600">a clearer compliance picture.</em>
-          </>
-        }
-        description="Book a 45-minute call or drop us a note. A senior CA replies to every message within one working day — guaranteed."
-        image="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1800&q=80&auto=format&fit=crop"
-        imageAlt="Client consultation in progress"
+      {/* Orisa "Contact 01": heading, office details and the message form
+          (the form posts to the existing lead API). */}
+      <LegacySection id="contact">
+        <ContactBlock />
+      </LegacySection>
+
+      {/* Previous design's "Book a consultation" block → process timeline */}
+      <div id="book">
+        <ProcessTimeline
+          label="BOOK A CONSULTATION"
+          title="Get a 45-minute audit on us. Worth ₹15,000."
+          description="Pick a slot from our live calendar — the invite, the Meet link and the reminders are handled for you. You just show up."
+          metrics={[
+            { value: "45m", label: "CALL LENGTH" },
+            { value: "₹0", label: "COST TO YOU" },
+          ]}
+          deliverablesLabel="WHAT YOU GET"
+          phases={[
+            { when: "Step 1", title: "Pick a slot", text: "A live calendar — only times we are actually free show up.", deliverables: ["45-minute call", "Senior consultant"] },
+            { when: "Step 2", title: "Auto-confirmed", text: "A Google Meet invite reaches your inbox the moment you confirm.", deliverables: ["Meet link", "Reminders"] },
+            { when: "Step 3", title: "We do the prep", text: "A short questionnaire arrives so the call starts where it matters.", deliverables: ["Health-check", "PF · ESI · GST · TDS"] },
+            { when: "After", title: "A clear plan", text: "Indicative pricing and a migration plan. No sales pitch, no follow-up unless you ask.", deliverables: ["Pricing", "Migration plan"] },
+          ]}
+        />
+      </div>
+
+      <CtaPanel
+        bar={{ left: settings.maintenance.formsDisabled ? "BOOKING PAUSED" : "SLOTS OPEN THIS WEEK", center: ci.hours, right: "FREE 45-MIN AUDIT" }}
+        tag="PREFER TO TALK FIRST"
+        title={["Talk", "to", "us."]}
+        lede={[
+          settings.maintenance.formsDisabled ? settings.maintenance.message : "Open the booking calendar, or simply call or email.",
+          "A senior consultant replies to every message within one working day.",
+        ]}
+        chips={[
+          ...(BOOKING_URL && !settings.maintenance.formsDisabled ? [{ label: "Open the booking calendar", href: BOOKING_URL }] : []),
+          { label: `Call ${ci.phone}`, href: `tel:${ci.phone.replace(/\s/g, "")}` },
+          { label: `Also on ${ci.altPhone}`, href: `tel:${ci.altPhone.replace(/\s/g, "")}` },
+        ]}
+        contact={{ label: "EMAIL", text: ci.email, href: `mailto:${ci.email}` }}
       />
 
-      <BookConsultation
-        contactInfo={settings.contactInfo}
-        maintenanceMessage={settings.maintenance.formsDisabled ? settings.maintenance.message : undefined}
-      />
+      {/* Previous design's verified-business card → registration strip */}
+      <LicenseStrip />
 
-      <ImageBanner
-        src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&q=80&auto=format&fit=crop"
-        alt="Vaishnavi Consultant — Kalaburagi office"
-        eyebrow="Head office"
-        title={
-          <>
-            Milan Chowk, <em className="not-italic">Kalaburagi.</em>
-          </>
-        }
-        description="Walk-ins by appointment, Monday to Saturday, 9:30 AM – 7:00 PM IST. Pan-India clients served remotely."
-        height="sm"
-        overlay="brand"
-      />
-
-      {/* Compact verified-business card above the contact form —
-          reduces lead-form hesitation by proving we're a real,
-          government-registered firm before the visitor parts with
-          their email + phone. */}
-      <section className="bg-mist pt-12 pb-2 sm:pt-16">
-        <div className="mx-auto max-w-3xl px-5 sm:px-8">
-          <LicenseCard variant="compact" />
-        </div>
-      </section>
-
-      <Contact
-        services={settings.formConfig.services}
-        sizes={settings.formConfig.sizes}
-        contactInfo={settings.contactInfo}
-        maintenanceMessage={settings.maintenance.formsDisabled ? settings.maintenance.message : undefined}
-      />
-    </MainLayout>
+      {ci.mapEmbedUrl && (
+        <section className="o-map" aria-label="Find us">
+          <div className="o-wrap">
+            <MapEmbed url={ci.mapEmbedUrl} title={`${ci.addressLine1} — map`} />
+          </div>
+        </section>
+      )}
+    </OrisaLayout>
   );
 }

@@ -1,0 +1,382 @@
+@use '../utils' as *;
+
+/* ===========================================================
+   Section 1 — Home 14 (Photography Hero)
+   =========================================================== */
+
+.sec-1-home-14 {
+    padding-top: 164px;
+    padding-bottom: 80px;
+
+    @media #{$lg},
+    #{$md} {
+        padding-top: 148px;
+        padding-bottom: 64px;
+    }
+
+    @media #{$sm},
+    #{$xs} {
+        padding-top: 136px;
+        padding-bottom: 48px;
+    }
+
+    &__inner {
+        max-width: 1920px;
+        margin: 0 auto;
+        padding-left: 100px;
+        padding-right: 100px;
+
+        @media #{$x4l},
+        #{$x3l},
+        #{$xxl} {
+            padding-left: 60px;
+            padding-right: 60px;
+        }
+
+        @media #{$xl} {
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+
+        @media #{$lg},
+        #{$md} {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        @media #{$sm},
+        #{$xs} {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+    }
+
+    /* Top row */
+    &__top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    &__tagline {
+        font-family: var(--at-ff-body);
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--at-neutral-950);
+
+        @media #{$sm},
+        #{$xs} {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+        }
+    }
+
+    &__counter {
+        font-family: var(--at-ff-body);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        color: var(--at-neutral-950);
+    }
+
+    /* Headline */
+    &__headline {
+        font-family: var(--at-ff-heading);
+        font-weight: 600;
+        font-size: clamp(40px, 6.5vw, 110px);
+        line-height: 1;
+        letter-spacing: -0.045em;
+        color: var(--at-neutral-950);
+        margin-bottom: 28px;
+
+        @media #{$xs} {
+            br {
+                display: none;
+            }
+        }
+    }
+
+    /* Sub row */
+    &__sub {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 32px;
+        margin-bottom: 48px;
+
+        @media #{$md},
+        #{$sm},
+        #{$xs} {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+        }
+    }
+
+    &__copy {
+        font-family: var(--at-ff-body);
+        font-size: 18px;
+        line-height: 1.5;
+        color: var(--at-neutral-500);
+        max-width: 720px;
+
+        @media #{$lg} {
+            font-size: 17px;
+        }
+
+        @media #{$md},
+        #{$sm},
+        #{$xs} {
+            font-size: 16px;
+
+            br {
+                display: none;
+            }
+        }
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 34px;
+        flex-shrink: 0;
+
+        @media #{$sm},
+        #{$xs} {
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+    }
+
+    &__btn-primary {
+        display: inline-flex;
+        align-items: stretch;
+        color: var(--at-neutral-0);
+        text-decoration: none;
+        transition: opacity 0.3s ease;
+
+        .sec-1-home-14__btn-label {
+            display: inline-flex;
+            align-items: center;
+            background: var(--at-neutral-900);
+            color: var(--at-neutral-0);
+            padding: 14px 27px;
+            border-radius: 50px 0 0 50px;
+            font-family: var(--at-ff-body);
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: -0.05em;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .sec-1-home-14__btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--at-neutral-900);
+            color: var(--at-neutral-0);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-left: 2px;
+        }
+
+        &:hover {
+            opacity: 0.85;
+            color: var(--at-neutral-0);
+        }
+    }
+
+    &__btn-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--at-neutral-900);
+        color: var(--at-neutral-900);
+        text-decoration: none;
+        font-family: var(--at-ff-body);
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: -0.05em;
+        text-transform: uppercase;
+        line-height: 1;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 0.7;
+            color: var(--at-neutral-900);
+        }
+    }
+
+    /* Hero image card */
+    &__hero {
+        position: relative;
+        margin: 0 0 24px 0;
+        overflow: hidden;
+        border-radius: 16px;
+        aspect-ratio: 1720 / 880;
+
+        @media #{$xs} {
+            aspect-ratio: 4 / 5;
+        }
+    }
+
+    &__hero-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+    }
+
+    &__hero-overlay {
+        position: absolute;
+        inset: 0;
+        padding: 48px 56px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: var(--at-common-white);
+        pointer-events: none;
+
+        @media #{$lg},
+        #{$md} {
+            padding: 36px 40px;
+        }
+
+        @media #{$sm},
+        #{$xs} {
+            padding: 24px 20px;
+        }
+    }
+
+    &__hero-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        font-size: 11px;
+        color: var(--at-common-white);
+
+        @media #{$xs} {
+            flex-direction: column;
+            gap: 8px;
+        }
+    }
+
+    &__hero-caption {
+        font-family: var(--at-ff-body);
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    &__hero-credit {
+        font-family: var(--at-ff-body);
+        font-weight: 400;
+        opacity: 0.7;
+        letter-spacing: 0.4px;
+    }
+
+    &__hero-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
+        color: var(--at-common-white);
+
+        @media #{$xs} {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+    }
+
+    &__hero-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__hero-title {
+        font-family: var(--at-ff-heading);
+        font-weight: 500;
+        font-size: 28px;
+        letter-spacing: -0.5px;
+        line-height: 1;
+
+        @media #{$sm},
+        #{$xs} {
+            font-size: 22px;
+        }
+    }
+
+    &__hero-sub {
+        font-family: var(--at-ff-body);
+        font-weight: 400;
+        font-size: 12px;
+        letter-spacing: 0.6px;
+        opacity: 0.7;
+    }
+
+    &__hero-scroll {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--at-ff-body);
+    }
+
+    &__hero-scroll-label {
+        font-weight: 500;
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    &__hero-scroll-arrow {
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    /* Tags row */
+    &__tags {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 20px 0;
+
+        @media #{$sm},
+        #{$xs} {
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 18px 24px;
+        }
+    }
+
+    &__tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--at-ff-body);
+        font-weight: 500;
+    }
+
+    &__tag-num {
+        font-size: 11px;
+        letter-spacing: 1.2px;
+        color: var(--at-neutral-500);
+    }
+
+    &__tag-name {
+        font-size: 14px;
+        letter-spacing: 0.4px;
+        color: var(--at-neutral-950);
+    }
+}

@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { MainLayout } from "@/layouts/MainLayout";
-import { PageHero } from "@/components/shared/PageHero";
-import { SectionDots } from "@/components/shared/SectionDots";
-import { ImageBanner } from "@/components/shared/ImageBanner";
-import { Services } from "@/sections/Services";
-import { WhyChooseUs } from "@/sections/WhyChooseUs";
-import { ComplianceProcess } from "@/sections/ComplianceProcess";
-import { ComplianceCalculator } from "@/sections/ComplianceCalculator";
-import { CTABanner } from "@/sections/CTABanner";
+import { OrisaLayout } from "@/components/orisa/OrisaLayout";
+import { LegacySection } from "@/components/orisa/legacy/LegacySection";
+import { SvcDetailHero } from "@/components/orisa/legacy/SvcDetailHero";
+import { SvcDetailMedia } from "@/components/orisa/legacy/SvcDetailMedia";
+import { SvcPanels } from "@/components/orisa/legacy/SvcPanels";
+import { FaqBlock } from "@/components/orisa/legacy/FaqBlock";
+import { ContactBlock } from "@/components/orisa/legacy/ContactBlock";
+import { GalleryWall } from "@/components/orisa/sections/GalleryWall";
+import { PricingPlans } from "@/components/orisa/sections/PricingPlans";
+import { HOME_GALLERY } from "@/constants/homeContent";
+import { SERVICE_PRICING } from "@/constants/servicesContent";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
@@ -22,18 +24,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("services", "/services");
 }
 
-const DOTS = [
-  { id: "services", label: "Services" },
-  { id: "process", label: "Process" },
-  { id: "why", label: "Why Us" },
-  { id: "calculator", label: "Calculator" },
-];
-
 export default async function ServicesPage() {
   const settings = await getSiteSettings();
   const services = settings.services.items.length > 0 ? settings.services.items : SERVICES;
   return (
-    <MainLayout>
+    <OrisaLayout>
       <JsonLd
         data={[
           webPageSchema({ path: "/services", title: PAGE_TITLE, description: PAGE_DESC }),
@@ -44,55 +39,25 @@ export default async function ServicesPage() {
           serviceListSchema(services.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
         ]}
       />
-      <SectionDots dots={DOTS} />
 
-      <PageHero
-        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Services" }]}
-        eyebrow="What we do"
-        title={
-          <>
-            Eight services. <em className="not-italic text-navy-600">One accountable team.</em>
-          </>
-        }
-        description="Pick the modules you need — payroll, EPF, ESI, GST, TDS, labour law, CFO advisory, or the full suite. We own the rest."
-        image="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1800&q=80&auto=format&fit=crop"
-        imageAlt="Compliance and finance workflows"
-      />
+      {/* Orisa "Service Details": hero + moving image strip */}
+      <LegacySection>
+        <SvcDetailHero />
+        <SvcDetailMedia />
+      </LegacySection>
 
-      <Services items={settings.services.items} />
-
-      <ImageBanner
-        src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1800&q=80&auto=format&fit=crop"
-        alt="A team reviewing compliance filings"
-        eyebrow="The Vaishnavi Promise"
-        title={
-          <>
-            Zero penalties. <em className="not-italic">Four years running.</em>
-          </>
-        }
-        description="If a filing penalty occurs due to our oversight, we cover it. That is our contractual commitment to every client we onboard."
-        stats={[
-          { value: "0", label: "Penalties · 4 yrs" },
-          { value: "99.8%", label: "On-time rate" },
-          { value: "24h", label: "Query SLA" },
-        ]}
-        height="md"
-        overlay="brand"
-      />
-
-      <ComplianceProcess />
-      <WhyChooseUs />
-      <ComplianceCalculator />
-
-      <CTABanner
-        eyebrow="Talk to a specialist"
-        title={<>Pick the modules you need. <em className="not-italic">We'll handle the rest.</em></>}
-        description="A 45-minute call with a senior CA — indicative pricing, migration plan, no follow-ups unless you ask."
-        cta={{ label: "Book free consultation", href: "/contact" }}
-        secondary={{ label: "Read case studies", href: "/industries" }}
-        variant="dark"
-        className="bg-mist"
-      />
-    </MainLayout>
+      {/* Orisa "Service 01", everything after its hero */}
+      <LegacySection id="services">
+        <SvcPanels />
+      </LegacySection>
+      <GalleryWall {...HOME_GALLERY} />
+      <PricingPlans {...SERVICE_PRICING} />
+      <LegacySection id="faq">
+        <FaqBlock />
+      </LegacySection>
+      <LegacySection id="contact">
+        <ContactBlock />
+      </LegacySection>
+    </OrisaLayout>
   );
 }

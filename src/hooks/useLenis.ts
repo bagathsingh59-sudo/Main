@@ -14,7 +14,9 @@ export function useLenis(enabled = true) {
   useEffect(() => {
     if (!enabled) return;
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Redesigned pages may opt in to motion regardless of the OS setting.
+    const forced = !!document.querySelector('.orisa[data-motion="always"]');
+    if (!forced && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
       duration: 1.15,

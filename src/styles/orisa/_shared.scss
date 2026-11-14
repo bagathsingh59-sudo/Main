@@ -1,0 +1,368 @@
+@use './utils' as *;
+
+/* Small pieces shared by several Orisa sections. Loaded last so these
+   rules win over the copied template partials. */
+
+/* Icons / marks drawn dark-on-light flip in dark mode. */
+.orisa[data-theme="dark"] .dark-mode-invert {
+	filter: invert(1);
+}
+
+/* ── Cross-fading stack (testimonial images + quotes) ───────── */
+.o-stack {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	&__item {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.6s ease, visibility 0.6s;
+
+		&[data-active="true"] {
+			opacity: 1;
+			visibility: visible;
+		}
+
+		img {
+			object-fit: cover;
+		}
+	}
+
+	/* Height follows the tallest item: every item shares one grid cell. */
+	&--auto {
+		display: grid;
+		height: auto;
+
+		.o-stack__item {
+			position: relative;
+			inset: auto;
+			grid-area: 1 / 1;
+		}
+	}
+}
+
+.o-stack-dots {
+	display: flex;
+	gap: 8px;
+	margin-top: 28px;
+
+	button {
+		width: 8px;
+		height: 8px;
+		border-radius: 50px;
+		background: var(--at-neutral-200);
+		transition: width 0.3s ease, background-color 0.3s ease;
+
+		&[aria-current="true"] {
+			width: 32px;
+			background: var(--at-neutral-900);
+		}
+	}
+}
+
+.sec-7-home-13 {
+	outline: none;
+	touch-action: pan-y;
+}
+
+/* ── Gallery wall (index-13 section 9) ──────────────────────── */
+.o-gallery {
+	padding: 65px 0;
+	overflow: hidden;
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 30px;
+		max-width: 2200px;
+		/* Columns are taller than the window and slide inside it. */
+		height: clamp(520px, 120vh, 1500px);
+		margin: 0 auto;
+		padding: 0 30px;
+		align-items: center;
+
+		@media #{$sm}, #{$xs} {
+			gap: 12px;
+			padding: 0 12px;
+			height: clamp(360px, 80vh, 720px);
+		}
+	}
+
+	&__col {
+		display: grid;
+		gap: 30px;
+		will-change: transform;
+
+		@media #{$sm}, #{$xs} {
+			gap: 12px;
+		}
+	}
+
+	&__item {
+		overflow: hidden;
+		border-radius: 12px;
+
+		img {
+			width: 100%;
+			height: auto;
+			transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+		}
+
+		&:hover img {
+			transform: scale(1.05);
+		}
+	}
+}
+
+/* ── Fit longer Vaishnavi wording into the template's display type ── */
+.footer-13__bigbrand-text {
+	font-size: clamp(34px, 8.4vw, 170px);
+	white-space: nowrap;
+}
+
+.sec-4-home-13__title {
+	font-size: clamp(56px, 12vw, 210px);
+}
+
+/* CTA panel glow follows the active palette instead of fixed orange. */
+.sec-4-home-13__glow {
+	background: radial-gradient(closest-side, rgba(var(--at-theme-primary-rgb), 0.7) 0%, rgba(var(--at-theme-primary-rgb), 0.28) 45%, rgba(var(--at-theme-primary-rgb), 0) 75%);
+}
+
+/* Pricing: "most popular" card follows the palette instead of fixed orange. */
+.card-home-12-price.is-popular .card-home-12-price__top {
+	background-color: rgba(var(--at-theme-primary-rgb), 0.1);
+}
+
+.card-home-12-price__badge {
+	background-color: var(--at-theme-primary);
+}
+
+/* ── Helpers for sections ported with port-section.py ───────── */
+.o-award-preview {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	width: 260px;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	border-radius: 14px;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.25s ease;
+	box-shadow: 0 30px 60px -20px rgba(6, 18, 42, 0.45);
+
+	&.is-on {
+		opacity: 1;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+.o-form-note {
+	margin-top: 16px;
+	font-size: 14px;
+
+	&[data-state="ok"] {
+		color: #059669;
+	}
+	&[data-state="error"] {
+		color: #dc2626;
+	}
+}
+
+/* About hero image: index-14 style drift inside a fixed frame, no ripple. */
+.o-drift-frame {
+	position: relative;
+	height: clamp(420px, 82vh, 980px);
+	overflow: hidden;
+}
+
+/* Ported blocks never widen the page (hover thumbnails slide in from the right). */
+.o-legacy {
+	overflow-x: clip;
+}
+
+/* Template sliders, without Swiper: a plain flex row. */
+.o-legacy .swiper {
+	overflow: hidden;
+}
+.o-legacy .swiper-wrapper {
+	display: flex;
+	gap: 30px;
+}
+.o-legacy .swiper-slide {
+	flex: 0 0 calc(50% - 15px);
+}
+
+.o-footer-4 {
+	padding: 24px 0 16px;
+
+	overflow-x: clip;
+
+	.footer-4-connect-title {
+		/* the template sets this with !important */
+		font-size: clamp(28px, 6.6vw, 140px) !important;
+		white-space: nowrap;
+	}
+	.footer-4-connect-title sup {
+		font-size: 0.4em;
+	}
+}
+
+.sec-4-home-13__card {
+	overflow: hidden;
+}
+
+/* Pill links keep their arrow on the same line. */
+.o-legacy .at-hero-social a {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 6px;
+	white-space: nowrap;
+}
+
+/* Drifting image fills its frame inside ported blocks too. */
+.o-legacy .o-hero-media img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100% !important;
+	max-width: none;
+	object-fit: cover;
+}
+
+/* The site header is in normal flow, so ported page heroes need less top space. */
+/* Ported page heroes: the template's header floats over the page, ours sits
+   above it, so keep the template's visible gap between header and heading
+   (84px on large screens, 34px below 1400px) instead of its raw 150px. */
+.o-legacy .sec-1-services-details,
+.o-legacy .sec-1-about {
+	padding-top: 84px !important;
+
+	@media (max-width: 1399px) {
+		padding-top: 40px !important;
+	}
+
+	@media (max-width: 991px) {
+		padding-top: 32px !important;
+
+		.pt-100 {
+			padding-top: 0 !important;
+		}
+	}
+}
+
+/* carouselTicker replacement (see LegacySection) */
+.o-legacy .carouselTicker {
+	overflow: hidden;
+}
+
+.o-legacy .carouselTicker__list.o-ticking {
+	display: flex;
+	flex-wrap: nowrap;
+	width: max-content;
+	animation: oTicker 40s linear infinite;
+}
+
+.o-legacy .carouselTicker-right .carouselTicker__list.o-ticking {
+	animation-direction: reverse;
+}
+
+.o-legacy .carouselTicker:hover .carouselTicker__list.o-ticking {
+	animation-play-state: paused;
+}
+
+/* About 02 hero: wordmark scales with the screen; banner keeps 1716 × 833. */
+.o-legacy .sec-1-about .section-title.fz-200 {
+	font-size: clamp(44px, 10.5vw, 200px) !important;
+	white-space: normal;
+}
+
+.o-about2-banner {
+	height: auto;
+	aspect-ratio: 1716 / 833;
+
+	@media (max-width: 575px) {
+		aspect-ratio: 4 / 3;
+	}
+}
+
+/* ── One side gutter for every block, matching the header ─────
+   The template's .container is 1750px wide with only 12px padding, so
+   between 1400px and ~1780px text ran almost to the screen edge. Ported
+   blocks, the header and our own wrappers now share --o-gutter. */
+.orisa {
+	--o-gutter: 16px;
+
+	@media (min-width: 768px) {
+		--o-gutter: 30px;
+	}
+	@media (min-width: 1200px) {
+		--o-gutter: 40px;
+	}
+	@media (min-width: 1400px) {
+		--o-gutter: 60px;
+	}
+	@media (min-width: 1800px) {
+		--o-gutter: 100px;
+	}
+}
+
+/* Below 1400px the template's Bootstrap container (centred, max 1140px)
+   already leaves room; from 1400px it jumps to 1750px with 12px padding,
+   which is where content touched the screen edge. Higher specificity than
+   legacy.css, which loads after this file. */
+@media (min-width: 1400px) {
+	.orisa .o-legacy .container {
+		max-width: calc(1726px + 2 * var(--o-gutter));
+		padding-inline: var(--o-gutter);
+	}
+}
+
+.orisa .header-14__bar,
+.orisa .header-14__meta-inner,
+.orisa .o-wrap,
+.orisa .sec-1-home-14__inner {
+	padding-inline: var(--o-gutter);
+}
+
+@media (min-width: 1200px) {
+	.orisa .sec-1-home-14 {
+		/* template gap between header and the first line of the hero */
+		padding-top: 48px;
+	}
+}
+
+/* Index-13 sections keep their template side padding below 1200px; above
+   it they follow the header gutter so every block lines up with the logo
+   (the index-14 header sits further in than index-13's own header). */
+@media (min-width: 1200px) {
+	.orisa {
+		.sec-2-home-13,
+		.sec-3-home-13,
+		.sec-4-home-13,
+		.sec-5-home-13,
+		.sec-6-home-13,
+		.sec-7-home-13,
+		.sec-8-home-13 {
+			padding-left: var(--o-gutter);
+			padding-right: var(--o-gutter);
+		}
+	}
+}
+
+/* Entrance animations start off-position (characters slide in from the
+   right, images start at 1.2x). Clip sideways so those start states never
+   make the page scroll horizontally; `clip` keeps position: sticky working. */
+.orisa {
+	overflow-x: clip;
+}

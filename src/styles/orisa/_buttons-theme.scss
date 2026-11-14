@@ -1,0 +1,11 @@
+/* The template hard-codes the button colours; route them through
+   tokens so palettes and dark mode apply. */
+.orisa .at-btn {
+	background-color: var(--at-btn-bg);
+	color: var(--at-btn-fg);
+	white-space: nowrap;
+
+	&:hover {
+		color: var(--at-btn-fg);
+	}
+}

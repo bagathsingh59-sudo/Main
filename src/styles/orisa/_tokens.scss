@@ -1,0 +1,116 @@
+/* ───────────────────────────────────────────────────────────
+   Design tokens for the Orisa-based pages.
+
+   Everything is a CSS variable on the `.orisa` wrapper, so:
+     • palettes are swappable   → data-palette="brand" | "orisa"
+     • light / dark is swappable → data-theme="light" | "dark"
+   Section styles only ever read `--at-*` variables, never hex values.
+   ─────────────────────────────────────────────────────────── */
+
+/* Palette "brand" — Vaishnavi navy + teal (default). */
+.orisa {
+	--at-ff-body: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+	--at-ff-heading: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+
+	--at-common-white: #ffffff;
+	--at-common-white-rgb: 255, 255, 255;
+	--at-common-black: #0b1f3a;
+	--at-common-black-rgb: 11, 31, 58;
+
+	--at-neutral-0: #fbfcff;
+	--at-neutral-0-rgb: 251, 252, 255;
+	--at-neutral-50: #f1f5fc;
+	--at-neutral-50-rgb: 241, 245, 252;
+	--at-neutral-100: #dbe3f1;
+	--at-neutral-200: #c7d1e4;
+	--at-neutral-300: #a9b5cc;
+	--at-neutral-500: #55637c;
+	--at-neutral-700: #1c3358;
+	--at-neutral-800: #12284a;
+	--at-neutral-900: #0b1f3a;
+	--at-neutral-950: #06122a;
+
+	--at-theme-primary: #0891b2;
+	--at-theme-primary-rgb: 8, 145, 178;
+	--at-btn-bg: #0b1f3a;
+	--at-btn-fg: #fbfcff;
+}
+
+.orisa[data-theme="dark"] {
+	--at-common-white: #0b1f3a;
+	--at-common-white-rgb: 11, 31, 58;
+	--at-common-black: #ffffff;
+	--at-common-black-rgb: 255, 255, 255;
+
+	--at-neutral-0: #050d1c;
+	--at-neutral-0-rgb: 5, 13, 28;
+	--at-neutral-50: #0a1730;
+	--at-neutral-50-rgb: 10, 23, 48;
+	--at-neutral-100: #14254a;
+	--at-neutral-200: #1d3260;
+	--at-neutral-300: #2c4476;
+	--at-neutral-500: #a9b8d4;
+	--at-neutral-700: #5b7099;
+	--at-neutral-800: #e3eaf7;
+	--at-neutral-900: #eef3fb;
+	--at-neutral-950: #f6f9ff;
+
+	--at-theme-primary: #22d3ee;
+	--at-theme-primary-rgb: 34, 211, 238;
+	--at-btn-bg: #eef3fb;
+	--at-btn-fg: #06122a;
+}
+
+/* Palette "orisa" — the template's original neutral + orange. */
+.orisa[data-palette="orisa"] {
+	--at-common-black: #1e1e1e;
+	--at-common-black-rgb: 30, 30, 30;
+
+	--at-neutral-0: #fefefe;
+	--at-neutral-0-rgb: 254, 254, 254;
+	--at-neutral-50: #f2f2f2;
+	--at-neutral-50-rgb: 242, 242, 242;
+	--at-neutral-100: #dfdfdf;
+	--at-neutral-200: #cdcccc;
+	--at-neutral-300: #b7b7b7;
+	--at-neutral-500: #585959;
+	--at-neutral-700: #303030;
+	--at-neutral-800: #212121;
+	--at-neutral-900: #1d1d1d;
+	--at-neutral-950: #0f0f0f;
+
+	--at-theme-primary: #f0460e;
+	--at-theme-primary-rgb: 240, 70, 14;
+	--at-btn-bg: #1d1d1d;
+	--at-btn-fg: #fefefe;
+}
+
+.orisa[data-palette="orisa"][data-theme="dark"] {
+	--at-common-white: #1e1e1e;
+	--at-common-white-rgb: 30, 30, 30;
+	--at-common-black: #ffffff;
+	--at-common-black-rgb: 255, 255, 255;
+
+	--at-neutral-0: #0c0c0c;
+	--at-neutral-0-rgb: 12, 12, 12;
+	--at-neutral-50: #141414;
+	--at-neutral-50-rgb: 20, 20, 20;
+	--at-neutral-100: #212121;
+	--at-neutral-200: #2d2d2d;
+	--at-neutral-300: #404040;
+	--at-neutral-500: #b3b3b3;
+	--at-neutral-700: #535353;
+	--at-neutral-800: #eaeaea;
+	--at-neutral-900: #efefef;
+	--at-neutral-950: #f4f4f4;
+
+	--at-btn-bg: #efefef;
+	--at-btn-fg: #0f0f0f;
+}
+
+/* `.changeless` blocks keep their light-on-dark look in both themes
+   (hero card overlays, dark CTA bands). */
+.orisa .changeless {
+	--at-common-white: #ffffff;
+	--at-common-white-rgb: 255, 255, 255;
+}

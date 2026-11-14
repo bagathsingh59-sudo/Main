@@ -53,9 +53,11 @@
 
   /* Reduce motion */
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    /* Redesigned pages opt out while their motion setting is "always"
+       (see src/components/orisa/config.ts). */
+    body:not(:has(.orisa[data-motion="always"])) *,
+    body:not(:has(.orisa[data-motion="always"])) *::before,
+    body:not(:has(.orisa[data-motion="always"])) *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;

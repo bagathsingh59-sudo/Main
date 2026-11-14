@@ -1,0 +1,112 @@
+@use './utils' as *;
+
+/* Base typography + motion primitives for everything inside `.orisa`. */
+.orisa {
+	font-family: var(--at-ff-body);
+	font-size: 16px;
+	line-height: 1.2;
+	color: var(--at-neutral-900);
+	background-color: var(--at-neutral-0);
+	transition: background-color 0.3s ease, color 0.3s ease;
+
+	::selection {
+		background: var(--at-neutral-900);
+		color: var(--at-neutral-0);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--at-theme-primary);
+		outline-offset: 3px;
+		box-shadow: none;
+	}
+}
+
+
+/* Element defaults carry no specificity, so any section class overrides them. */
+:where(.orisa) {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--at-ff-heading);
+		font-weight: 700;
+		line-height: 1.2;
+		letter-spacing: -0.05em;
+		color: var(--at-neutral-900);
+	}
+
+	p {
+		font-weight: 500;
+		letter-spacing: -0.02em;
+		color: var(--at-neutral-500);
+	}
+
+}
+
+/* ── Above-the-fold fades ────────────────────────────────────
+   CSS-only (no hydration needed) so the headline paints at once
+   and LCP is never blocked by JavaScript. Mirrors the template's
+   `.at_fade_anim`: 20px offset, 0.75s, power2.out. */
+@keyframes orisaFade {
+	from {
+		opacity: 0;
+		transform: translate3d(var(--fade-x, 0), var(--fade-y, 20px), 0);
+	}
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+.o-fade {
+	animation: orisaFade 0.75s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+	animation-delay: var(--fade-delay, 0.15s);
+
+	&--top {
+		--fade-y: -20px;
+	}
+	&--left {
+		--fade-y: 0px;
+		--fade-x: -20px;
+	}
+	&--right {
+		--fade-y: 0px;
+		--fade-x: 20px;
+	}
+}
+
+/* ── Below-the-fold fades (driven by useOrisaMotion) ───────── */
+.orisa-js [data-fade] {
+	opacity: 0;
+}
+
+/* Template's zoom-in entrance: scale 1.2 → 1 with a fade, 2s. */
+@keyframes orisaZoomIn {
+	from {
+		opacity: 0;
+		transform: scale(1.2);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.o-zoomin {
+	animation: orisaZoomIn 2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.orisa[data-motion="respect-user"] {
+		.o-fade,
+		.o-zoomin {
+			animation: none;
+		}
+		&.orisa-js [data-fade],
+		.orisa-js [data-fade] {
+			opacity: 1;
+		}
+	}
+}

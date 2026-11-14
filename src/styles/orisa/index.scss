@@ -1,0 +1,23 @@
+/* Entry point for the Orisa-based pages.
+   Only the partials actually used are compiled — add a section's
+   stylesheet here when its component is added. */
+@use 'tokens';
+@use 'base';
+@use 'buttons';
+@use 'buttons-theme';
+@use 'header';
+@use 'sections/hero-heading';
+@use 'sections/hero-card';
+@use 'sections/hero-merge';
+@use 'sections/hero-extras';
+@use 'sections/home13-sec2';
+@use 'sections/home13-sec3';
+@use 'sections/home13-sec4';
+@use 'sections/home13-sec5';
+@use 'sections/home13-sec6';
+@use 'sections/home13-sec7';
+@use 'sections/home13-sec8';
+@use 'sections/footer-13';
+@use 'sections/pricing';
+@use 'sections/product';
+@use 'shared';

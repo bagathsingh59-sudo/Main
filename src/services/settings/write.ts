@@ -8,6 +8,7 @@
  */
 
 import { put } from "@vercel/blob";
+import { settingsFilePath, writeSettingsFile } from "./fileStore";
 import { invalidateSettingsCache, SETTINGS_BLOB_PATHNAME } from "./read";
 import { siteSettingsSchema, type SiteSettings } from "./types";
 
@@ -25,11 +26,22 @@ export async function updateSiteSettings(next: SiteSettings): Promise<WriteResul
     };
   }
 
+  const file = settingsFilePath();
+  if (file) {
+    try {
+      await writeSettingsFile(file, parsed.data);
+      invalidateSettingsCache();
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, reason: "api_error", detail: err instanceof Error ? err.message : "unknown" };
+    }
+  }
+
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     return {
       ok: false,
       reason: "not_configured",
-      detail: "BLOB_READ_WRITE_TOKEN env var must be set. In Vercel: Storage → Blob → Connect to project.",
+      detail: "Set BLOB_READ_WRITE_TOKEN (Vercel Blob) or SETTINGS_FILE (local JSON file, e.g. .data/site-settings.json).",
     };
   }
 

@@ -178,11 +178,11 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   navigation: {
     navbarLinks: [
+      { label: "Home", href: "/", visible: true },
+      { label: "About us", href: "/about", visible: true },
       { label: "Services", href: "/services", visible: true },
-      { label: "Industries", href: "/industries", visible: true },
-      { label: "About", href: "/about", visible: true },
-      { label: "Insights", href: "/insights", visible: true },
-      { label: "Contact", href: "/contact", visible: true },
+      { label: "VaishnaviPay", href: "/vaishnavi-pay", visible: true },
+      { label: "Contact us", href: "/contact", visible: true },
     ],
     footerColumns: [
       {

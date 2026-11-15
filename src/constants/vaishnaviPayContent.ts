@@ -7,56 +7,23 @@
  *
  * Plan prices and inclusions mirror the owner console (see VP_PRICING).
  */
-import type { AboutIntroProps } from "@/components/orisa/sections/AboutIntro";
 import type { ComparisonTableProps } from "@/components/orisa/sections/ComparisonTable";
-import type { CtaPanelProps } from "@/components/orisa/sections/CtaPanel";
-import type { DistinctionListProps } from "@/components/orisa/sections/DistinctionList";
-import type { ExpertiseListProps } from "@/components/orisa/sections/ExpertiseList";
 import type { FaqListProps } from "@/components/orisa/sections/FaqList";
 import type { PricingPlansProps } from "@/components/orisa/sections/PricingPlans";
-import type { ProcessTimelineProps } from "@/components/orisa/sections/ProcessTimeline";
 import type { ProjectListProps } from "@/components/orisa/sections/ProjectList";
+import type { VpAboutProps } from "@/components/orisa/legacy/VpAbout";
+import type { VpBlogPost } from "@/components/orisa/legacy/VpBlog";
+import type { VpCtaProps } from "@/components/orisa/legacy/VpCta";
+import type { VpHeroProps } from "@/components/orisa/legacy/VpHero";
+import type { VpModulesProps } from "@/components/orisa/legacy/VpModules";
+import type { VpRailsProps } from "@/components/orisa/legacy/VpRails";
+import type { VpReviewsProps } from "@/components/orisa/legacy/VpReviews";
+import type { VpScreensProps } from "@/components/orisa/legacy/VpScreens";
 
 const SHOT = "/vaishnavi-pay";
-const ICON = "/orisa/home-13";
 const DEMO = "/contact?topic=vaishnavipay-demo";
 
-export const VP_HERO = {
-  tagline: "VaishnaviPay · Payroll & Compliance Software",
-  since: "Built by practitioners",
-  headline: ["The software our own team", "runs every filing on."] as [string, string],
-  copy: "Payroll, statutory reports, client logins and digitally signed documents in one place — for a single company, a CA firm or a large consultancy.",
-  cta: { label: "Request a demo", href: DEMO },
-  image: { src: `${SHOT}/dashboard.webp`, alt: "VaishnaviPay dashboard for a wage month" },
-  label: "Runs in your browser · nothing to install",
-  tags: [
-    { label: "Payroll", href: "#modules" },
-    { label: "32 reports", href: "#modules" },
-    { label: "Client logins", href: "#modules" },
-    { label: "Signed documents", href: "#why" },
-    { label: "Pricing", href: "#pricing" },
-  ],
-};
 
-export const VP_ABOUT: AboutIntroProps = {
-  label: "WHAT IT IS",
-  intro: "One place to run payroll, file on time and *prove* every document you issue.",
-  avatars: [],
-  cta: { label: "See pricing", href: "#pricing" },
-  pill: "Free demo available",
-  title: "Enroll. Process. File. Share. A whole wage month, from new joiners to the client's statement, without a spreadsheet.",
-  images: [`${SHOT}/payroll.webp`, `${SHOT}/payslip.webp`],
-  caption: {
-    title: "Made for the monthly cycle",
-    text: "Add joiners and leavers, process the month, download the PF ECR, ESI return and PT statement, record challan dates, print registers and pay slips, then send each client their statement and fee invoice.",
-  },
-  stats: [
-    { icon: `${ICON}/sec-2-shape-1.webp`, tag: "▲ Statutory", count: 32, caption: "Reports and registers, from PF ECR to Form XVI." },
-    { icon: `${ICON}/sec-2-shape-2.webp`, tag: "▲ Ready to use", count: 16, caption: "HR letters and certificates on your letterhead." },
-    { icon: `${ICON}/sec-2-shape-3.webp`, tag: "▲ Roles", count: 3, caption: "Kinds of login: admin, staff and client." },
-    { icon: `${ICON}/sec-2-shape-4.webp`, tag: "▲ Every file", count: 100, suffix: "%", caption: "Of documents digitally signed and verifiable." },
-  ],
-};
 
 export const VP_MODULES: ProjectListProps = {
   label: "MODULES",
@@ -116,35 +83,7 @@ export const VP_MODULES: ProjectListProps = {
   ],
 };
 
-export const VP_MONTH: ProcessTimelineProps = {
-  label: "A TYPICAL MONTH",
-  title: "Five steps from new joiners to the client's statement.",
-  description: "The same routine every wage month, with the dashboard showing how far each establishment has got and what is overdue.",
-  metrics: [
-    { value: "05", label: "STEPS" },
-    { value: "01", label: "SCREEN FLOW" },
-  ],
-  deliverablesLabel: "WHERE",
-  phases: [
-    { when: "Step 1", title: "Enroll", text: "Add new joiners and record leavers for each establishment.", deliverables: ["Masters", "Enroll Employees"] },
-    { when: "Step 2", title: "Process", text: "Process the month, check the payroll summary and finalize it.", deliverables: ["Payroll", "New Payroll"] },
-    { when: "Step 3", title: "File", text: "Download the PF ECR, ESI return and PT statement and file them on the government portals.", deliverables: ["Reports", "Payroll Process"] },
-    { when: "Step 4", title: "Record & print", text: "Enter the challan payment dates, then print the registers and pay slips.", deliverables: ["Reports", "Monthly Govt."] },
-    { when: "Step 5", title: "Share & bill", text: "Send each client their monthly statement and fee invoice.", deliverables: ["MIS", "Fee Invoices"] },
-  ],
-};
 
-export const VP_ADDONS: ExpertiseListProps = {
-  title: "Add-ons & apps",
-  hint: "Switch on only what your firm uses — nothing is deleted when you switch one off.",
-  items: [
-    { image: `${SHOT}/invoice.webp`, title: "HR documents", tag: "ADD-ON", text: "Sixteen ready letters in five groups — joining, during employment, certificates, discipline and leaving — numbered and on the establishment's letterhead." },
-    { image: `${SHOT}/payslip.webp`, title: "Hiring", tag: "ADD-ON", text: "Offer letters, joining forms and a CTC calculator for new hires." },
-    { image: `${SHOT}/matrix.webp`, title: "Client Desk", tag: "ADD-ON", text: "Quotations for new clients, documents received from clients, and a register of licences and notices." },
-    { image: `${SHOT}/calendar.webp`, title: "Chat, email, calendar & files", tag: "APPS", text: "Talk to your team and clients, send reports by email, follow the compliance calendar and keep files in one place." },
-    { image: `${SHOT}/verify.webp`, title: "Verify a document", tag: "TRUST", text: "Check any VaishnaviPay document by its code or QR to confirm it is genuine and unchanged, and build an evidence pack for an auditor." },
-  ],
-};
 
 export const VP_COMPARE: ComparisonTableProps = {
   label: "TWO WAYS TO WORK WITH US",
@@ -214,18 +153,6 @@ export const VP_PRICING: PricingPlansProps = {
   },
 };
 
-export const VP_WHY: DistinctionListProps = {
-  tag: { label: "WHY VAISHNAVIPAY", href: "/about" },
-  title: "Built inside a working compliance practice.",
-  cta: { label: "Request a demo", href: DEMO },
-  items: [
-    { name: "Used on our own clients", image: `${SHOT}/dashboard.webp`, href: DEMO, lede: "Every screen exists because our consultants needed it for a real wage month. It is the software Vaishnavi Consultant runs its own practice on." },
-    { name: "Every document is sealed", image: `${SHOT}/verify.webp`, href: DEMO, lede: "Each PDF, Excel export and backup carries a document code and QR. Anyone can check later that a copy is genuine and unchanged." },
-    { name: "Nothing overdue slips by", image: `${SHOT}/matrix.webp`, href: DEMO, lede: "The dashboard and filing matrix show finalized, pending and overdue months for every establishment, with the next filing due." },
-    { name: "Portal-ready files", image: `${SHOT}/ecr.webp`, href: DEMO, lede: "ECR and ESI files download exactly as the EPFO and ESIC portals expect, so they upload as before." },
-    { name: "Your data stays yours", image: `${SHOT}/invoice.webp`, href: DEMO, lede: "Role-based logins, two-factor sign-in, signed exports and a backup you download and keep yourself." },
-  ],
-};
 
 export const VP_FAQ: FaqListProps = {
   label: "QUESTIONS",
@@ -242,15 +169,127 @@ export const VP_FAQ: FaqListProps = {
   ],
 };
 
-export const VP_CTA = (email: string): CtaPanelProps => ({
-  bar: { left: "FREE DEMO  —  NO CARD NEEDED", center: "PAYROLL · REPORTS · CLIENT LOGINS", right: "VAISHNAVIPAY" },
-  tag: "SEE IT WITH YOUR OWN DATA",
-  title: ["Run it", "your", "way."],
-  lede: ["Tell us how many establishments and employees you handle.", "We set up a demo and walk you through one full wage month."],
-  chips: [
-    { label: "Request a demo", href: DEMO },
-    { label: "See pricing", href: "#pricing" },
-    { label: "Prefer we do it? Managed service", href: "/services" },
+/* ── Index-8 layout ───────────────────────────────────────────── */
+
+const TPL8 = "/orisa/tpl/pages/home-8";
+const shot = (name: string, alt: string) => ({ src: `${SHOT}/${name}.webp`, alt });
+
+export const VP8_HERO = (email: string): VpHeroProps => ({
+  badge: { label: "Free demo", href: DEMO },
+  headline: "PAYROLL, FILINGS & CLIENT LOGINS IN ONE PLACE",
+  photos: [
+    shot("dashboard", "VaishnaviPay dashboard for a wage month"),
+    shot("payroll", "Payroll processing screen"),
+    shot("ecr", "PF ECR report ready for the EPFO portal"),
+    shot("payslip", "Digitally signed pay slip"),
+    shot("matrix", "Filing matrix across establishments"),
+    shot("verify", "Document verification by code or QR"),
   ],
-  contact: { label: "CONTACT", text: email, href: `mailto:${email}` },
+  stats: [
+    { value: 32, suffix: "", text: "Statutory reports and registers, from PF ECR to Form XVI." },
+    { value: 100, suffix: "%", text: "Of issued documents digitally signed and verifiable." },
+  ],
+  wordmark: { left: "VAISHNAVI", right: "PAY", frame: `${SHOT}/dashboard.webp` },
+  meta: { left: email, right: "Runs in your browser · nothing to install" },
 });
+
+export const VP8_MARQUEE = [
+  "Payroll processing",
+  "PF ECR",
+  "ESIC returns",
+  "Professional tax",
+  "Pay slips",
+  "Form XVI",
+  "Statutory registers",
+  "Bonus & gratuity",
+  "Filing matrix",
+  "Fee invoices",
+  "Client logins",
+  "Signed documents",
+];
+
+export const VP8_ABOUT: VpAboutProps = {
+  title: "Turning the whole wage month into",
+  accent: "one routine screen",
+  lead: "Enroll joiners, process payroll, download portal-ready returns, print registers and pay slips, then send each client their statement and fee invoice — without a spreadsheet in between.",
+  tags: ["Payroll", "32 statutory reports", "Client logins", "Signed documents"],
+  images: [shot("payslip", "Pay slip generated by VaishnaviPay"), shot("payroll", "Payroll summary before finalizing")],
+};
+
+export const VP8_MODULES: VpModulesProps = {
+  kicker: "Modules",
+  since: "Built by Vaishnavi Consultant",
+  caption: "Every screen exists because our own consultants needed it for a real wage month.",
+  items: VP_MODULES.items.map((m) => ({ title: m.title, text: m.description.split(". ")[0] + ".", image: m.image, href: m.href })),
+  cta: { label: "Request a demo", href: DEMO },
+};
+
+/** Who it is for — shown as words until there are client logos to use. */
+export const VP8_AUDIENCE = [
+  { label: "CA firms" },
+  { label: "Payroll consultants" },
+  { label: "Single companies" },
+  { label: "Multi-branch groups" },
+  { label: "Labour contractors" },
+  { label: "Compliance consultancies" },
+];
+
+export const VP8_SCREENS: VpScreensProps = {
+  kicker: "Inside VaishnaviPay",
+  viewAll: { label: "Request a demo", href: DEMO },
+  cards: [
+    { title: "Pay slips", image: `${SHOT}/payslip.webp`, href: DEMO },
+    { title: "Fee invoices", image: `${SHOT}/invoice.webp`, href: DEMO },
+    { title: "Dashboard", image: `${SHOT}/dashboard.webp`, href: DEMO },
+    { title: "PF ECR", image: `${SHOT}/ecr.webp`, href: DEMO },
+    { title: "Filing matrix", image: `${SHOT}/matrix.webp`, href: DEMO },
+    { title: "Compliance calendar", image: `${SHOT}/calendar.webp`, href: DEMO },
+    { title: "Verify a document", image: `${SHOT}/verify.webp`, href: DEMO },
+  ],
+};
+
+export const VP8_RAILS: VpRailsProps = {
+  title: "One login for your whole compliance desk",
+  cta: { label: "See pricing", href: "#pricing" },
+  rows: [
+    [`${SHOT}/dashboard.webp`, `${SHOT}/payroll.webp`, `${SHOT}/ecr.webp`, `${SHOT}/payslip.webp`],
+    [`${SHOT}/matrix.webp`, `${SHOT}/invoice.webp`, `${SHOT}/calendar.webp`, `${SHOT}/verify.webp`],
+  ],
+};
+
+/**
+ * PLACEHOLDER testimonials — illustrative only, written for the layout.
+ * Replace with real, approved quotes before this page goes live.
+ */
+export const VP8_REVIEWS: VpReviewsProps = {
+  kicker: "What users say",
+  trusted: "Used on our own clients every month",
+  title: "Firms that run their month on VaishnaviPay",
+  footnote: "Placeholder quotes — to be replaced with feedback from firms using VaishnaviPay.",
+  items: [
+    { name: "Payroll consultant", role: "Partner", company: "CA firm, Kalaburagi", avatar: `${TPL8}/sec8-avatar-1.webp`, quote: "The ECR and ESI files upload to the portals first time, and the filing matrix shows me which client is still pending." },
+    { name: "HR manager", role: "HR & Accounts", company: "Manufacturing unit", avatar: `${TPL8}/sec8-avatar-2.webp`, quote: "I log in, see this month's registers and pay slips, and download what the inspector asks for in a minute." },
+    { name: "Compliance lead", role: "Operations", company: "Multi-branch group", avatar: `${TPL8}/sec8-avatar-3.webp`, quote: "Every document carries a code and QR, so an auditor can check a copy is genuine without calling us." },
+    { name: "Firm owner", role: "Founder", company: "Payroll bureau", avatar: `${TPL8}/sec8-avatar-4.webp`, quote: "Fee invoices with our UPI QR go out with the statement, and payments come in faster than before." },
+  ],
+};
+
+export const VP8_CTA: VpCtaProps = {
+  title: "Ready to run your next wage month on VaishnaviPay?",
+  lead: "Tell us how many establishments and employees you handle. We set up a demo and walk you through one full month.",
+  button: { label: "Request a free demo", href: DEMO },
+  card: {
+    kicker: "Talk to us",
+    text: "Prefer we do it for you? Ask about our managed payroll and compliance service.",
+    href: "/services",
+    image: `${SHOT}/dashboard.webp`,
+  },
+};
+
+/** Shown when Admin → Blog has no published posts yet. */
+export const VP8_BLOG_FALLBACK: VpBlogPost[] = [
+  { title: "Your monthly payroll compliance checklist", category: "Payroll", excerpt: "Every return, register and due date in one wage month, in the order we work through them.", author: "Vaishnavi desk", date: "", href: "/insights", image: `${TPL8}/sec-10-1.webp` },
+  { title: "PF ECR errors that stop an upload — and how to avoid them", category: "EPF", excerpt: "", author: "Vaishnavi desk", date: "", href: "/insights", image: `${TPL8}/sec-10-2.webp` },
+  { title: "Digitally signed pay slips: what they prove and what they don't", category: "Documents", excerpt: "", author: "Vaishnavi desk", date: "", href: "/insights", image: `${TPL8}/sec-10-3.webp` },
+];
+

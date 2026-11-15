@@ -1,29 +1,37 @@
 import type { Metadata } from "next";
 import { OrisaLayout } from "@/components/orisa/OrisaLayout";
-import { HomeHero } from "@/components/orisa/HomeHero";
-import { AboutIntro } from "@/components/orisa/sections/AboutIntro";
-import { ProjectList } from "@/components/orisa/sections/ProjectList";
-import { ProcessTimeline } from "@/components/orisa/sections/ProcessTimeline";
-import { ExpertiseList } from "@/components/orisa/sections/ExpertiseList";
-import { ComparisonTable } from "@/components/orisa/sections/ComparisonTable";
+import { LegacySection } from "@/components/orisa/legacy/LegacySection";
+import { VpHero } from "@/components/orisa/legacy/VpHero";
+import { VpMarquee } from "@/components/orisa/legacy/VpMarquee";
+import { VpAbout } from "@/components/orisa/legacy/VpAbout";
+import { VpModules } from "@/components/orisa/legacy/VpModules";
+import { VpBrands } from "@/components/orisa/legacy/VpBrands";
+import { VpScreens } from "@/components/orisa/legacy/VpScreens";
+import { VpRails } from "@/components/orisa/legacy/VpRails";
+import { VpReviews } from "@/components/orisa/legacy/VpReviews";
+import { VpCta } from "@/components/orisa/legacy/VpCta";
+import { VpBlog } from "@/components/orisa/legacy/VpBlog";
 import { PricingPlans } from "@/components/orisa/sections/PricingPlans";
-import { DistinctionList } from "@/components/orisa/sections/DistinctionList";
+import { ComparisonTable } from "@/components/orisa/sections/ComparisonTable";
 import { FaqList } from "@/components/orisa/sections/FaqList";
-import { CtaPanel } from "@/components/orisa/sections/CtaPanel";
+import { articleCards } from "@/components/orisa/fromSettings";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, faqSchema, SITE_URL, webPageSchema } from "@/utils/jsonLd";
 import { getSiteSettings } from "@/services/settings";
 import {
-  VP_ABOUT,
-  VP_ADDONS,
   VP_COMPARE,
-  VP_CTA,
   VP_FAQ,
-  VP_HERO,
-  VP_MODULES,
-  VP_MONTH,
   VP_PRICING,
-  VP_WHY,
+  VP8_ABOUT,
+  VP8_AUDIENCE,
+  VP8_BLOG_FALLBACK,
+  VP8_CTA,
+  VP8_HERO,
+  VP8_MARQUEE,
+  VP8_MODULES,
+  VP8_RAILS,
+  VP8_REVIEWS,
+  VP8_SCREENS,
 } from "@/constants/vaishnaviPayContent";
 
 const TITLE = "VaishnaviPay — Payroll & Compliance Software for Firms";
@@ -38,9 +46,13 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
+/**
+ * VaishnaviPay product page — Orisa index-8 layout, in the template's
+ * order, with pricing, the comparison table and FAQ before the closing CTA.
+ */
 export default async function VaishnaviPayPage() {
   const settings = await getSiteSettings();
-  const ci = settings.contactInfo;
+  const posts = articleCards(settings, VP8_BLOG_FALLBACK.map((p) => p.image)) ?? VP8_BLOG_FALLBACK;
 
   return (
     <OrisaLayout>
@@ -66,32 +78,43 @@ export default async function VaishnaviPayPage() {
         ]}
       />
 
+      <LegacySection>
+        <VpHero {...VP8_HERO(settings.contactInfo.email)} />
+      </LegacySection>
+      <LegacySection>
+        <VpMarquee items={VP8_MARQUEE} />
+      </LegacySection>
+      <LegacySection>
+        <VpAbout {...VP8_ABOUT} />
+      </LegacySection>
+      <LegacySection id="modules">
+        <VpModules {...VP8_MODULES} />
+      </LegacySection>
+      <LegacySection>
+        <VpBrands items={VP8_AUDIENCE} />
+      </LegacySection>
+      <LegacySection id="screens">
+        <VpScreens {...VP8_SCREENS} />
+      </LegacySection>
+      <LegacySection>
+        <VpRails {...VP8_RAILS} />
+      </LegacySection>
+      <LegacySection>
+        <VpReviews {...VP8_REVIEWS} />
+      </LegacySection>
+
       <div className="o-product">
-        <HomeHero
-          tagline={VP_HERO.tagline}
-          since={VP_HERO.since}
-          headline={VP_HERO.headline}
-          copy={VP_HERO.copy}
-          cta={VP_HERO.cta}
-          image={VP_HERO.image}
-          card={{ label: VP_HERO.label, email: ci.email, tags: VP_HERO.tags, hours: ci.hours }}
-          /* Office status, deadline ticker and the Explore cursor belong to the home page. */
-          ideas={{ 4: false, 5: false, 10: false }}
-        />
-        <AboutIntro {...VP_ABOUT} />
-        <div id="modules">
-          <ProjectList {...VP_MODULES} />
-        </div>
-        <ProcessTimeline {...VP_MONTH} />
-        <ExpertiseList {...VP_ADDONS} />
-        <ComparisonTable {...VP_COMPARE} />
         <PricingPlans {...VP_PRICING} />
-        <div id="why">
-          <DistinctionList {...VP_WHY} />
-        </div>
+        <ComparisonTable {...VP_COMPARE} />
         <FaqList {...VP_FAQ} />
-        <CtaPanel {...VP_CTA(ci.email)} />
       </div>
+
+      <LegacySection>
+        <VpCta {...VP8_CTA} />
+      </LegacySection>
+      <LegacySection>
+        <VpBlog label="Insights" title={["Latest from", "our compliance desk."]} viewAll={{ label: "All articles", href: "/insights" }} posts={posts} />
+      </LegacySection>
     </OrisaLayout>
   );
 }

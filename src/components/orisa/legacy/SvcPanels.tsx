@@ -1,7 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `services-1.html` (.at-service-area) by scripts/orisa/port-section.py.
-// Template copy and images are kept as placeholders — edit freely.
-export function SvcPanels() {
+// Rows come from Admin → Services.
+export interface SvcPanelItem {
+  title: string;
+  summary: string;
+  href: string;
+}
+
+/** Template images, cycled (Admin → Services has no image field yet). */
+const SVC_IMAGES = [5, 6, 7, 8, 9, 10];
+const svcImage = (i: number, small: boolean) => `/orisa/tpl/pages/img-${SVC_IMAGES[i % SVC_IMAGES.length]}${small ? "-sm" : ""}.webp`;
+
+export function SvcPanels({ items }: { items: SvcPanelItem[] }) {
   return (
     <div className="at-service-area at-panel-pin-area pt-120 pb-120">
       <div className="container">
@@ -35,24 +45,11 @@ export function SvcPanels() {
             <div className="at-service-content mr-60 mt-20">
               <div className="at-service-sales-wrap at-panel-pin fix p-relative">
                 <div className="at-service-img-wrapper image-container">
-                  <div className="hover-image">
-                    <img className="thumb" src="/orisa/tpl/pages/img-5.webp" alt="Service Image" />
-                  </div>
-                  <div className="hover-image">
-                    <img className="thumb" src="/orisa/tpl/pages/img-6.webp" alt="Service Image" />
-                  </div>
-                  <div className="hover-image">
-                    <img className="thumb" src="/orisa/tpl/pages/img-7.webp" alt="Service Image" />
-                  </div>
-                  <div className="hover-image">
-                    <img className="thumb" src="/orisa/tpl/pages/img-8.webp" alt="Service Image" />
-                  </div>
-                  <div className="hover-image">
-                    <img className="thumb" src="/orisa/tpl/pages/img-9.webp" alt="Service Image" />
-                  </div>
-                  <div className="hover-image">
-                    <img className="thumb" src="/orisa/tpl/pages/img-10.webp" alt="Service Image" />
-                  </div>
+                  {items.map((it, i) => (
+                    <div key={it.title} className="hover-image">
+                      <img className="thumb" src={svcImage(i, false)} alt="" />
+                    </div>
+                  ))}
                 </div>
                 <h4 className="h5 fw-600 mb-0 mt-10">
                   <span data-count="250" />
@@ -66,138 +63,22 @@ export function SvcPanels() {
           </div>
           <div className="col-xxl-7 ms-auto col-lg-8 col-xl-8 mb-40">
             <div className="at-service-list-wrap">
-              <a href="/contact?service=payroll">
-                <div className="at-service-item service-item">
-                  <div className="count">
-                    <span className="number">
-                      [01]
-                    </span>
+              {items.map((it, i) => (
+                <a key={it.title} href={it.href}>
+                  <div className="at-service-item service-item">
+                    <div className="count">
+                      <span className="number">[{String(i + 1).padStart(2, "0")}]</span>
+                    </div>
+                    <div className="content">
+                      <h2 className="title h1">{it.title}</h2>
+                      <p className="text">{it.summary}</p>
+                    </div>
+                    <div className="thumb" data-zoomin="">
+                      <img src={svcImage(i, true)} alt="" />
+                    </div>
                   </div>
-                  <div className="content">
-                    <h1 className="title">
-                      Payroll Management
-                    </h1>
-                    <p className="text">
-                      {" End-to-end payroll, payslips and "}
-                      <br />
-                      {" Form 16 for your whole workforce. "}
-                    </p>
-                  </div>
-                  <div className="thumb" data-zoomin="">
-                    <img src="/orisa/tpl/pages/img-5-sm.webp" alt="" />
-                  </div>
-                </div>
-              </a>
-              <a href="/contact?service=epf-esi">
-                <div className="at-service-item service-item">
-                  <div className="count">
-                    <span className="number">
-                      [02]
-                    </span>
-                  </div>
-                  <div className="content">
-                    <h1 className="title">
-                      {"EPF & ESI Compliance"}
-                    </h1>
-                    <p className="text">
-                      {" PF ECR, ESI returns, KYC and "}
-                      <br />
-                      {" inspection support, end to end. "}
-                    </p>
-                  </div>
-                  <div className="thumb" data-zoomin="">
-                    <img src="/orisa/tpl/pages/img-6-sm.webp" alt="" />
-                  </div>
-                </div>
-              </a>
-              <a href="/contact?service=labour-law">
-                <div className="at-service-item service-item">
-                  <div className="count">
-                    <span className="number">
-                      [03]
-                    </span>
-                  </div>
-                  <div className="content">
-                    <h1 className="title">
-                      Labour Law Compliance
-                    </h1>
-                    <p className="text">
-                      {" S&E, PT, LWF, contract labour, "}
-                      <br />
-                      {" bonus and gratuity registers. "}
-                    </p>
-                  </div>
-                  <div className="thumb" data-zoomin="">
-                    <img src="/orisa/tpl/pages/img-7-sm.webp" alt="" />
-                  </div>
-                </div>
-              </a>
-              <a href="/contact?service=gst">
-                <div className="at-service-item service-item">
-                  <div className="count">
-                    <span className="number">
-                      [04]
-                    </span>
-                  </div>
-                  <div className="content">
-                    <h1 className="title">
-                      GST Compliance
-                    </h1>
-                    <p className="text">
-                      {" GSTR-1, 3B, 9 and 9C with "}
-                      <br />
-                      {" reconciliation and refunds. "}
-                    </p>
-                  </div>
-                  <div className="thumb" data-zoomin="">
-                    <img src="/orisa/tpl/pages/img-8-sm.webp" alt="" />
-                  </div>
-                </div>
-              </a>
-              <a href="/contact?service=income-tax">
-                <div className="at-service-item service-item">
-                  <div className="count">
-                    <span className="number">
-                      [05]
-                    </span>
-                  </div>
-                  <div className="content">
-                    <h1 className="title">
-                      Income Tax Advisory
-                    </h1>
-                    <p className="text">
-                      {" Corporate returns, TDS, advance "}
-                      <br />
-                      {" tax and tax planning. "}
-                    </p>
-                  </div>
-                  <div className="thumb" data-zoomin="">
-                    <img src="/orisa/tpl/pages/img-9-sm.webp" alt="" />
-                  </div>
-                </div>
-              </a>
-              <a href="/contact?service=cfo">
-                <div className="at-service-item service-item">
-                  <div className="count">
-                    <span className="number">
-                      [06]
-                    </span>
-                  </div>
-                  <div className="content">
-                    <h1 className="title">
-                      Virtual CFO Advisory
-                    </h1>
-                    <p className="text">
-                      {" Monthly MIS, board packs and "}
-                      <br />
-                      {" fund-raise readiness. "}
-                    </p>
-                  </div>
-                  <div className="thumb" data-zoomin="">
-                    <img src="/orisa/tpl/pages/img-10-sm.webp" alt="" />
-                  </div>
-                </div>
-              </a>
+                </a>
+              ))}
               <div className="at-service-btn pt-30">
                 <a className="at-btn" href="/contact">
                   <span>

@@ -14,6 +14,7 @@
  */
 
 import { DEFAULT_SETTINGS } from "./defaults";
+import { readSettingsFile, settingsFilePath } from "./fileStore";
 import { siteSettingsSchema, type SiteSettings } from "./types";
 
 /** Deterministic pathname inside the Blob store. */
@@ -95,6 +96,19 @@ export async function getSiteSettings(opts: GetSettingsOptions = {}): Promise<Si
   const now = Date.now();
   if (!opts.skipCache && cached && now - cached.at < TTL_MS) return cached.value;
 
+  const file = settingsFilePath();
+  if (file) {
+    try {
+      const raw = await readSettingsFile(file);
+      const value = raw === null ? DEFAULT_SETTINGS : toSettings(raw);
+      cached = { at: now, value };
+      return value;
+    } catch (err) {
+      console.error("[settings] File read failed:", err instanceof Error ? err.message : err);
+      return DEFAULT_SETTINGS;
+    }
+  }
+
   const storeUrl = getBlobStoreUrl();
   if (!storeUrl) {
     cached = { at: now, value: DEFAULT_SETTINGS };
@@ -118,22 +132,21 @@ export async function getSiteSettings(opts: GetSettingsOptions = {}): Promise<Si
       cached = { at: now, value: DEFAULT_SETTINGS };
       return DEFAULT_SETTINGS;
     }
-    const raw = (await res.json()) as unknown;
-    const parsed = siteSettingsSchema.safeParse(raw);
-    if (parsed.success) {
-      cached = { at: now, value: parsed.data };
-      return parsed.data;
-    }
-    // Older shape — soft-migrate, then re-validate.
-    const migrated = migrate(raw);
-    const reparsed = siteSettingsSchema.safeParse(migrated);
-    const value = reparsed.success ? reparsed.data : DEFAULT_SETTINGS;
+    const value = toSettings((await res.json()) as unknown);
     cached = { at: now, value };
     return value;
   } catch (err) {
     console.error("[settings] Blob read failed:", err instanceof Error ? err.message : err);
     return DEFAULT_SETTINGS;
   }
+}
+
+/** Validate stored JSON; older shapes are soft-migrated, anything else falls back to defaults. */
+function toSettings(raw: unknown): SiteSettings {
+  const parsed = siteSettingsSchema.safeParse(raw);
+  if (parsed.success) return parsed.data;
+  const reparsed = siteSettingsSchema.safeParse(migrate(raw));
+  return reparsed.success ? reparsed.data : DEFAULT_SETTINGS;
 }
 
 /** Force the next call to bypass the in-memory cache. Used after writes. */

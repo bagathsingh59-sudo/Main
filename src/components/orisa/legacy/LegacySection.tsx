@@ -22,6 +22,10 @@ import { useOrisaMotion } from "../useOrisaMotion";
  *      - logo / image tickers     .carouselTicker .carouselTicker__list
  *      - stacked cards on scroll  .section-fix (title pinned, .item cards slide up)
  *      - contact form             form.sec-4-about-form → POST /api/contact
+ *      - index-8 pieces           [data-parallax-range] / [data-card-parallax] drift,
+ *                                 .at-item-anime-2 reverse strip, .scale-img-from-to,
+ *                                 .at-scroll-rotate, .scroll-move-up, pinned
+ *                                 .sec-8-home-8__stage, .text-scale-anim letters
  *
  * The wrapped content is static server-rendered markup, so React never
  * re-renders it and the DOM changes made here are safe.
@@ -143,8 +147,8 @@ export function LegacySection({ children, id, className }: { children: ReactNode
               email: String(data.get("email") ?? ""),
               phone: String(data.get("phone") ?? ""),
               company: "",
-              companySize: "11-50",
-              service: form.dataset.service || "General enquiry",
+              companySize: String(data.get("companySize") || "11-50"),
+              service: String(data.get("service") || form.dataset.service || "General enquiry"),
               message: String(data.get("message") ?? ""),
             }),
           });
@@ -209,7 +213,106 @@ export function LegacySection({ children, id, className }: { children: ReactNode
           const target = section.querySelector(".scale-up");
           if (target) gsap.to(target, { scale: 1.15, scrollTrigger: { trigger: section, start: "top bottom", end: "bottom center", scrub: 1 } });
         });
+
+        /* second scroll-driven strip, moving the other way (index-8 rails) */
+        const area2 = root.querySelector(".at-item-anime-area-2");
+        const strips2 = root.querySelectorAll(".at-item-anime-2.marque");
+        if (area2 && strips2.length) {
+          gsap.fromTo(strips2, { x: "-35%" }, { x: "200%", ease: "none", scrollTrigger: { trigger: area2, start: "-1000 0%", end: "bottom 0%", scrub: true, invalidateOnRefresh: true } });
+        }
+
+        /* photos / cards drifting at their own speed, alternating direction
+           [data-parallax-range] travels ±range/2, [data-card-parallax] ±range */
+        const narrow = window.innerWidth < 768;
+        const drift = (selector: string, attr: string, half: boolean, mobile: number, scrub: number) => {
+          root.querySelectorAll<HTMLElement>(selector).forEach((box, i) => {
+            const range = (parseFloat(box.getAttribute(attr) ?? "") || 60) * (narrow ? mobile : 1) * (half ? 0.5 : 1);
+            const dir = i % 2 === 0 ? 1 : -1;
+            gsap.fromTo(
+              box,
+              { y: range * dir },
+              {
+                y: -range * dir,
+                ease: box.dataset.parallaxEase || "none",
+                scrollTrigger: { trigger: box.closest("section") ?? box, start: "top bottom", end: "bottom top", scrub, invalidateOnRefresh: true },
+              },
+            );
+          });
+        };
+        drift("[data-parallax-range]", "data-parallax-range", true, 0.55, 0.85);
+        drift("[data-card-parallax]", "data-card-parallax", false, 0.5, 0.75);
+
+        /* picture that settles from a zoom as it scrolls in */
+        root.querySelectorAll<HTMLElement>(".scale-img-from-to").forEach((img) => {
+          const from = parseFloat(img.dataset.value1 ?? "") || 1.5;
+          const to = parseFloat(img.dataset.value2 ?? "") || 1;
+          gsap.fromTo(img, { scale: from }, { scale: to, ease: "none", scrollTrigger: { trigger: img.parentElement ?? img, start: "top bottom", end: "bottom center", scrub: 1 } });
+        });
+
+        /* asterisk that turns with the scroll */
+        root.querySelectorAll<HTMLElement>(".at-scroll-rotate").forEach((el) => {
+          gsap.to(el, { rotation: 360, ease: "none", scrollTrigger: { trigger: el.closest("section") ?? el, start: "top bottom", end: "bottom top", scrub: 1 } });
+        });
+
+        mm.add("(min-width: 992px)", () => {
+          /* gentle lift on scroll */
+          root.querySelectorAll<HTMLElement>(".scroll-move-up").forEach((el) => {
+            gsap.to(el, { y: -100, scrollTrigger: { trigger: el, start: "top 70%", scrub: 1 } });
+          });
+
+          /* index-8 testimonials: pin the stage, cards rise past the title */
+          const stage = root.querySelector<HTMLElement>(".sec-8-home-8__stage");
+          const center = stage?.querySelector<HTMLElement>(".sec-8-home-8__center");
+          const groups = stage ? Array.from(stage.querySelectorAll<HTMLElement>(".sec-8-home-8__group")) : [];
+          if (stage && center && groups.length) {
+            const distance = () => Math.max(0, Math.max(...groups.map((g) => g.offsetTop + g.offsetHeight)) - center.offsetTop);
+            gsap
+              .timeline({ scrollTrigger: { trigger: center, start: "top 10%", end: () => `+=${distance()}`, pin: stage, pinSpacing: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true } })
+              .to(groups, { y: () => -distance(), ease: "none" }, 0);
+          }
+        });
       }, root);
+    }
+
+    /* ── letters that stretch under the pointer (.text-scale-anim) ── */
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      root.querySelectorAll<HTMLElement>(".text-scale-anim").forEach((heading) => {
+        const original = heading.innerHTML;
+        const parts: Node[] = [];
+        heading.childNodes.forEach((node) => {
+          if (node.nodeType !== Node.TEXT_NODE) return void parts.push(node.cloneNode(true));
+          const words = (node.textContent ?? "").split(" ");
+          words.forEach((word, w) => {
+            if (word) {
+              const wordSpan = document.createElement("span");
+              wordSpan.className = "at-word-span";
+              Array.from(word).forEach((ch) => {
+                const letter = document.createElement("span");
+                letter.className = "at-letter-span";
+                letter.textContent = ch;
+                wordSpan.appendChild(letter);
+              });
+              parts.push(wordSpan);
+            }
+            if (w < words.length - 1) parts.push(document.createTextNode(" "));
+          });
+        });
+        heading.replaceChildren(...parts);
+        const letters = Array.from(heading.querySelectorAll<HTMLElement>(".at-letter-span"));
+        const stretch = (el: HTMLElement | undefined, scaleY: number, y: string) => el && gsap.to(el, { scaleY, y, duration: 0.4, ease: "sine" });
+        letters.forEach((letter, i) => {
+          on(letter, "mouseenter", () => {
+            stretch(letter, 1.6, "-24%");
+            stretch(letters[i - 1], 1.3, "-12%");
+            stretch(letters[i + 1], 1.3, "-12%");
+          });
+          on(letter, "mouseleave", () => [letter, letters[i - 1], letters[i + 1]].forEach((el) => stretch(el, 1, "0%")));
+        });
+        off.push(() => {
+          gsap.killTweensOf(letters);
+          heading.innerHTML = original;
+        });
+      });
     }
 
     return () => {

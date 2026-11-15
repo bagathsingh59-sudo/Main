@@ -10,7 +10,7 @@ import { Logo } from "./Logo";
 import { UiEffectOverlay, type UiEffectKind } from "./UiEffectOverlay";
 import { cn } from "@/utils/cn";
 
-type StripCtaStyle =
+export type StripCtaStyle =
   | "solid"
   | "outline"
   | "glow"
@@ -21,7 +21,7 @@ type StripCtaStyle =
   | "gradient-shadow"
   | "neubrutalism";
 
-interface BannerData {
+export interface BannerData {
   message: string;
   linkUrl?: string;
   linkLabel?: string;
@@ -65,7 +65,7 @@ const BANNER_TONE: Record<BannerData["tone"], string> = {
  * Style variants for the strip — the "neutral" path preserves the
  * existing solid-tone behaviour so saved settings render identically.
  */
-const BANNER_STYLE: Record<NonNullable<BannerData["style"]>, (tone: BannerData["tone"]) => string> = {
+export const BANNER_STYLE: Record<NonNullable<BannerData["style"]>, (tone: BannerData["tone"]) => string> = {
   neutral: (tone) => `${BANNER_TONE[tone] ?? BANNER_TONE.info} text-white`,
   gradient: () =>
     "bg-gradient-to-r from-navy-700 via-navy-600 to-teal-500 text-white shadow-[0_2px_18px_-8px_rgba(13,42,84,0.6)]",
@@ -308,7 +308,7 @@ export function Navbar({ links, logoUrl, banner, maintenance }: NavbarProps = {}
  * options used by popup/floating/sticky, but with tighter padding so
  * it fits inside a one-row strip.
  */
-function stripCtaClass(style: BannerData["style"], ctaStyle: NonNullable<StripCtaStyle>): string {
+export function stripCtaClass(style: BannerData["style"], ctaStyle: NonNullable<StripCtaStyle>): string {
   const light = style === "neutral" || style === "apple-glass" || style === "glass";
   // On dark strips (gradient/branded/info-navy) the button is white-on-dark,
   // matching the legibility math from SitePromo's ctaClass.
@@ -348,7 +348,7 @@ function stripCtaClass(style: BannerData["style"], ctaStyle: NonNullable<StripCt
   }
 }
 
-function StripCtaInner({ ctaStyle, label }: { ctaStyle: NonNullable<StripCtaStyle>; label: string }) {
+export function StripCtaInner({ ctaStyle, label }: { ctaStyle: NonNullable<StripCtaStyle>; label: string }) {
   if (ctaStyle === "shimmer") {
     return (
       <>

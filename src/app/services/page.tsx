@@ -14,6 +14,7 @@ import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { SERVICES } from "@/constants/services";
+import { contactForm, faqItems, serviceRows } from "@/components/orisa/fromSettings";
 import { getSiteSettings } from "@/services/settings";
 
 const PAGE_TITLE = "Services — EPF, ESI, GST, Payroll & Tax Compliance";
@@ -48,15 +49,15 @@ export default async function ServicesPage() {
 
       {/* Orisa "Service 01", everything after its hero */}
       <LegacySection id="services">
-        <SvcPanels />
+        <SvcPanels items={serviceRows(settings)} />
       </LegacySection>
       <GalleryWall {...HOME_GALLERY} />
       <PricingPlans {...SERVICE_PRICING} />
       <LegacySection id="faq">
-        <FaqBlock />
+        <FaqBlock items={faqItems(settings)} />
       </LegacySection>
       <LegacySection id="contact">
-        <ContactBlock />
+        <ContactBlock {...contactForm(settings)} />
       </LegacySection>
     </OrisaLayout>
   );

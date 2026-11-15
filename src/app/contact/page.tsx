@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { OrisaLayout } from "@/components/orisa/OrisaLayout";
 import { LegacySection } from "@/components/orisa/legacy/LegacySection";
 import { ContactBlock } from "@/components/orisa/legacy/ContactBlock";
+import { contactForm } from "@/components/orisa/fromSettings";
 import { ProcessTimeline } from "@/components/orisa/sections/ProcessTimeline";
 import { CtaPanel } from "@/components/orisa/sections/CtaPanel";
 import { LicenseStrip } from "@/components/orisa/sections/LicenseStrip";
@@ -39,7 +40,7 @@ export default async function ContactPage() {
       {/* Orisa "Contact 01": heading, office details and the message form
           (the form posts to the existing lead API). */}
       <LegacySection id="contact">
-        <ContactBlock />
+        <ContactBlock {...contactForm(settings)} />
       </LegacySection>
 
       {/* Previous design's "Book a consultation" block → process timeline */}

@@ -13,6 +13,7 @@ import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { getSiteSettings } from "@/services/settings";
+import { blogPosts, contactForm, linkedinUrl, teamMembers } from "@/components/orisa/fromSettings";
 
 const PAGE_TITLE = "About Us — 15 Years of Trusted Compliance";
 const PAGE_DESC =
@@ -22,7 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("about", "/about");
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getSiteSettings();
   return (
     <OrisaLayout>
       <JsonLd
@@ -37,7 +39,7 @@ export default function AboutPage() {
 
       {/* Orisa "About 02" hero (wordmark, social link, banner) */}
       <LegacySection>
-        <AboutTwoHero />
+        <AboutTwoHero linkedinUrl={linkedinUrl(settings)} />
       </LegacySection>
 
       {/* Orisa "About 01", every section after its hero, in the template's order */}
@@ -51,13 +53,13 @@ export default function AboutPage() {
         <AwardsBlock />
       </LegacySection>
       <LegacySection id="team">
-        <TeamBlock />
+        <TeamBlock members={teamMembers(settings)} />
       </LegacySection>
       <LegacySection id="contact">
-        <ContactBlock />
+        <ContactBlock {...contactForm(settings)} />
       </LegacySection>
       <LegacySection>
-        <BlogBlock />
+        <BlogBlock posts={blogPosts(settings)} />
       </LegacySection>
       <LegacySection>
         <BrandScroll />

@@ -13,3 +13,6 @@ coverage/
 # Local content-audit dump (generated for owner)
 content-audit/
 vaishnavi-content-audit.zip
+
+# Local settings store (SETTINGS_FILE)
+/.data/

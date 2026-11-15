@@ -1,7 +1,72 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `about-1.html` (.home-3-section-11) by scripts/orisa/port-section.py.
-// Template copy and images are kept as placeholders — edit freely.
-export function BlogBlock() {
+// Cards come from Admin → Blog (published posts); the defaults below show when it is empty.
+import Link from "next/link";
+
+export interface BlogBlockPost {
+  title: string;
+  category: string;
+  author: string;
+  date: string;
+  href: string;
+  image: string;
+}
+
+/** Template images used for posts without a cover image. */
+export const BLOG_FALLBACK_IMAGES = ["/orisa/tpl/pages/img-71.webp", "/orisa/tpl/pages/img-72.webp", "/orisa/tpl/pages/img-73.webp", "/orisa/tpl/pages/img-51.webp", "/orisa/tpl/pages/img-52.webp", "/orisa/tpl/pages/img-53.webp"];
+
+export const DEFAULT_POSTS: BlogBlockPost[] = [
+  {
+    "category": "Payroll",
+    "title": "The 2026 Payroll Compliance Checklist for Indian Businesses",
+    "author": "Vaishnavi desk",
+    "date": "May 2026",
+    "href": "/insights",
+    "image": "/orisa/tpl/pages/img-71.webp"
+  },
+  {
+    "category": "GST",
+    "title": "Reading GSTR-2B vs 2A: The Reconciliation Mistakes Costing You ITC",
+    "author": "Vaishnavi desk",
+    "date": "Apr 2026",
+    "href": "/insights",
+    "image": "/orisa/tpl/pages/img-72.webp"
+  },
+  {
+    "category": "Income Tax",
+    "title": "Section 43B(h) MSME Payments: A Complete Implementation Guide",
+    "author": "Vaishnavi desk",
+    "date": "Apr 2026",
+    "href": "/insights",
+    "image": "/orisa/tpl/pages/img-73.webp"
+  },
+  {
+    "category": "Labour Law",
+    "title": "Wage Code 2025: What Changes for Payroll, PF, and Gratuity",
+    "author": "Vaishnavi desk",
+    "date": "Mar 2026",
+    "href": "/insights",
+    "image": "/orisa/tpl/pages/img-51.webp"
+  },
+  {
+    "category": "CFO",
+    "title": "Building a Fund-Raise Ready Data Room in 21 Days",
+    "author": "Vaishnavi desk",
+    "date": "Mar 2026",
+    "href": "/insights",
+    "image": "/orisa/tpl/pages/img-52.webp"
+  },
+  {
+    "category": "RegTech",
+    "title": "When to Replace Your Compliance Spreadsheet with a Platform",
+    "author": "Vaishnavi desk",
+    "date": "Feb 2026",
+    "href": "/insights",
+    "image": "/orisa/tpl/pages/img-53.webp"
+  }
+];
+
+export function BlogBlock({ posts = DEFAULT_POSTS }: { posts?: BlogBlockPost[] }) {
   return (
     <div className="home-3-section-11 overflow-hidden pb-100">
       <div className="container section-fix pt-100">
@@ -51,186 +116,34 @@ export function BlogBlock() {
             <div className="scroll-section vertical-section section">
               <div className="wrapper">
                 <div className="list" role="list">
-                  <div className="item">
-                    <article className="blog-card-2 bg-neutral-0 py-5">
-                      <div className="blog-card-2__left flex-grow-1">
-                        <span className="blog-card-2__category">
-                          Payroll
-                        </span>
-                        <h4 className="h6 blog-card-2__title">
-                          <a className="blog-card-2__title-link" href="/insights">
-                            The 2026 Payroll Compliance Checklist for Indian Businesses
-                          </a>
-                        </h4>
-                        <p className="blog-card-2__meta">
-                          <span className="blog-card-2__meta-text">
-                            {"By "}
-                          </span>
-                          <a className="blog-card-2__author" href="/about#team">
-                            Vaishnavi desk
-                          </a>
-                          <span className="blog-card-2__meta-text">
-                            {" – May 2026"}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="blog-card-2__thumb hover-effect-1">
-                        <a className="blog-card-2__img-link" href="/insights">
-                          <img className="blog-card-2__img" src="/orisa/tpl/pages/img-71.webp" alt="" />
-                        </a>
-                      </div>
-                    </article>
-                  </div>
-                  <div className="item">
-                    <article className="blog-card-2 bg-neutral-0 py-5">
-                      <div className="blog-card-2__left flex-grow-1">
-                        <span className="blog-card-2__category">
-                          GST
-                        </span>
-                        <h4 className="h6 blog-card-2__title">
-                          <a className="blog-card-2__title-link" href="/insights">
-                            Reading GSTR-2B vs 2A: The Reconciliation Mistakes Costing You ITC
-                          </a>
-                        </h4>
-                        <p className="blog-card-2__meta">
-                          <span className="blog-card-2__meta-text">
-                            {"By "}
-                          </span>
-                          <a className="blog-card-2__author" href="/about#team">
-                            Vaishnavi desk
-                          </a>
-                          <span className="blog-card-2__meta-text">
-                            {" – Apr 2026"}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="blog-card-2__thumb hover-effect-1">
-                        <a className="blog-card-2__img-link" href="/insights">
-                          <img className="blog-card-2__img" src="/orisa/tpl/pages/img-72.webp" alt="" />
-                        </a>
-                      </div>
-                    </article>
-                  </div>
-                  <div className="item">
-                    <article className="blog-card-2 bg-neutral-0 py-5">
-                      <div className="blog-card-2__left flex-grow-1">
-                        <span className="blog-card-2__category">
-                          Income Tax
-                        </span>
-                        <h4 className="h6 blog-card-2__title">
-                          <a className="blog-card-2__title-link" href="/insights">
-                            Section 43B(h) MSME Payments: A Complete Implementation Guide
-                          </a>
-                        </h4>
-                        <p className="blog-card-2__meta">
-                          <span className="blog-card-2__meta-text">
-                            {"By "}
-                          </span>
-                          <a className="blog-card-2__author" href="/about#team">
-                            Vaishnavi desk
-                          </a>
-                          <span className="blog-card-2__meta-text">
-                            {" – Apr 2026"}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="blog-card-2__thumb hover-effect-1">
-                        <a className="blog-card-2__img-link" href="/insights">
-                          <img className="blog-card-2__img" src="/orisa/tpl/pages/img-73.webp" alt="" />
-                        </a>
-                      </div>
-                    </article>
-                  </div>
-                  <div className="item">
-                    <article className="blog-card-2 bg-neutral-0 py-5">
-                      <div className="blog-card-2__left flex-grow-1">
-                        <span className="blog-card-2__category">
-                          Labour Law
-                        </span>
-                        <h4 className="h6 blog-card-2__title">
-                          <a className="blog-card-2__title-link" href="/insights">
-                            Wage Code 2025: What Changes for Payroll, PF, and Gratuity
-                          </a>
-                        </h4>
-                        <p className="blog-card-2__meta">
-                          <span className="blog-card-2__meta-text">
-                            {"By "}
-                          </span>
-                          <a className="blog-card-2__author" href="/about#team">
-                            Vaishnavi desk
-                          </a>
-                          <span className="blog-card-2__meta-text">
-                            {" – Mar 2026"}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="blog-card-2__thumb hover-effect-1">
-                        <a className="blog-card-2__img-link" href="/insights">
-                          <img className="blog-card-2__img" src="/orisa/tpl/pages/img-51.webp" alt="" />
-                        </a>
-                      </div>
-                    </article>
-                  </div>
-                  <div className="item">
-                    <article className="blog-card-2 bg-neutral-0 py-5">
-                      <div className="blog-card-2__left flex-grow-1">
-                        <span className="blog-card-2__category">
-                          CFO
-                        </span>
-                        <h4 className="h6 blog-card-2__title">
-                          <a className="blog-card-2__title-link" href="/insights">
-                            Building a Fund-Raise Ready Data Room in 21 Days
-                          </a>
-                        </h4>
-                        <p className="blog-card-2__meta">
-                          <span className="blog-card-2__meta-text">
-                            {"By "}
-                          </span>
-                          <a className="blog-card-2__author" href="/about#team">
-                            Vaishnavi desk
-                          </a>
-                          <span className="blog-card-2__meta-text">
-                            {" – Mar 2026"}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="blog-card-2__thumb hover-effect-1">
-                        <a className="blog-card-2__img-link" href="/insights">
-                          <img className="blog-card-2__img" src="/orisa/tpl/pages/img-52.webp" alt="" />
-                        </a>
-                      </div>
-                    </article>
-                  </div>
-                  <div className="item">
-                    <article className="blog-card-2 bg-neutral-0 py-5">
-                      <div className="blog-card-2__left flex-grow-1">
-                        <span className="blog-card-2__category">
-                          RegTech
-                        </span>
-                        <h4 className="h6 blog-card-2__title">
-                          <a className="blog-card-2__title-link" href="/insights">
-                            When to Replace Your Compliance Spreadsheet with a Platform
-                          </a>
-                        </h4>
-                        <p className="blog-card-2__meta">
-                          <span className="blog-card-2__meta-text">
-                            {"By "}
-                          </span>
-                          <a className="blog-card-2__author" href="/about#team">
-                            Vaishnavi desk
-                          </a>
-                          <span className="blog-card-2__meta-text">
-                            {" – Feb 2026"}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="blog-card-2__thumb hover-effect-1">
-                        <a className="blog-card-2__img-link" href="/insights">
-                          <img className="blog-card-2__img" src="/orisa/tpl/pages/img-53.webp" alt="" />
-                        </a>
-                      </div>
-                    </article>
-                  </div>
+                  {posts.map((p) => (
+                    <div key={p.href + p.title} className="item">
+                      <article className="blog-card-2 bg-neutral-0 py-5">
+                        <div className="blog-card-2__left flex-grow-1">
+                          {p.category && <span className="blog-card-2__category">{p.category}</span>}
+                          <h4 className="h6 blog-card-2__title">
+                            <Link className="blog-card-2__title-link" href={p.href}>
+                              {p.title}
+                            </Link>
+                          </h4>
+                          <p className="blog-card-2__meta">
+                            {p.author && (
+                              <>
+                                <span className="blog-card-2__meta-text">{"By "}</span>
+                                <span className="blog-card-2__author">{p.author}</span>
+                              </>
+                            )}
+                            {p.date && <span className="blog-card-2__meta-text">{`${p.author ? " – " : ""}${p.date}`}</span>}
+                          </p>
+                        </div>
+                        <div className="blog-card-2__thumb hover-effect-1">
+                          <Link className="blog-card-2__img-link" href={p.href} tabIndex={-1} aria-hidden="true">
+                            <img className="blog-card-2__img" src={p.image} alt="" />
+                          </Link>
+                        </div>
+                      </article>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

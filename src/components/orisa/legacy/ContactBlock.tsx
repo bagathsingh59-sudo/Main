@@ -1,7 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `services-1.html` (.sec-4-about) by scripts/orisa/port-section.py.
-// Template copy and images are kept as placeholders — edit freely.
-export function ContactBlock() {
+// Service and company-size options come from Admin → Form config.
+export interface ContactBlockProps {
+  services?: string[];
+  sizes?: string[];
+  /** Admin → Maintenance: forms paused. */
+  disabledMessage?: string;
+}
+
+export function ContactBlock({ services = [], sizes = [], disabledMessage }: ContactBlockProps) {
   return (
     <div className="sec-4-about bg-neutral-50 pt-120 pb-120">
       <div className="container">
@@ -138,7 +145,12 @@ export function ContactBlock() {
             </div>
           </div>
           <div className="col-xxl-8 col-lg-7 ms-auto pt-lg-0 pt-30">
-            <form className="sec-4-about-form" action="#" method="post">
+            {disabledMessage && (
+              <p className="sec-4-about-form__paused mb-20" role="status">
+                {disabledMessage}
+              </p>
+            )}
+            <form className="sec-4-about-form" action="#" method="post" data-disabled={disabledMessage ? "" : undefined}>
               <div className="sec-4-about-form__field">
                 <input className="sec-4-about-form__input" type="text" name="name" placeholder="Your name *" required aria-label="Your name" />
               </div>
@@ -148,6 +160,34 @@ export function ContactBlock() {
               <div className="sec-4-about-form__field">
                 <input className="sec-4-about-form__input" type="tel" name="phone" placeholder="Your phone *" required aria-label="Your phone" />
               </div>
+              {services.length > 0 && (
+                <div className="sec-4-about-form__field">
+                  <select className="sec-4-about-form__input" name="service" required aria-label="Service you need" defaultValue="">
+                    <option value="" disabled>
+                      Service you need *
+                    </option>
+                    {services.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              {sizes.length > 0 && (
+                <div className="sec-4-about-form__field">
+                  <select className="sec-4-about-form__input" name="companySize" required aria-label="Company size" defaultValue="">
+                    <option value="" disabled>
+                      Company size (employees) *
+                    </option>
+                    {sizes.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div className="sec-4-about-form__field">
                 <textarea className="sec-4-about-form__input sec-4-about-form__textarea" name="message" placeholder="Your message *" rows={5} required aria-label="Your message" />
               </div>

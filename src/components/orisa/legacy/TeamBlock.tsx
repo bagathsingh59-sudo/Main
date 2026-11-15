@@ -1,7 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `about-1.html` (.home-3-section-9) by scripts/orisa/port-section.py.
-// Template copy and images are kept as placeholders — edit freely.
-export function TeamBlock() {
+// Cards come from Admin → Team; the defaults below show when it is empty.
+export interface TeamBlockMember {
+  id: string;
+  name: string;
+  role: string;
+  image: string;
+  initials: string;
+  accent: string;
+  linkedinUrl: string;
+}
+
+export const DEFAULT_TEAM: TeamBlockMember[] = [
+  { id: "d1", name: "Rakesh Bhatia", role: "Partner — Payroll & Labour Law", image: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=480&q=80&auto=format&fit=crop", initials: "RB", accent: "", linkedinUrl: "" },
+  { id: "d2", name: "Aishwarya Rao", role: "Head of Compliance Technology", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=480&q=80&auto=format&fit=crop", initials: "AR", accent: "", linkedinUrl: "" },
+  { id: "d3", name: "Prasad Iyengar", role: "Head of Virtual CFO Practice", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=480&q=80&auto=format&fit=crop", initials: "PI", accent: "", linkedinUrl: "" },
+  { id: "d4", name: "Compliance desk", role: "10+ in-house professionals", image: "/orisa/tpl/pages/img-20.webp", initials: "CD", accent: "", linkedinUrl: "" },
+];
+
+export function TeamBlock({ members = DEFAULT_TEAM }: { members?: TeamBlockMember[] }) {
   return (
     <div className="home-3-section-9 p-relative">
       <div className="position-absolute w-100 h-100 d-grid top-0 md:grid-cols-7 gap-0 z-n1 opacity-10">
@@ -78,102 +95,39 @@ export function TeamBlock() {
             </div>
           </div>
           <div className="row pt-80 g-4">
-            <div className="col-lg-3 col-md-6 pt-md-5 changeless">
-              <div className="team-card">
-                <div className="team-card-image">
-                  <div data-zoomin="">
-                    <img className="img-cover" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=480&q=80&auto=format&fit=crop" alt="Darrell Steward" />
+            {members.map((m, i) => {
+              const href = m.linkedinUrl || "/contact";
+              const external = /^https?:/.test(href);
+              const linkProps = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+              return (
+                <div key={m.id} className={`col-lg-3 col-md-6 changeless${i % 2 === 0 ? " pt-md-5" : ""}`}>
+                  <div className="team-card">
+                    <div className="team-card-image">
+                      <div data-zoomin="">
+                        {m.image ? (
+                          <img className="img-cover" src={m.image} alt={m.name} />
+                        ) : (
+                          <div className={`img-cover o-team-initials bg-gradient-to-br ${m.accent || "from-navy-600 to-teal-500"}`} aria-hidden="true">
+                            {m.initials || m.name.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <a className="team-card-icon" href={href} aria-label={`${m.name}${external ? " on LinkedIn" : ""}`} {...linkProps}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                        <path d="M7.85986 2.43872L1.7123 8.58629L0.702148 7.57614L6.84971 1.42857H1.43131V0H9.28843V7.85714H7.85986V2.43872Z" fill="currentColor" />
+                      </svg>
+                    </a>
+                    <div className="team-card-content">
+                      <a className="team-card-name" href={href} {...linkProps}>
+                        <h2 className="h6 fz-font-2xl">{m.name}</h2>
+                      </a>
+                      {m.role && <p className="team-card-position fz-font-sm m-0 common-white">{m.role}</p>}
+                    </div>
                   </div>
                 </div>
-                <a className="team-card-icon" href="/contact">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M7.85986 2.43872L1.7123 8.58629L0.702148 7.57614L6.84971 1.42857H1.43131V0H9.28843V7.85714H7.85986V2.43872Z" fill="currentColor" />
-                  </svg>
-                </a>
-                <div className="team-card-content">
-                  <a className="team-card-name" href="/contact">
-                    <h2 className="h6 fz-font-2xl">
-                      Rakesh Bhatia
-                    </h2>
-                  </a>
-                  <p className="team-card-position fz-font-sm m-0 common-white">
-                    {"Partner — Payroll & Labour Law"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 changeless">
-              <div className="team-card">
-                <div className="team-card-image">
-                  <div data-zoomin="">
-                    <img className="img-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=480&q=80&auto=format&fit=crop" alt="Amelia Courtney" />
-                  </div>
-                </div>
-                <a className="team-card-icon" href="/contact">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M7.85986 2.43872L1.7123 8.58629L0.702148 7.57614L6.84971 1.42857H1.43131V0H9.28843V7.85714H7.85986V2.43872Z" fill="currentColor" />
-                  </svg>
-                </a>
-                <div className="team-card-content">
-                  <a className="team-card-name" href="/contact">
-                    <h2 className="h6 fz-font-2xl">
-                      Aishwarya Rao
-                    </h2>
-                  </a>
-                  <p className="team-card-position fz-font-sm m-0 common-white">
-                    Head of Compliance Technology
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 pt-md-5 changeless">
-              <div className="team-card">
-                <div className="team-card-image">
-                  <div data-zoomin="">
-                    <img className="img-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=480&q=80&auto=format&fit=crop" alt="Esther Howard" />
-                  </div>
-                </div>
-                <a className="team-card-icon" href="/contact">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M7.85986 2.43872L1.7123 8.58629L0.702148 7.57614L6.84971 1.42857H1.43131V0H9.28843V7.85714H7.85986V2.43872Z" fill="currentColor" />
-                  </svg>
-                </a>
-                <div className="team-card-content">
-                  <a className="team-card-name" href="/contact">
-                    <h2 className="h6 fz-font-2xl">
-                      Prasad Iyengar
-                    </h2>
-                  </a>
-                  <p className="team-card-position fz-font-sm m-0 common-white">
-                    Head of Virtual CFO Practice
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 changeless">
-              <div className="team-card">
-                <div className="team-card-image">
-                  <div data-zoomin="">
-                    <img className="img-cover" src="/orisa/tpl/pages/img-20.webp" alt="Jacob Jones" />
-                  </div>
-                </div>
-                <a className="team-card-icon" href="/contact">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M7.85986 2.43872L1.7123 8.58629L0.702148 7.57614L6.84971 1.42857H1.43131V0H9.28843V7.85714H7.85986V2.43872Z" fill="currentColor" />
-                  </svg>
-                </a>
-                <div className="team-card-content">
-                  <a className="team-card-name" href="/contact">
-                    <h2 className="h6 fz-font-2xl">
-                      Compliance desk
-                    </h2>
-                  </a>
-                  <p className="team-card-position fz-font-sm m-0 common-white">
-                    10+ in-house professionals
-                  </p>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
           <div className="row">
             <div className="col-12 order-5">

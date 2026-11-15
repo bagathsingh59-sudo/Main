@@ -1,7 +1,31 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `services-1.html` (.alt-faq-area) by scripts/orisa/port-section.py.
-// Template copy and images are kept as placeholders — edit freely.
-export function FaqBlock() {
+// Questions come from Admin → FAQ; the defaults below show when it is empty.
+export interface FaqBlockItem {
+  question: string;
+  answer: string;
+}
+
+export const DEFAULT_FAQ: FaqBlockItem[] = [
+  {
+    "question": "How do you make sure filings are never late?",
+    "answer": "Every client gets a named compliance manager, a four-eye review on each filing, deadline trackers and a pre-filing check. If a penalty arises from our oversight, we cover it."
+  },
+  {
+    "question": "How long does onboarding take?",
+    "answer": "Usually 7–14 working days: a compliance health-check on day one, the engagement plan by day three and your filings running by week two."
+  },
+  {
+    "question": "Can we switch to you in the middle of the year?",
+    "answer": "Yes. We collect the data from your previous consultant, reconcile past filings and take over without interrupting any ongoing return."
+  },
+  {
+    "question": "Do you handle GST notices and assessments?",
+    "answer": "Yes. Drafting replies to notices and representing you at hearings are part of our GST and income-tax services."
+  }
+];
+
+export function FaqBlock({ items = DEFAULT_FAQ }: { items?: FaqBlockItem[] }) {
   return (
     <div className="alt-faq-area pt-145 pb-80 border-top-100">
       <div className="container">
@@ -57,83 +81,33 @@ export function FaqBlock() {
               <h3 className="at-section-title fw-600" data-reveal="">
                 {" Straight answers to the questions business owners ask us first. "}
               </h3>
-              <div className="accordion pt-80" id="accordionExample">
-                <div className="at-faq-item scroll-move-up rounded-4">
-                  <div className="at-faq-header d-flex gap-2">
-                    <div className="box-number">
-                      <span className="at-faq-number">
-                        1
-                      </span>
+              <div className="accordion pt-80" id="faqAccordion">
+                {items.map((item, i) => (
+                  <div key={item.question} className="at-faq-item scroll-move-up rounded-4">
+                    <div className="at-faq-header d-flex gap-2">
+                      <div className="box-number">
+                        <span className="at-faq-number">{i + 1}</span>
+                      </div>
+                      <button
+                        className={i === 0 ? "at-faq-button" : "at-faq-button collapsed"}
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target={`#faq-${i}`}
+                        aria-expanded={i === 0}
+                        aria-controls={`faq-${i}`}
+                      >
+                        {item.question}
+                      </button>
                     </div>
-                    <button className="at-faq-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      How do you make sure filings are never late?
-                    </button>
-                  </div>
-                  <div className="at-faq-collapse collapse show" id="collapseOne" data-bs-parent="#accordionExample">
-                    <div className="at-faq-body">
-                      <p>
-                        Every client gets a named compliance manager, a four-eye review on each filing, deadline trackers and a pre-filing check. If a penalty arises from our oversight, we cover it.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="at-faq-item scroll-move-up rounded-4">
-                  <div className="at-faq-header d-flex gap-2">
-                    <div className="box-number">
-                      <span className="at-faq-number">
-                        2
-                      </span>
-                    </div>
-                    <button className="at-faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                      How long does onboarding take?
-                    </button>
-                  </div>
-                  <div className="at-faq-collapse collapse" id="collapseTwo" data-bs-parent="#accordionExample">
-                    <div className="at-faq-body">
-                      <p>
-                        Usually 7–14 working days: a compliance health-check on day one, the engagement plan by day three and your filings running by week two.
-                      </p>
+                    <div className={i === 0 ? "at-faq-collapse collapse show" : "at-faq-collapse collapse"} id={`faq-${i}`} data-bs-parent="#faqAccordion">
+                      <div className="at-faq-body">
+                        {item.answer.split(/\n{2,}/).map((para, j) => (
+                          <p key={j}>{para}</p>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="at-faq-item scroll-move-up rounded-4">
-                  <div className="at-faq-header d-flex gap-2">
-                    <div className="box-number">
-                      <span className="at-faq-number">
-                        3
-                      </span>
-                    </div>
-                    <button className="at-faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      Can we switch to you in the middle of the year?
-                    </button>
-                  </div>
-                  <div className="at-faq-collapse collapse" id="collapseThree" data-bs-parent="#accordionExample">
-                    <div className="at-faq-body">
-                      <p>
-                        Yes. We collect the data from your previous consultant, reconcile past filings and take over without interrupting any ongoing return.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="at-faq-item scroll-move-up rounded-4">
-                  <div className="at-faq-header d-flex gap-2">
-                    <div className="box-number">
-                      <span className="at-faq-number">
-                        4
-                      </span>
-                    </div>
-                    <button className="at-faq-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                      Do you handle GST notices and assessments?
-                    </button>
-                  </div>
-                  <div className="at-faq-collapse collapse" id="collapseFour" data-bs-parent="#accordionExample">
-                    <div className="at-faq-body">
-                      <p>
-                        Yes. Drafting replies to notices and representing you at hearings are part of our GST and income-tax services.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>

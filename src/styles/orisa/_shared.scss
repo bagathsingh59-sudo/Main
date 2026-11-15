@@ -366,3 +366,76 @@
 .orisa {
 	overflow-x: clip;
 }
+
+/* Team card without a photo (Admin → Team, no image uploaded). */
+.o-legacy .o-team-initials {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 3 / 4;
+	color: #fff;
+	font-size: clamp(40px, 5vw, 72px);
+	font-weight: 600;
+	letter-spacing: -0.03em;
+}
+
+/* Contact form: admin-driven selects + paused state (Admin → Maintenance). */
+.o-legacy select.sec-4-about-form__input {
+	appearance: none;
+	-webkit-appearance: none;
+	padding-right: 36px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%23888' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	cursor: pointer;
+
+	&:invalid {
+		color: var(--at-neutral-500, #8a8a8a);
+	}
+}
+.o-legacy .sec-4-about-form[data-disabled] {
+	opacity: 0.5;
+	pointer-events: none;
+}
+.o-legacy .sec-4-about-form__paused {
+	padding: 12px 16px;
+	border-radius: 10px;
+	background: #fef3c7;
+	color: #92400e;
+	font-weight: 500;
+}
+
+/* Long footer email wraps instead of running off narrow screens. */
+.o-footer-4 .at-footer-area h3 a {
+	overflow-wrap: anywhere;
+}
+
+/* Index-8 logo strip used with words until there are client logos. */
+.o-legacy .brand-item .o-brand-word {
+	display: inline-block;
+	font-size: clamp(18px, 1.6vw, 28px);
+	font-weight: 600;
+	letter-spacing: -0.03em;
+	white-space: nowrap;
+	color: var(--at-neutral-900);
+	opacity: 0.55;
+	padding-inline: clamp(24px, 3vw, 56px);
+}
+
+/* Index-8 CTA card: keep the caption readable over an app screenshot. */
+.o-legacy .sec-9-home-8__card-media {
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to top, rgba(6, 18, 42, 0.88) 0%, rgba(6, 18, 42, 0.35) 55%, rgba(6, 18, 42, 0) 100%);
+		pointer-events: none;
+	}
+}
+/* Lead article card: long admin titles stop at three lines. */
+.o-legacy .home-5-section-8 .alt-portfolio-btn h3 {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}

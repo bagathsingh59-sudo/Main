@@ -66,16 +66,16 @@ export function A2Figures() {
               <div className="cart-stats__item scroll-move-up" data-fade="bottom" data-delay=".3">
                 <div className="cart-stats__item-title">
                   <h3 className="fz-ds-1 fw-500 cart-stats__item-number text-nowrap mb-0">
-                    <span data-count="8" />
+                    <span data-count="25" />
                     +
                   </h3>
                   <h4 className="h6 fw-500 mb-0">
-                    Years in practice
+                    Years of practice
                   </h4>
                 </div>
                 <div className="cart-stats__item-content">
                   <p className="mb-0 fz-font-lg fw-500 neutral-900">
-                    Helping businesses stay compliant since 2018, with the same team answering your calls.
+                    Combined practitioner experience behind a firm registered in Kalaburagi in 2018.
                   </p>
                 </div>
               </div>

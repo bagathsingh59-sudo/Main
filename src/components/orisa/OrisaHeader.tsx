@@ -169,7 +169,7 @@ export function OrisaHeader({
                   width={34}
                   height={34}
                 />
-                <span className="at-header-logo__word">Vaishnavi</span>
+                <span className="at-header-logo__word">Vaishnavi Consultant</span>
               </Link>
             </div>
 
@@ -246,7 +246,7 @@ export function OrisaHeader({
                   width={30}
                   height={30}
                 />
-                <span className="at-header-logo__word">Vaishnavi</span>
+                <span className="at-header-logo__word">Vaishnavi Consultant</span>
               </Link>
             </div>
 
@@ -367,7 +367,7 @@ export function OrisaHeader({
                 width={34}
                 height={34}
               />
-              <span className="at-header-logo__word">Vaishnavi</span>
+              <span className="at-header-logo__word">Vaishnavi Consultant</span>
             </Link>
           </div>
           <button

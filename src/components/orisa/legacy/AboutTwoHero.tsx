@@ -1,17 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `about-2.html` (.sec-1-about) by scripts/orisa/port-section.py.
 // The LinkedIn link comes from Admin → Footer → social links.
-/** Sectors shown in the ticker under the banner (until there are client logos). */
-export const ABOUT_SECTORS = [
-  { label: "Manufacturing" },
-  { label: "Retail" },
-  { label: "Education" },
-  { label: "Healthcare" },
-  { label: "Hospitality" },
-  { label: "IT & Services" },
-  { label: "Construction" },
-  { label: "Logistics" },
-];
+import { INDUSTRIES } from "@/constants/industries";
+
+/** Sectors we serve (previous site's "Industries we serve"). */
+export const ABOUT_SECTORS = INDUSTRIES.map((i) => ({ label: i.name }));
 
 export function AboutTwoHero({
   linkedinUrl = "https://www.linkedin.com/company/vaishnavi-consultant",
@@ -27,9 +20,6 @@ export function AboutTwoHero({
           <div className="col-xxl-9 col-lg-8">
             <h1 className="section-title d-flex fw-600 lh-1 fz-200 mb-0" data-reveal="">
               Vaishnavi Consultant
-              <sup>
-                ®
-              </sup>
             </h1>
           </div>
           <div className="col-xxl-3 col-lg-4 ms-auto">

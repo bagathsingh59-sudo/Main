@@ -182,7 +182,7 @@ export function H7Hero() {
                   data-fade="bottom"
                   data-delay="0.3"
                 >
-                  {" Compliance, Done Right "}
+                  {" Compliance with Confidence "}
                 </h1>
                 <span className="sec-1-home-7__headline-arrow-cover d-none d-md-inline-block">
                   <span
@@ -213,7 +213,7 @@ export function H7Hero() {
                 data-delay="0.5"
               >
                 {
-                  " Payroll, EPF, ESIC, GST and labour-law filings for Indian businesses — prepared, checked and filed on time by one accountable team, every month. "
+                  " Supporting businesses with accurate and professional Payroll, EPF, ESIC, GST and Labour Compliance services that help minimise risk, reduce administrative burden and ensure complete compliance. "
                 }
               </p>
               <div className="sec-1-home-7__cta d-flex align-items-center flex-wrap gap-2 mb-60">
@@ -296,7 +296,7 @@ export function H7Hero() {
                 >
                   {" 250+ businesses trust "}
                   <br className="d-none d-xl-inline" />
-                  {"Vaishnavi with their compliance "}
+                  {"Vaishnavi Consultant with their compliance "}
                 </p>
               </div>
             </div>

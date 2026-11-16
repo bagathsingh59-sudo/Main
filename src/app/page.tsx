@@ -12,7 +12,7 @@ import { H7Team } from "@/components/orisa/legacy/H7Team";
 import { H7Band } from "@/components/orisa/legacy/H7Band";
 import { H7Insights } from "@/components/orisa/legacy/H7Insights";
 import { H7Contact } from "@/components/orisa/legacy/H7Contact";
-import { teamMembers } from "@/components/orisa/fromSettings";
+import { contactDetails, teamMembers } from "@/components/orisa/fromSettings";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
@@ -39,9 +39,9 @@ export default async function HomePage() {
         data={[
           webPageSchema({
             path: "/",
-            title: "Vaishnavi Consultants — Tax & Compliance Consulting",
+            title: "Vaishnavi Consultant — Tax & Compliance Consulting",
             description:
-              "EPF, ESI, Payroll, GST, TDS and Labour Law compliance for Indian businesses. Zero-penalty track record across 850+ clients.",
+              "Supporting businesses with accurate and professional Payroll, EPF, ESIC, GST and Labour Compliance services that help minimise risk, maintain accuracy, reduce administrative burden, and ensure complete compliance and operational peace of mind.",
           }),
           breadcrumbSchema([{ name: "Home", path: "/" }]),
           serviceListSchema(services.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
@@ -57,7 +57,7 @@ export default async function HomePage() {
         <H7Strip />
       </LegacySection>
       <LegacySection>
-        <H7Partner />
+        <H7Partner contact={contactDetails(settings)} />
       </LegacySection>
       <LegacySection id="services">
         <H7Products />

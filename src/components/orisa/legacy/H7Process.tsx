@@ -37,7 +37,7 @@ export function H7Process() {
               data-fade="bottom"
             >
               {
-                " A short onboarding, then a steady monthly rhythm — so nothing is ever filed late and you always know where things stand. "
+                " Battle-tested methodology that turns complex compliance into a seamless, predictable pipeline. "
               }
             </p>
           </div>
@@ -49,7 +49,7 @@ export function H7Process() {
             data-delay="0.1"
           >
             <span className="sec-6-home-7__chip-text">
-              {"Compliance Audit"}
+              {"Discovery Audit"}
             </span>
           </span>
           <span
@@ -58,7 +58,7 @@ export function H7Process() {
             data-delay="0.2"
           >
             <span className="sec-6-home-7__chip-text">
-              Setup &amp; Registration
+              Strategy Design
             </span>
           </span>
           <span
@@ -66,7 +66,7 @@ export function H7Process() {
             data-fade="bottom"
             data-delay="0.3"
           >
-            <span className="sec-6-home-7__chip-text">Monthly Processing</span>
+            <span className="sec-6-home-7__chip-text">System Onboarding</span>
           </span>
           <span
             className="sec-6-home-7__chip sec-6-home-7__chip--4"
@@ -74,7 +74,7 @@ export function H7Process() {
             data-delay="0.4"
           >
             <span className="sec-6-home-7__chip-text">
-              {"Filing & Reporting"}
+              {"Ongoing Filing"}
             </span>
           </span>
         </div>
@@ -88,11 +88,11 @@ export function H7Process() {
               <div className="sec-6-home-7__card-body">
                 <p className="sec-6-home-7__card-num mb-0">[01]</p>
                 <h3 className="sec-6-home-7__card-title mb-0">
-                  {"Compliance Audit"}
+                  {"Discovery Audit"}
                 </h3>
                 <p className="sec-6-home-7__card-desc mb-0">
                   {
-                    " A free review of your registrations, past filings and open notices, so we know exactly where your business stands. "
+                    " Complete compliance health-check of your current state, gaps, and risk exposure. "
                   }
                 </p>
               </div>
@@ -110,18 +110,18 @@ export function H7Process() {
               <div className="sec-6-home-7__card-body">
                 <p className="sec-6-home-7__card-num mb-0">[02]</p>
                 <h3 className="sec-6-home-7__card-title mb-0">
-                  Setup &amp; Registration
+                  Strategy Design
                 </h3>
                 <p className="sec-6-home-7__card-desc mb-0">
                   {
-                    " We complete pending registrations, set up your establishments in VaishnaviPay and agree a monthly calendar with you. "
+                    " Custom compliance roadmap aligned to your industry, growth stage, and priorities. "
                   }
                 </p>
               </div>
               <div className="sec-6-home-7__card-media">
                 <img
                   src="/orisa/tpl/pages/home-7/step-2.webp"
-                  alt="Setup &amp; Registration"
+                  alt="Strategy Design"
                 />
               </div>
             </div>
@@ -135,18 +135,18 @@ export function H7Process() {
               <div className="sec-6-home-7__card-body">
                 <p className="sec-6-home-7__card-num mb-0">[03]</p>
                 <h3 className="sec-6-home-7__card-title mb-0">
-                  Monthly Processing
+                  System Onboarding
                 </h3>
                 <p className="sec-6-home-7__card-desc mb-0">
                   {
-                    " Every month we process payroll, compute contributions and prepare each return, with a four-eye review before filing. "
+                    " Configure workflows, registers and dashboards. Migrate from your existing vendor cleanly. "
                   }
                 </p>
               </div>
               <div className="sec-6-home-7__card-media">
                 <img
                   src="/orisa/tpl/pages/home-7/step-3.webp"
-                  alt="Monthly Processing"
+                  alt="System Onboarding"
                 />
               </div>
             </div>
@@ -160,11 +160,11 @@ export function H7Process() {
               <div className="sec-6-home-7__card-body">
                 <p className="sec-6-home-7__card-num mb-0">[04]</p>
                 <h3 className="sec-6-home-7__card-title mb-0">
-                  {"Filing & Reporting"}
+                  {"Ongoing Filing"}
                 </h3>
                 <p className="sec-6-home-7__card-desc mb-0">
                   {
-                    " Returns are filed on the portals, challans recorded and a clear monthly statement shared with you — every time. "
+                    " Timely filing of every return with tracker alerts and a zero-penalty guarantee. "
                   }
                 </p>
               </div>

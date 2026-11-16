@@ -126,9 +126,8 @@ export function H7Products() {
                 >
                   <div className="accordion-body sec-5-home-7__acc-body">
                     <p className="sec-5-home-7__acc-text mb-0">
-                      Salary processing, pay slips, Form 16 and statutory
-                      registers for your whole workforce, prepared and checked
-                      every month.
+                      End-to-end payroll, salary structuring, payslips, and Form
+                      16 generation for your entire workforce.
                     </p>
                     <div className="sec-5-home-7__tags d-flex flex-wrap gap-2 pt-4">
                       <span className="sec-5-home-7__tag">Pay slips</span>
@@ -180,8 +179,8 @@ export function H7Products() {
                 >
                   <div className="accordion-body sec-5-home-7__acc-body">
                     <p className="sec-5-home-7__acc-text mb-0">
-                      Monthly ECR and ESIC returns, UAN and IP management, KYC
-                      seeding and inspection support — owned end to end.
+                      PF ECR, ESI returns, KYC seeding, UAN linking, and
+                      inspection support — owned end-to-end.
                     </p>
                     <div className="sec-5-home-7__tags d-flex flex-wrap gap-2 pt-4">
                       <span className="sec-5-home-7__tag">ECR filing</span>
@@ -233,8 +232,8 @@ export function H7Products() {
                 >
                   <div className="accordion-body sec-5-home-7__acc-body">
                     <p className="sec-5-home-7__acc-text mb-0">
-                      GST returns, TDS filings and income-tax returns prepared,
-                      reconciled and filed before every due date.
+                      GSTR-1, 3B, 9 &amp; 9C filings with reconciliation, plus
+                      corporate ITR, TDS and advance tax for SMEs and corporates.
                     </p>
                     <div className="sec-5-home-7__tags d-flex flex-wrap gap-2 pt-4">
                       <span className="sec-5-home-7__tag">GSTR-1 &amp; 3B</span>
@@ -286,9 +285,9 @@ export function H7Products() {
                 >
                   <div className="accordion-body sec-5-home-7__acc-body">
                     <p className="sec-5-home-7__acc-text mb-0">
-                      Shops &amp; Establishments, professional tax, LWF, bonus
-                      and gratuity compliance, plus a virtual CFO when you need
-                      one.
+                      S&amp;E, PT, LWF, Contract Labour, Bonus &amp; Gratuity —
+                      statutory compliance, plus virtual CFO advisory when you
+                      need it.
                     </p>
                     <div className="sec-5-home-7__tags d-flex flex-wrap gap-2 pt-4">
                       <span className="sec-5-home-7__tag">PT &amp; LWF</span>

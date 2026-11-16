@@ -69,11 +69,8 @@ export default async function ServiceDetailPage({ params }: Props) {
         <SdBody
           label="What we do"
           heading={`What our ${item.title} service covers.`}
-          sub={`${item.summary} Everything is handled end to end by your named compliance manager and checked twice before anything is filed.`}
-          items={points.slice(0, 4).map((p) => ({
-            title: p,
-            text: `Part of our ${item.title} service — prepared, reviewed and filed on time, with the proof shared with you every month.`,
-          }))}
+          sub={`${item.summary} Every client gets a named consultant backed by a four-eye review system.`}
+          items={points.slice(0, 4).map((p) => ({ title: p }))}
         />
       </LegacySection>
       <LegacySection>

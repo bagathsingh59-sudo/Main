@@ -29,7 +29,7 @@ export function SdApproach() {
               {"How we take it off your desk "}
             </h3>
             <h3 className="h6 fw-500 mb-0">
-              The same four steps for every client and every statute — so nothing is missed and nothing is late.
+              Battle-tested methodology that turns complex compliance into a seamless, predictable pipeline.
             </h3>
           </div>
           <div className="col-lg-4 col-md-8 ms-auto text-end">
@@ -52,12 +52,12 @@ export function SdApproach() {
                 </div>
                 <h4 className="mt-3 fw-600">
                   <a href="#">
-                    Review
+                    Discovery Audit
                   </a>
                 </h4>
                 <div className="at-service-card-description">
                   <p className="mb-0 neutral-900">
-                    Check registrations, past filings and open notices
+                    Complete health-check of your current state, gaps and risk exposure
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">
@@ -77,12 +77,12 @@ export function SdApproach() {
                 </div>
                 <h4 className="mt-3 fw-600">
                   <a href="#">
-                    Set up
+                    Strategy Design
                   </a>
                 </h4>
                 <div className="at-service-card-description">
                   <p className="mb-0 neutral-900">
-                    Register, onboard employees and agree a calendar
+                    Custom compliance roadmap aligned to your industry and growth stage
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">
@@ -102,12 +102,12 @@ export function SdApproach() {
                 </div>
                 <h4 className="mt-3 fw-600">
                   <a href="#">
-                    Process
+                    Onboarding
                   </a>
                 </h4>
                 <div className="at-service-card-description">
                   <p className="mb-0 neutral-900">
-                    {"Compute, prepare and review every return"}
+                    {"Configure workflows and migrate from your existing vendor cleanly"}
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">
@@ -127,12 +127,12 @@ export function SdApproach() {
                 </div>
                 <h4 className="mt-3 fw-600">
                   <a href="#">
-                    File
+                    Ongoing Filing
                   </a>
                 </h4>
                 <div className="at-service-card-description">
                   <p className="mb-0 neutral-900">
-                    File on time and share a clear statement
+                    Timely filing of every return with tracker alerts
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">

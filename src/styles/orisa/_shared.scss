@@ -618,3 +618,8 @@
 .o-legacy .sec-1-services .col-lg-3 a {
 	overflow-wrap: anywhere;
 }
+
+/* Footer giant word is the full name ("VAISHNAVI CONSULTANT"): sized to fit one line on wide screens. */
+.orisa .o-footer-7 .footer-7__word {
+	font-size: clamp(2.5rem, 6.2vw, 9.5rem);
+}

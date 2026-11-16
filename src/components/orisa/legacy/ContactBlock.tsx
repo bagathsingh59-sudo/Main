@@ -1,14 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `services-1.html` (.sec-4-about) by scripts/orisa/port-section.py.
-// Service and company-size options come from Admin → Form config.
+// Service and company-size options come from Admin → Form config;
+// addresses, phones and emails from Admin → Contact info.
+import { DEFAULT_CONTACT, telHref, type SiteContact } from "./contact";
 export interface ContactBlockProps {
   services?: string[];
   sizes?: string[];
   /** Admin → Maintenance: forms paused. */
   disabledMessage?: string;
+  /** Admin → Contact info. */
+  contact?: SiteContact;
 }
 
-export function ContactBlock({ services = [], sizes = [], disabledMessage }: ContactBlockProps) {
+export function ContactBlock({ services = [], sizes = [], disabledMessage, contact = DEFAULT_CONTACT }: ContactBlockProps) {
+  const c = contact;
   return (
     <div className="sec-4-about bg-neutral-50 pt-120 pb-120">
       <div className="container">
@@ -66,21 +71,23 @@ export function ContactBlock({ services = [], sizes = [], disabledMessage }: Con
                     </h3>
                     <div className="d-flex flex-wrap gap-md-5 gap-4">
                       <span className="fz-font-md neutral-500">
-                        {" H. No. 3-692, Milan Chowk, Gazipur Road "}
+                        {c.addressLine1}
                         <br className="d-block" />
-                        {" Kalaburagi, Karnataka 585101 "}
+                        {c.addressLine2}
+                        <br className="d-block" />
+                        {`${c.city}, ${c.state} ${c.pin}`}
                         <br className="d-block" />
                         {" Phone: "}
                         <span className="neutral-900">
-                          <a href="tel:+919742222976">
-                            +91 97422 22976
+                          <a href={telHref(c.phone)}>
+                            {c.phone}
                           </a>
                         </span>
                         <br className="d-block" />
                         {" Email: "}
                         <span className="neutral-900">
-                          <a href="mailto:connect@vaishnaviconsultant.com">
-                            connect@vaishnaviconsultant.com
+                          <a href={`mailto:${c.email}`}>
+                            {c.email}
                           </a>
                         </span>
                       </span>
@@ -107,19 +114,27 @@ export function ContactBlock({ services = [], sizes = [], disabledMessage }: Con
                         <br className="d-block" />
                         {" Served from Kalaburagi, remotely and on visit "}
                         <br className="d-block" />
-                        {" Phone: "}
-                        <span className="neutral-900">
-                          <a href="tel:+918951470936">
-                            +91 89514 70936
-                          </a>
-                        </span>
-                        <br className="d-block" />
-                        {" Email: "}
-                        <span className="neutral-900">
-                          <a href="mailto:info@vaishnaviconsultant.com">
-                            info@vaishnaviconsultant.com
-                          </a>
-                        </span>
+                        {c.altPhone && (
+                          <>
+                            {" Phone: "}
+                            <span className="neutral-900">
+                              <a href={telHref(c.altPhone)}>
+                                {c.altPhone}
+                              </a>
+                            </span>
+                            <br className="d-block" />
+                          </>
+                        )}
+                        {c.supportEmail && (
+                          <>
+                            {" Email: "}
+                            <span className="neutral-900">
+                              <a href={`mailto:${c.supportEmail}`}>
+                                {c.supportEmail}
+                              </a>
+                            </span>
+                          </>
+                        )}
                       </span>
                     </div>
                   </div>
@@ -130,7 +145,7 @@ export function ContactBlock({ services = [], sizes = [], disabledMessage }: Con
               <div className="col-xxl-6 col-lg-8 mx-auto">
                 <ul className="at-social-list list-unstyled d-flex flex-wrap gap-md-4 gap-3 pt-50">
                   <li>
-                    <a className="at-social__link d-flex align-items-center gap-2" href="https://www.linkedin.com/company/vaishnavi-consultant" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <a className="at-social__link d-flex align-items-center gap-2" href={c.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                         <path d="M15.3352 15.339H12.6697V11.1622C12.6697 10.1662 12.6495 8.8845 11.2807 8.8845C9.89102 8.8845 9.67872 9.9683 9.67872 11.0887V15.339H7.01322V6.75H9.57372V7.9207H9.60822C9.96602 7.2457 10.836 6.53325 12.1357 6.53325C14.8365 6.53325 15.336 8.3108 15.336 10.6245L15.3352 15.339ZM4.00275 5.57475C3.14475 5.57475 2.4555 4.88025 2.4555 4.026C2.4555 3.1725 3.1455 2.47875 4.00275 2.47875C4.85775 2.47875 5.55075 3.1725 5.55075 4.026C5.55075 4.88025 4.857 5.57475 4.00275 5.57475ZM5.33925 15.339H2.66625V6.75H5.33925V15.339ZM16.6687 0H1.32825C0.594 0 0 0.5805 0 1.29675V16.7033C0 17.4202 0.594 18 1.32825 18H16.6665C17.4 18 18 17.4202 18 16.7033V1.29675C18 0.5805 17.4 0 16.6665 0H16.6687Z" fill="currentColor" />
                       </svg>

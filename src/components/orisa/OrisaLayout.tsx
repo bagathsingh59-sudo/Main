@@ -104,7 +104,7 @@ export async function OrisaLayout({ children, home = false }: { children: ReactN
             address={[ci.addressLine1, ci.addressLine2, `${ci.city}, ${ci.state} ${ci.pin}`].filter((l) => l.trim())}
             hours={{ days: hoursDays, time: hoursRest.join(" · ") }}
             cta={{ title: ["Questions about payroll", "or compliance?"], label: "Book a consultation", href: "/contact" }}
-            word="VAISHNAVI"
+            word="VAISHNAVI CONSULTANT"
             copyright={nav.copyright}
             legal={legal ? visible(legal.links) : []}
           />

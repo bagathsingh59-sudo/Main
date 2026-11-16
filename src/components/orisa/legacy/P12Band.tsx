@@ -16,7 +16,7 @@ export function P12Band() {
               <span data-scramble="">
                 2026
               </span>
-              {" Vaishnavi"}
+              {" Vaishnavi Consultant"}
             </span>
           </div>
         </div>

@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `/Users/thakurankushsingh/Downloads/orisahtml-410/orisahtml-410/Orisa_v4.1.0_Unzip-First/1.Orisa_HTML_template/services-1.html` (.home-2-section-12) by scripts/orisa/port-section.py.
 // PLACEHOLDER service prices (from the old site) — confirm before launch.
-export function S1Pricing() {
+import { DEFAULT_CONTACT, telHref, type SiteContact } from "./contact";
+
+export function S1Pricing({ contact = DEFAULT_CONTACT }: { contact?: SiteContact }) {
   return (
     <div className="home-2-section-12 rounded-5 overflow-hidden mx-lg-3 mx-2 mt-50 p-relative pt-100 pb-100 pt-0">
       <div className="p-absolute top-0 left-0 w-100 h-100 rounded-5 opacity-10 z-0 d-none" style={{ backgroundImage: "url('/orisa/tpl/pages/noise.gif')" }} />
@@ -315,13 +317,13 @@ export function S1Pricing() {
               Contact Us
             </a>
             <p className="h6 fw-600 mb-0">
-              <a href="mailto:connect@vaishnaviconsultant.com">
-                connect@vaishnaviconsultant.com
+              <a href={`mailto:${contact.email}`}>
+                {contact.email}
               </a>
             </p>
             <p className="h6 fw-600 mb-0">
-              <a href="tel:+919742222976">
-                +91 97422 22976
+              <a href={telHref(contact.phone)}>
+                {contact.phone}
               </a>
             </p>
           </div>

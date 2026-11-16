@@ -7,7 +7,7 @@ import { S1Gallery } from "@/components/orisa/legacy/S1Gallery";
 import { S1Pricing } from "@/components/orisa/legacy/S1Pricing";
 import { FaqBlock } from "@/components/orisa/legacy/FaqBlock";
 import { ContactBlock } from "@/components/orisa/legacy/ContactBlock";
-import { contactForm, faqItems, serviceRows } from "@/components/orisa/fromSettings";
+import { contactDetails, contactForm, faqItems, serviceRows } from "@/components/orisa/fromSettings";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, serviceListSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
@@ -42,7 +42,7 @@ export default async function ServicesPage() {
         ]}
       />
       <LegacySection>
-        <S1Hero />
+        <S1Hero contact={contactDetails(settings)} />
       </LegacySection>
       <LegacySection id="services">
         <SvcPanels items={serviceRows(settings)} />
@@ -51,7 +51,7 @@ export default async function ServicesPage() {
         <S1Gallery />
       </LegacySection>
       <LegacySection id="pricing">
-        <S1Pricing />
+        <S1Pricing contact={contactDetails(settings)} />
       </LegacySection>
       <LegacySection id="faq">
         <FaqBlock items={faqItems(settings)} />

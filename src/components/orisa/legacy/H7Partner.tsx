@@ -1,7 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `/Users/thakurankushsingh/Downloads/orisahtml-410/orisahtml-410/Orisa_v4.1.0_Unzip-First/1.Orisa_HTML_template/index-7.html` (.sec-4-home-7) by scripts/orisa/port-section.py.
 // Vaishnavi copy; contact details mirror Admin → Contact info defaults.
-export function H7Partner() {
+import { DEFAULT_CONTACT, telHref, type SiteContact } from "./contact";
+
+export function H7Partner({ contact = DEFAULT_CONTACT }: { contact?: SiteContact }) {
+  const c = contact;
   return (
     <div className="sec-4-home-7 bg-neutral-50 pt-120 pb-120">
       <div className="container-2200 px-lg-5 px-3">
@@ -112,26 +115,26 @@ export function H7Partner() {
                     </h3>
                     <div className="sec-4-home-7__loc-body" data-fade="bottom">
                       <p className="mb-2">
-                        H. No. 3-692, Milan Chowk, Gazipur Road
+                        {`${c.addressLine1}, ${c.addressLine2}`}
                         <br />
-                        Kalaburagi, Karnataka 585101
+                        {`${c.city}, ${c.state} ${c.pin}`}
                       </p>
                       <p className="mb-2">
                         {" Phone: "}
                         <a
                           className="sec-4-home-7__loc-strong"
-                          href="tel:+919742222976"
+                          href={telHref(c.phone)}
                         >
-                          +91 97422 22976
+                          {c.phone}
                         </a>
                       </p>
                       <p className="mb-0">
                         {" Email: "}
                         <a
                           className="sec-4-home-7__loc-strong"
-                          href="mailto:connect@vaishnaviconsultant.com"
+                          href={`mailto:${c.email}`}
                         >
-                          connect@vaishnaviconsultant.com
+                          {c.email}
                         </a>
                       </p>
                     </div>
@@ -152,18 +155,18 @@ export function H7Partner() {
                     {" Phone: "}
                     <a
                       className="sec-4-home-7__loc-strong"
-                      href="tel:+918951470936"
+                      href={telHref(c.altPhone || c.phone)}
                     >
-                      +91 89514 70936
+                      {c.altPhone || c.phone}
                     </a>
                   </p>
                   <p className="mb-0">
                     {" Email: "}
                     <a
                       className="sec-4-home-7__loc-strong"
-                      href="mailto:info@vaishnaviconsultant.com"
+                      href={`mailto:${c.supportEmail || c.email}`}
                     >
-                      info@vaishnaviconsultant.com
+                      {c.supportEmail || c.email}
                     </a>
                   </p>
                 </div>

@@ -37,7 +37,7 @@ export function Logo({
   return (
     <Link
       href="/"
-      aria-label="Vaishnavi Consultants — home"
+      aria-label="Vaishnavi Consultant — home"
       className={cn("group inline-flex items-center gap-2.5", className)}
     >
       <span

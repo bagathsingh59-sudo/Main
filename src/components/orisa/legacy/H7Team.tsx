@@ -78,7 +78,7 @@ export function H7Team({
             </h2>
             <p className="sec-8-home-7__desc mb-40" data-reveal="">
               {
-                " Chartered accountants, payroll and labour-law specialists who answer your questions in plain language. "
+                " Three decades of hands-on compliance expertise — accounts, PF/ESI, inspections and labour-law matters handled by people you can call. "
               }
             </p>
             <div

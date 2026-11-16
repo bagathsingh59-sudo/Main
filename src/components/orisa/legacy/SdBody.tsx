@@ -5,7 +5,7 @@ export interface SdBodyProps {
   label: string;
   heading: string;
   sub: string;
-  items: { title: string; text: string }[];
+  items: { title: string; text?: string }[];
 }
 
 export function SdBody({ label, heading, sub, items }: SdBodyProps) {
@@ -75,8 +75,8 @@ export function SdBody({ label, heading, sub, items }: SdBodyProps) {
                                   />
                                 </svg>
                               </div>
-                              <span className="h5 mb-4">{it.title}</span>
-                              <p className="mb-0 fz-font-lg">{it.text}</p>
+                              <span className={it.text ? "h5 mb-4" : "h5 mb-0"}>{it.title}</span>
+                              {it.text && <p className="mb-0 fz-font-lg">{it.text}</p>}
                             </div>
                           </div>
                         </div>

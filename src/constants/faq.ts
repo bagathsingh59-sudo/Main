@@ -3,7 +3,7 @@ import type { FAQ } from "@/types";
 export const FAQS: FAQ[] = [
   {
     id: "f1",
-    question: "How does Vaishnavi Consultants guarantee zero penalties?",
+    question: "How does Vaishnavi Consultant guarantee zero penalties?",
     answer:
       "Every client gets a dedicated compliance manager backed by a four-eye review system, automated deadline trackers, and a 24-hour pre-filing audit. If a filing penalty occurs due to our oversight, we cover it — that is the Vaishnavi Promise.",
   },

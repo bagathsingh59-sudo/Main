@@ -1,6 +1,7 @@
 import type { SiteSettings } from "@/services/settings";
 import { SERVICES } from "@/constants/services";
 import type { ContactBlockProps } from "./legacy/ContactBlock";
+import { DEFAULT_CONTACT, type SiteContact } from "./legacy/contact";
 import type { FaqBlockItem } from "./legacy/FaqBlock";
 import type { SvcPanelItem } from "./legacy/SvcPanels";
 import type { TeamBlockMember } from "./legacy/TeamBlock";
@@ -30,9 +31,13 @@ export function faqItems(s: SiteSettings): FaqBlockItem[] | undefined {
   return orUndefined(s.faq.items.filter((i) => i.question.trim() && i.answer.trim()));
 }
 
-/** Admin → Team. */
+/** Admin → Team, led by the founder (previous site's "From the founder"). */
 export function teamMembers(s: SiteSettings): TeamBlockMember[] | undefined {
-  return orUndefined(s.team.members);
+  const f = s.founder;
+  const founder: TeamBlockMember[] = f?.name?.trim()
+    ? [{ id: "founder", name: f.name.trim(), role: f.role, image: f.image, initials: f.initials, accent: f.accent, linkedinUrl: "" }]
+    : [];
+  return orUndefined([...founder, ...s.team.members]);
 }
 
 /** Admin → Form config + Maintenance. */
@@ -41,6 +46,25 @@ export function contactForm(s: SiteSettings): ContactBlockProps {
     services: s.formConfig.services,
     sizes: s.formConfig.sizes,
     disabledMessage: s.maintenance.formsDisabled ? s.maintenance.message || "Enquiries are paused for a short while." : undefined,
+    contact: contactDetails(s),
+  };
+}
+
+/** Admin → Contact info (+ LinkedIn from Footer → social links). */
+export function contactDetails(s: SiteSettings): SiteContact {
+  const ci = s.contactInfo;
+  const pick = (v: string | undefined, d: string) => (v && v.trim() ? v.trim() : d);
+  return {
+    phone: pick(ci.phone, DEFAULT_CONTACT.phone),
+    altPhone: ci.altPhone?.trim() ?? "",
+    email: pick(ci.email, DEFAULT_CONTACT.email),
+    supportEmail: ci.supportEmail?.trim() ?? "",
+    addressLine1: pick(ci.addressLine1, DEFAULT_CONTACT.addressLine1),
+    addressLine2: ci.addressLine2?.trim() ?? "",
+    city: pick(ci.city, DEFAULT_CONTACT.city),
+    state: pick(ci.state, DEFAULT_CONTACT.state),
+    pin: pick(ci.pin, DEFAULT_CONTACT.pin),
+    linkedin: linkedinUrl(s) ?? DEFAULT_CONTACT.linkedin,
   };
 }
 

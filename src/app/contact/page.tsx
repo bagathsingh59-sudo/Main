@@ -14,7 +14,7 @@ import { getSiteSettings } from "@/services/settings";
 
 const PAGE_TITLE = "Contact — Book a Free 45-Minute Consultation";
 const PAGE_DESC =
-  "Reach Vaishnavi Consultants — head office in Bengaluru, with five branches across India. Senior CA replies within one working day.";
+  "Reach Vaishnavi Consultant in Kalaburagi for a free 45-minute compliance consultation. A senior consultant replies within one working day.";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("contact", "/contact");

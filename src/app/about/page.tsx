@@ -13,9 +13,9 @@ import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { getSiteSettings } from "@/services/settings";
 import { contactForm, linkedinUrl, teamMembers } from "@/components/orisa/fromSettings";
 
-const PAGE_TITLE = "About Us — 15 Years of Trusted Compliance";
+const PAGE_TITLE = "About Us — Vaishnavi Consultant";
 const PAGE_DESC =
-  "From a 3-person Bengaluru CA practice to India's most trusted compliance partner. Founder's note, our journey, leadership team, certifications, awards, and security.";
+  "Meet the team behind Vaishnavi Consultant — 25+ years of combined practitioner experience across payroll, EPF, ESI, GST, and labour compliance.";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("about", "/about");

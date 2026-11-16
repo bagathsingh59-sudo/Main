@@ -35,7 +35,7 @@ export function H7Intro() {
           </div>
           <div className="col-lg-5 col-12 mt-4 mt-lg-0 ps-lg-4 d-flex align-items-end">
             <p className="sec-2-home-7__desc mb-0" data-reveal="">
-              <strong>Vaishnavi</strong>
+              <strong>Vaishnavi Consultant</strong>
               {
                 " is more than a filing service; we are the compliance desk for businesses that would rather focus on growth. We "
               }
@@ -77,14 +77,14 @@ export function H7Intro() {
                   </svg>
                 </div>
                 <h3 className="sec-2-home-7__feature-title" data-chars="">
-                  On Time, Every Time
+                  Zero-Penalty Guarantee
                 </h3>
                 <p
                   className="sec-2-home-7__feature-desc mb-0"
                   data-fade="bottom"
                 >
-                  Every return is prepared, reviewed and filed before its due
-                  date, with a live tracker for every establishment we handle.
+                  If a filing penalty occurs due to our oversight, we cover it.
+                  Track record speaks for itself.
                 </p>
               </div>
             </div>
@@ -134,15 +134,14 @@ export function H7Intro() {
                   </svg>
                 </div>
                 <h3 className="sec-2-home-7__feature-title" data-chars="">
-                  Practitioner Led
+                  Dedicated Compliance Manager
                 </h3>
                 <p
                   className="sec-2-home-7__feature-desc mb-0"
                   data-fade="bottom"
                 >
-                  Our team works through real wage months every day — EPF, ESIC,
-                  PT, LWF, GST and TDS — and answers your questions in plain
-                  language.
+                  Every client gets a named consultant backed by a four-eye
+                  review system. Not a ticket queue.
                 </p>
               </div>
             </div>
@@ -159,10 +158,10 @@ export function H7Intro() {
           <div className="sec-2-home-7__row">
             <div className="sec-2-home-7__cell sec-2-home-7__cell--stat sec-2-home-7__col-1">
               <h3 className="sec-2-home-7__stat-value mb-3">
-                <span data-count="98">0</span>%
+                <span data-count="25">0</span>+
               </h3>
               <p className="sec-2-home-7__stat-label mb-0" data-fade="bottom">
-                Clients who stay with us year after year.
+                Years of combined practitioner experience.
               </p>
             </div>
             <div className="sec-2-home-7__cell sec-2-home-7__cell--img sec-2-home-7__col-3">
@@ -194,15 +193,14 @@ export function H7Intro() {
                   </svg>
                 </div>
                 <h3 className="sec-2-home-7__feature-title" data-chars="">
-                  Built to Scale
+                  24-hour Response SLA
                 </h3>
                 <p
                   className="sec-2-home-7__feature-desc mb-0"
                   data-fade="bottom"
                 >
-                  From a single shop to a multi-branch group, our process and
-                  VaishnaviPay handle three establishments or three hundred just
-                  as smoothly.
+                  Every query — small or strategic — gets a substantive response
+                  within one working day.
                 </p>
               </div>
             </div>

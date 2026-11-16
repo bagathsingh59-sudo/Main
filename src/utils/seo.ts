@@ -11,15 +11,15 @@ const DEFAULT_KEYWORDS = [
   "Tax Consulting India",
   "EPF Compliance",
   "ESI Compliance",
-  "Payroll Management Bangalore",
+  "Payroll Management Kalaburagi",
   "GST Filing",
   "Labour Law Compliance",
   "Virtual CFO",
   "Statutory Filings",
   "TDS Return Filing",
   "Income Tax Return Filing",
-  "Vaishnavi Consultants",
-  "Compliance Consulting Bengaluru",
+  "Vaishnavi Consultant",
+  "Compliance Consulting Kalaburagi",
 ];
 
 /* ────────────────────────────────────────────────

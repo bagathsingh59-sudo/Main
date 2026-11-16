@@ -3,8 +3,17 @@
 // Vaishnavi milestones; images are template placeholders.
 import { JOURNEY } from "@/constants/journey";
 
-/* Template photos, cycled until real ones are added. */
-const JOURNEY_IMAGES = [126, 127, 128, 129].map((n) => `/orisa/tpl/pages/img-${n}.webp`);
+/* Stock photos (Unsplash), one per milestone, cycled if more are added. */
+const JOURNEY_IMAGES = [
+  "https://images.unsplash.com/photo-1770627000564-3feb36aecbcd?auto=format&fit=crop&w=998&h=620&q=80",
+  "https://images.unsplash.com/photo-1741707040272-2f11cea5ff4c?auto=format&fit=crop&w=998&h=620&q=80",
+  "https://images.unsplash.com/photo-1741591646534-5aa244610566?auto=format&fit=crop&w=998&h=620&q=80",
+  "https://images.unsplash.com/photo-1787724779349-18ba0352c154?auto=format&fit=crop&w=998&h=620&q=80",
+  "https://images.unsplash.com/photo-1681164315051-add1906a9b07?auto=format&fit=crop&w=998&h=620&q=80",
+  "https://images.unsplash.com/photo-1758518730327-98070967caab?auto=format&fit=crop&w=998&h=620&q=80",
+  "https://images.unsplash.com/photo-1758876203026-99a024dc43b9?auto=format&fit=crop&w=998&h=620&q=80",
+  "https://images.unsplash.com/photo-1756885465373-bce82fd5c944?auto=format&fit=crop&w=998&h=620&q=80",
+];
 
 export function A2Journey() {
   return (

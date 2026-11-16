@@ -33,7 +33,7 @@ export function FaqBlock({ items = DEFAULT_FAQ }: { items?: FaqBlockItem[] }) {
           <div className="col-lg-5">
             <div className="alt-faq-title-wrap mb-40">
               <div className="rounded-4 overflow-hidden" data-zoomin="">
-                <img className="w-100" src="/orisa/tpl/pages/img-21.webp" alt="" />
+                <img className="w-100" src="https://images.unsplash.com/photo-1758518727653-5650fd9e146c?auto=format&fit=crop&w=1944&h=2146&q=80" alt="" />
               </div>
               <h3 className="h6 fw-600 mb-15 pt-50">
                 Still have a question?

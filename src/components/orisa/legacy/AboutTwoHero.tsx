@@ -45,7 +45,7 @@ export function AboutTwoHero({
               <div className="o-drift-frame o-about2-banner">
                 <div className="o-hero-drift" data-drift=".8">
                   <div className="o-hero-media" data-zoomin="">
-                    <img src="/orisa/tpl/pages/img-122.webp" alt="" />
+                    <img src="https://images.unsplash.com/photo-1781246212288-7fa538344718?auto=format&fit=crop&w=2000&h=971&q=80" alt="" />
                   </div>
                 </div>
               </div>

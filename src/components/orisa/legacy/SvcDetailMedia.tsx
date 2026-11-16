@@ -8,27 +8,27 @@ export function SvcDetailMedia() {
         <div className="swiper-wrapper">
           <div className="swiper-slide">
             <div className="about-me-slider-thumb at-item-anime marque">
-              <img className="w-100 rounded-4" src="/orisa/tpl/pages/img-156.webp" alt="" />
+              <img className="w-100 rounded-4" src="https://images.unsplash.com/photo-1758876203026-99a024dc43b9?auto=format&fit=crop&w=1540&h=1120&q=80" alt="" />
             </div>
           </div>
           <div className="swiper-slide">
             <div className="about-me-slider-thumb at-item-anime marque">
-              <img className="w-100 rounded-4" src="/orisa/tpl/pages/img-157.webp" alt="" />
+              <img className="w-100 rounded-4" src="https://images.unsplash.com/photo-1781246212288-7fa538344718?auto=format&fit=crop&w=1540&h=1120&q=80" alt="" />
             </div>
           </div>
           <div className="swiper-slide">
             <div className="about-me-slider-thumb at-item-anime marque">
-              <img className="w-100 rounded-4" src="/orisa/tpl/pages/img-158.webp" alt="" />
+              <img className="w-100 rounded-4" src="https://images.unsplash.com/photo-1758518730380-04c8e0d57b68?auto=format&fit=crop&w=1540&h=1120&q=80" alt="" />
             </div>
           </div>
           <div className="swiper-slide">
             <div className="about-me-slider-thumb at-item-anime marque">
-              <img className="w-100 rounded-4" src="/orisa/tpl/pages/img-159.webp" alt="" />
+              <img className="w-100 rounded-4" src="https://images.unsplash.com/photo-1709880945165-d2208c6ad2ec?auto=format&fit=crop&w=1540&h=1120&q=80" alt="" />
             </div>
           </div>
           <div className="swiper-slide">
             <div className="about-me-slider-thumb at-item-anime marque">
-              <img className="w-100 rounded-4" src="/orisa/tpl/pages/img-160.webp" alt="" />
+              <img className="w-100 rounded-4" src="https://images.unsplash.com/photo-1621858436649-25dedba0eb38?auto=format&fit=crop&w=1540&h=1120&q=80" alt="" />
             </div>
           </div>
         </div>

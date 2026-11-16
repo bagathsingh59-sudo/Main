@@ -7,9 +7,18 @@ export interface SvcPanelItem {
   href: string;
 }
 
-/** Template images, cycled (Admin → Services has no image field yet). */
-const SVC_IMAGES = [5, 6, 7, 8, 9, 10];
-const svcImage = (i: number, small: boolean) => `/orisa/tpl/pages/img-${SVC_IMAGES[i % SVC_IMAGES.length]}${small ? "-sm" : ""}.webp`;
+/** Stock photos (Unsplash) per service row, cycled (Admin → Services has no image field yet). */
+const SVC_IMAGES = [
+  "photo-1664575602276-acd073f104c1",
+  "photo-1741591646534-5aa244610566",
+  "photo-1741591646737-e634ae96e83d",
+  "photo-1758518730250-9fde74eb4757",
+  "photo-1762427354051-a9bdb181ae3b",
+  "photo-1758518730327-98070967caab",
+  "photo-1758520144437-f068ecaf0d83",
+];
+const svcImage = (i: number, small: boolean) =>
+  `https://images.unsplash.com/${SVC_IMAGES[i % SVC_IMAGES.length]}?auto=format&fit=crop&q=80&${small ? "w=380&h=230" : "w=1074&h=820"}`;
 
 export function SvcPanels({ items }: { items: SvcPanelItem[] }) {
   return (

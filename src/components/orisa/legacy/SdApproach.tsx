@@ -61,7 +61,7 @@ export function SdApproach() {
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">
-                  <img className="img-cover rounded-2" src="/orisa/tpl/pages/img-161.webp" alt="" />
+                  <img className="img-cover rounded-2" src="https://images.unsplash.com/photo-1772588627327-1eeddcf73c11?auto=format&fit=crop&w=610&h=370&q=80" alt="" />
                 </div>
               </div>
             </div>
@@ -86,7 +86,7 @@ export function SdApproach() {
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">
-                  <img className="img-cover rounded-2" src="/orisa/tpl/pages/img-162.webp" alt="" />
+                  <img className="img-cover rounded-2" src="https://images.unsplash.com/photo-1686249959385-ee6c7dcdf0ec?auto=format&fit=crop&w=610&h=370&q=80" alt="" />
                 </div>
               </div>
             </div>
@@ -111,7 +111,7 @@ export function SdApproach() {
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">
-                  <img className="img-cover rounded-2" src="/orisa/tpl/pages/img-163.webp" alt="" />
+                  <img className="img-cover rounded-2" src="https://images.unsplash.com/photo-1781246081182-b8e658662ebd?auto=format&fit=crop&w=610&h=370&q=80" alt="" />
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@ export function SdApproach() {
                   </p>
                 </div>
                 <div className="at-service-card-img rounded-2 fix mt-4 hover-effect-1">
-                  <img className="img-cover rounded-2" src="/orisa/tpl/pages/img-164.webp" alt="" />
+                  <img className="img-cover rounded-2" src="https://images.unsplash.com/photo-1668713701571-1d1cbcefe7bd?auto=format&fit=crop&w=610&h=370&q=80" alt="" />
                 </div>
               </div>
             </div>

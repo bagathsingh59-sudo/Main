@@ -38,7 +38,7 @@ export function SdCta({ heading, receive, promise }: SdCtaProps) {
       <div className="container">
         <div className="row g-4 align-items-center">
           <div className="col-lg-6">
-            <img src="/orisa/tpl/pages/img-165.webp" alt="" />
+            <img src="https://images.unsplash.com/photo-1771244688590-1e481dba1b5a?auto=format&fit=crop&w=1596&h=1596&q=80" alt="" />
           </div>
           <div className="col-lg-5 mx-auto">
             <span className="at-btn common-black text-uppercase bg-transparent mb-10 rounded-0 p-0">

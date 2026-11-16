@@ -13,7 +13,7 @@ export function SdNewsletter() {
               <div className="ripple-image ripples rounded-3 overflow-hidden d-inline-flex">
                 <img
                   className="img-cover"
-                  src="/orisa/tpl/pages/img-74.webp"
+                  src="https://images.unsplash.com/photo-1770627000564-3feb36aecbcd?auto=format&fit=crop&w=1200&h=900&q=80"
                   alt=""
                 />
               </div>

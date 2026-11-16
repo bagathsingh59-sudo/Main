@@ -28,7 +28,7 @@ export function S1Hero({ contact = DEFAULT_CONTACT }: { contact?: SiteContact })
         </div>
       </div>
       <div className="at-banner-thumb overflow-hidden scale-up-img">
-        <img className="img-cover scale-up" src="/orisa/tpl/pages/img-153.webp" alt="" />
+        <img className="img-cover scale-up" src="https://images.unsplash.com/photo-1622675363311-3e1904dc1885?auto=format&fit=crop&w=2000&h=594&q=80" alt="" />
       </div>
     </div>
   );

@@ -1,14 +1,15 @@
 /**
  * Shared configuration for the Orisa-based pages.
  *
- * PALETTE — "brand" (Vaishnavi navy + teal) or "orisa" (the template's
- * neutral + orange). Change the default with NEXT_PUBLIC_ORISA_PALETTE,
- * or preview the other one on any page with `?palette=orisa` / `?palette=brand`.
+ * PALETTE — "pay" (VaishnaviPay console: navy + mint, the default),
+ * "brand" (earlier navy + teal) or "orisa" (the template's neutral +
+ * orange). Change the default with NEXT_PUBLIC_ORISA_PALETTE, or preview
+ * one on any page with `?palette=brand` / `?palette=orisa`.
  */
-export type OrisaPalette = "brand" | "orisa";
+export type OrisaPalette = "pay" | "brand" | "orisa";
 
 export const ORISA_PALETTE: OrisaPalette =
-  process.env.NEXT_PUBLIC_ORISA_PALETTE === "orisa" ? "orisa" : "brand";
+  process.env.NEXT_PUBLIC_ORISA_PALETTE === "orisa" ? "orisa" : process.env.NEXT_PUBLIC_ORISA_PALETTE === "brand" ? "brand" : "pay";
 
 /**
  * MOTION — "always" plays every effect; "respect-user" switches the
@@ -41,7 +42,7 @@ export function motionAllowed(): boolean {
 export const HERO_IDEAS: Record<4 | 5 | 6 | 9 | 10, boolean> = {
   4: true,
   5: true,
-  6: true,
+  6: false, // paused by the user (2026-11-15) until the hero is revisited
   9: true,
   10: true,
 };

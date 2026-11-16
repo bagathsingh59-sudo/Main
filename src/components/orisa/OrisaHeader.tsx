@@ -5,12 +5,27 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
 import { AtButton } from "./AtButton";
-import { ORISA_NAV, ORISA_SEARCH_INDEX, type OrisaNavLink, type OrisaPalette } from "./config";
+import {
+  ORISA_NAV,
+  ORISA_SEARCH_INDEX,
+  type OrisaNavLink,
+  type OrisaPalette,
+} from "./config";
 
 /**
- * Site header — Orisa `header-14`: meta strip, logo, centred tabs,
- * search / dark-mode / side-panel buttons and the CTA. Once the bar
- * has scrolled away the template's floating MENU pill takes over.
+ * Site header, two looks sharing the same search, side panel and
+ * dark-mode logic:
+ *
+ *  • variant "7" (default) — Orisa `header-7`: logo, glass pill with the
+ *    page tabs, three-line toggle, search / dark-mode / side-panel icons.
+ *      menu="toggle"  home: see-through over the hero, the toggle slides
+ *                     the tabs open and closed (template behaviour)
+ *      menu="open"    other pages: solid bar, tabs always open on large
+ *                     screens, no toggle there
+ *    Below 1200px the toggle opens the side panel instead.
+ *  • variant "14" — Orisa `header-14`: meta strip, centred tabs, CTA.
+ *
+ * Once the bar has scrolled away the template's floating MENU pill takes over.
  */
 interface OrisaHeaderProps {
   links?: readonly OrisaNavLink[];
@@ -19,6 +34,9 @@ interface OrisaHeaderProps {
   meta: { key: string; hours: string; phone: string; note: string };
   contact: { phone: string; email: string; address: string[]; hours: string };
   cta?: { label: string; href: string };
+  variant?: "7" | "14";
+  /** Header-7 only: "toggle" on the home page, "open" everywhere else. */
+  menu?: "toggle" | "open";
 }
 
 const THEME_KEY = "vc-theme";
@@ -29,6 +47,8 @@ export function OrisaHeader({
   meta,
   contact,
   cta = { label: "Book consultation", href: "/contact" },
+  variant = "7",
+  menu = "open",
 }: OrisaHeaderProps) {
   const pathname = usePathname();
   const rootRef = useRef<HTMLElement>(null);
@@ -37,15 +57,26 @@ export function OrisaHeader({
   const [panel, setPanel] = useState<"none" | "menu" | "search">("none");
   const [dark, setDark] = useState(false);
   const [query, setQuery] = useState("");
+  const [navOpen, setNavOpen] = useState(false);
 
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname?.startsWith(href));
+  /* Header-7 toggle: slides the tabs open on large screens, opens the side panel below 1200px. */
+  const onToggle = () => {
+    if (window.matchMedia("(min-width: 1200px)").matches) setNavOpen((v) => !v);
+    else setPanel("menu");
+  };
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname?.startsWith(href);
 
   /* Theme + palette live on the nearest `.orisa` wrapper. */
   useEffect(() => {
     const shell = rootRef.current?.closest<HTMLElement>(".orisa");
     if (!shell) return;
-    const palette = new URLSearchParams(window.location.search).get("palette") as OrisaPalette | null;
-    if (palette === "brand" || palette === "orisa") shell.dataset.palette = palette;
+    const palette = new URLSearchParams(window.location.search).get(
+      "palette",
+    ) as OrisaPalette | null;
+    if (palette === "pay" || palette === "brand" || palette === "orisa")
+      shell.dataset.palette = palette;
     let stored: string | null = null;
     try {
       stored = localStorage.getItem(THEME_KEY);
@@ -98,82 +129,214 @@ export function OrisaHeader({
   }, [query]);
 
   return (
-    <header ref={rootRef} className="header-14">
-      <div className="header-14__meta">
-        <div className="header-14__meta-inner">
-          <div className="header-14__meta-group">
-            <span className="header-14__meta-key">{meta.key}</span>
-            <span className="header-14__meta-val">{meta.hours}</span>
+    <header
+      ref={rootRef}
+      className={cn(
+        variant === "14" ? "header-14" : "header-7",
+        variant === "7" &&
+          (menu === "open" ? "header-7--solid" : "header-7--overlay"),
+        variant === "7" && (menu === "open" || navOpen) && "is-menu-open",
+      )}
+    >
+      {variant === "14" ? (
+        <>
+          <div className="header-14__meta">
+            <div className="header-14__meta-inner">
+              <div className="header-14__meta-group">
+                <span className="header-14__meta-key">{meta.key}</span>
+                <span className="header-14__meta-val">{meta.hours}</span>
+              </div>
+              <div className="header-14__meta-group">
+                <a
+                  className="header-14__meta-val"
+                  href={`tel:${meta.phone.replace(/\s/g, "")}`}
+                >
+                  {meta.phone}
+                </a>
+                <span className="header-14__meta-quiet">{meta.note}</span>
+              </div>
+            </div>
           </div>
-          <div className="header-14__meta-group">
-            <a className="header-14__meta-val" href={`tel:${meta.phone.replace(/\s/g, "")}`}>
-              {meta.phone}
-            </a>
-            <span className="header-14__meta-quiet">{meta.note}</span>
+
+          <div className="header-14__bar">
+            <div className="at-header-logo">
+              <Link href="/" aria-label="Vaishnavi Consultant — home">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className="at-header-logo__mark"
+                  src={logoUrl || "/brand/logo-128.png"}
+                  alt=""
+                  width={34}
+                  height={34}
+                />
+                <span className="at-header-logo__word">Vaishnavi</span>
+              </Link>
+            </div>
+
+            <nav className="at-main-menu" aria-label="Primary">
+              <ul>
+                {links.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      aria-current={isActive(l.href) ? "page" : undefined}
+                    >
+                      {l.label}
+                      {l.badge && (
+                        <span className="at-main-menu__badge">{l.badge}</span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="header-14__right">
+              <button
+                type="button"
+                className="header-14__icon-btn"
+                aria-label="Search"
+                onClick={() => setPanel("search")}
+              >
+                <SearchIcon />
+              </button>
+              <div className="dark-light-mode">
+                <button
+                  type="button"
+                  className="toggle"
+                  aria-pressed={dark}
+                  aria-label={
+                    dark ? "Switch to light mode" : "Switch to dark mode"
+                  }
+                  onClick={toggleTheme}
+                >
+                  <span className="icon icon--moon">
+                    <MoonIcon />
+                  </span>
+                  <span className="icon icon--sun">
+                    <SunIcon />
+                  </span>
+                </button>
+              </div>
+              <button
+                type="button"
+                className="header-14__icon-btn"
+                aria-label="Open menu"
+                aria-expanded={panel === "menu"}
+                onClick={() => setPanel("menu")}
+              >
+                <GridIcon />
+              </button>
+              <AtButton href={cta.href} className="header-14__cta">
+                {cta.label}
+              </AtButton>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          <div className="header-7__bar">
+            <div className="at-header-logo">
+              <Link href="/" aria-label="Vaishnavi Consultant — home">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className="at-header-logo__mark"
+                  src={logoUrl || "/brand/logo-128.png"}
+                  alt=""
+                  width={30}
+                  height={30}
+                />
+                <span className="at-header-logo__word">Vaishnavi</span>
+              </Link>
+            </div>
 
-      <div className="header-14__bar">
-        <div className="at-header-logo">
-          <Link href="/" aria-label="Vaishnavi Consultant — home">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="at-header-logo__mark" src={logoUrl || "/brand/logo-128.png"} alt="" width={34} height={34} />
-            <span className="at-header-logo__word">Vaishnavi</span>
-          </Link>
-        </div>
-
-        <nav className="at-main-menu" aria-label="Primary">
-          <ul>
-            {links.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} aria-current={isActive(l.href) ? "page" : undefined}>
-                  {l.label}
-                  {l.badge && <span className="at-main-menu__badge">{l.badge}</span>}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="header-14__right">
-          <button type="button" className="header-14__icon-btn" aria-label="Search" onClick={() => setPanel("search")}>
-            <SearchIcon />
-          </button>
-          <div className="dark-light-mode">
-            <button
-              type="button"
-              className="toggle"
-              aria-pressed={dark}
-              aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-              onClick={toggleTheme}
-            >
-              <span className="icon icon--moon">
-                <MoonIcon />
-              </span>
-              <span className="icon icon--sun">
-                <SunIcon />
-              </span>
-            </button>
+            <div className="header-7__right">
+              <nav
+                id="header7Nav"
+                className="header-7__nav"
+                aria-label="Primary"
+              >
+                <ul>
+                  {links.map((l) => (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        aria-current={isActive(l.href) ? "page" : undefined}
+                        tabIndex={
+                          menu === "toggle" && !navOpen ? -1 : undefined
+                        }
+                      >
+                        {l.label}
+                        {l.badge && (
+                          <span className="at-main-menu__badge">{l.badge}</span>
+                        )}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <button
+                type="button"
+                className="at-hamburger header-7__toggle"
+                aria-controls="header7Nav"
+                aria-expanded={navOpen}
+                aria-label={navOpen ? "Close navigation" : "Open navigation"}
+                onClick={onToggle}
+              >
+                <span className="at-hamburger__box" aria-hidden="true">
+                  <span className="at-hamburger__bar" />
+                  <span className="at-hamburger__bar" />
+                  <span className="at-hamburger__bar" />
+                </span>
+              </button>
+              <div className="header-7__icons">
+                <button
+                  type="button"
+                  className="header-7__icon-btn"
+                  aria-label="Search"
+                  onClick={() => setPanel("search")}
+                >
+                  <SearchIcon />
+                </button>
+                <div className="dark-light-mode">
+                  <button
+                    type="button"
+                    className="toggle"
+                    aria-pressed={dark}
+                    aria-label={
+                      dark ? "Switch to light mode" : "Switch to dark mode"
+                    }
+                    onClick={toggleTheme}
+                  >
+                    <span className="icon icon--moon">
+                      <MoonIcon />
+                    </span>
+                    <span className="icon icon--sun">
+                      <SunIcon />
+                    </span>
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  className="header-7__icon-btn"
+                  aria-label="Open menu"
+                  aria-expanded={panel === "menu"}
+                  onClick={() => setPanel("menu")}
+                >
+                  <GridIcon />
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            type="button"
-            className="header-14__icon-btn"
-            aria-label="Open menu"
-            aria-expanded={panel === "menu"}
-            onClick={() => setPanel("menu")}
-          >
-            <GridIcon />
-          </button>
-          <AtButton href={cta.href} className="header-14__cta">
-            {cta.label}
-          </AtButton>
-        </div>
-      </div>
+        </>
+      )}
 
       <button
         type="button"
-        className={cn("hamburger-sticky-menu", scrolled && panel === "none" && "header-sticky")}
+        className={cn(
+          "hamburger-sticky-menu",
+          scrolled && panel === "none" && "header-sticky",
+        )}
         onClick={() => setPanel("menu")}
         tabIndex={scrolled ? 0 : -1}
       >
@@ -181,28 +344,54 @@ export function OrisaHeader({
         <GridIcon />
       </button>
 
-      <div className={cn("o-overlay", panel !== "none" && "is-open")} onClick={() => setPanel("none")} aria-hidden="true" />
+      <div
+        className={cn("o-overlay", panel !== "none" && "is-open")}
+        onClick={() => setPanel("none")}
+        aria-hidden="true"
+      />
 
       {/* Side panel */}
-      <aside className={cn("o-panel", panel === "menu" && "is-open")} aria-label="Menu" aria-hidden={panel !== "menu"}>
+      <aside
+        className={cn("o-panel", panel === "menu" && "is-open")}
+        aria-label="Menu"
+        aria-hidden={panel !== "menu"}
+      >
         <div className="o-panel__head">
           <div className="at-header-logo">
             <Link href="/">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="at-header-logo__mark" src={logoUrl || "/brand/logo-128.png"} alt="" width={34} height={34} />
+              <img
+                className="at-header-logo__mark"
+                src={logoUrl || "/brand/logo-128.png"}
+                alt=""
+                width={34}
+                height={34}
+              />
               <span className="at-header-logo__word">Vaishnavi</span>
             </Link>
           </div>
-          <button type="button" className="header-14__icon-btn" aria-label="Close menu" onClick={() => setPanel("none")}>
+          <button
+            type="button"
+            className="header-14__icon-btn"
+            aria-label="Close menu"
+            onClick={() => setPanel("none")}
+          >
             <CloseIcon />
           </button>
         </div>
         <nav className="o-panel__nav" aria-label="Menu">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} aria-current={isActive(l.href) ? "page" : undefined} tabIndex={panel === "menu" ? 0 : -1}>
+            <Link
+              key={l.href}
+              href={l.href}
+              aria-current={isActive(l.href) ? "page" : undefined}
+              tabIndex={panel === "menu" ? 0 : -1}
+            >
               <span>
                 {l.label}
-                {l.badge && <span className="at-main-menu__badge">{l.badge}</span>}
+                {l.badge && (
+                  <span className="at-main-menu__badge">{l.badge}</span>
+                )}
               </span>
               <ArrowIcon />
             </Link>
@@ -217,7 +406,9 @@ export function OrisaHeader({
           </div>
           <div>
             <div className="o-panel__label">Talk to us</div>
-            <a href={`tel:${contact.phone.replace(/\s/g, "")}`}>{contact.phone}</a>
+            <a href={`tel:${contact.phone.replace(/\s/g, "")}`}>
+              {contact.phone}
+            </a>
             <br />
             <a href={`mailto:${contact.email}`}>{contact.email}</a>
           </div>
@@ -230,7 +421,12 @@ export function OrisaHeader({
       </aside>
 
       {/* Search */}
-      <div className={cn("o-search", panel === "search" && "is-open")} role="dialog" aria-label="Search" aria-hidden={panel !== "search"}>
+      <div
+        className={cn("o-search", panel === "search" && "is-open")}
+        role="dialog"
+        aria-label="Search"
+        aria-hidden={panel !== "search"}
+      >
         <div className="o-search__inner">
           <input
             ref={searchRef}
@@ -241,20 +437,31 @@ export function OrisaHeader({
             onChange={(e) => setQuery(e.target.value)}
             tabIndex={panel === "search" ? 0 : -1}
           />
-          <button type="button" className="header-14__icon-btn o-search__close" aria-label="Close search" onClick={() => setPanel("none")}>
+          <button
+            type="button"
+            className="header-14__icon-btn o-search__close"
+            aria-label="Close search"
+            onClick={() => setPanel("none")}
+          >
             <CloseIcon />
           </button>
           {results.length > 0 ? (
             <div className="o-search__results">
               {results.map((r) => (
-                <Link key={r.href} href={r.href} tabIndex={panel === "search" ? 0 : -1}>
+                <Link
+                  key={r.href}
+                  href={r.href}
+                  tabIndex={panel === "search" ? 0 : -1}
+                >
                   <span>{r.label}</span>
                   <span>{r.kind}</span>
                 </Link>
               ))}
             </div>
           ) : (
-            <p className="o-search__empty">Nothing matches “{query}”. Try “services” or “contact”.</p>
+            <p className="o-search__empty">
+              Nothing matches “{query}”. Try “services” or “contact”.
+            </p>
           )}
         </div>
       </div>
@@ -263,11 +470,23 @@ export function OrisaHeader({
 }
 
 /* ── icons ─────────────────────────────────────────────────── */
-const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", strokeLinejoin: "round" } as const;
+const stroke = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.6,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+} as const;
 
 function SearchIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      {...stroke}
+    >
       <circle cx="11" cy="11" r="7" />
       <path d="m20 20-3.5-3.5" />
     </svg>
@@ -275,14 +494,26 @@ function SearchIcon() {
 }
 function MoonIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      fill="currentColor"
+    >
       <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
     </svg>
   );
 }
 function SunIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      {...stroke}
+    >
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
     </svg>
@@ -290,7 +521,13 @@ function SunIcon() {
 }
 function GridIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      {...stroke}
+    >
       <rect x="4" y="4" width="6" height="6" rx="1.2" />
       <rect x="14" y="4" width="6" height="6" rx="1.2" />
       <rect x="4" y="14" width="6" height="6" rx="1.2" />
@@ -300,14 +537,27 @@ function GridIcon() {
 }
 function CloseIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" {...stroke}>
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      {...stroke}
+    >
       <path d="M6 6l12 12M18 6 6 18" />
     </svg>
   );
 }
 function ArrowIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" {...stroke} strokeWidth={2}>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      {...stroke}
+      strokeWidth={2}
+    >
       <path d="M7 17 17 7M9 7h8v8" />
     </svg>
   );

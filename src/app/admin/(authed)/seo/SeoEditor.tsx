@@ -10,8 +10,6 @@ const PAGE_TABS: Array<{ key: SeoPageKey; label: string; path: string }> = [
   { key: "home", label: "Home", path: "/" },
   { key: "about", label: "About", path: "/about" },
   { key: "services", label: "Services", path: "/services" },
-  { key: "industries", label: "Industries", path: "/industries" },
-  { key: "insights", label: "Insights", path: "/insights" },
   { key: "contact", label: "Contact", path: "/contact" },
 ];
 

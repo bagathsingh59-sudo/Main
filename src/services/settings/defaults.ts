@@ -200,23 +200,17 @@ export const DEFAULT_SETTINGS: SiteSettings = {
         title: "Company",
         links: [
           { label: "About Us", href: "/about", visible: true },
-          { label: "Founder's Message", href: "/about#founder", visible: true },
           { label: "Our Journey", href: "/about#journey", visible: true },
           { label: "Team", href: "/about#team", visible: true },
-          // "Awards" footer link removed — fictional entries cleared from
-          // constants/certifications.ts; re-add when real awards are issued.
-          { label: "Trust & Security", href: "/about#trust", visible: true },
+          { label: "Contact Us", href: "/contact", visible: true },
         ],
       },
       {
         title: "Resources",
         links: [
-          { label: "Compliance Calculator", href: "/services#calculator", visible: true },
-          { label: "Blogs & Insights", href: "/insights", visible: true },
-          { label: "Latest Updates", href: "/insights#updates", visible: true },
-          { label: "Case Studies", href: "/industries#case-studies", visible: true },
-          { label: "FAQs", href: "/insights#faq", visible: true },
-          { label: "Help Centre", href: "/contact", visible: true },
+          { label: "VaishnaviPay", href: "/vaishnavi-pay", visible: true },
+          { label: "VaishnaviPay Pricing", href: "/vaishnavi-pay#pricing", visible: true },
+          { label: "FAQs", href: "/services#faq", visible: true },
         ],
       },
       {
@@ -225,7 +219,6 @@ export const DEFAULT_SETTINGS: SiteSettings = {
           { label: "Privacy Policy", href: "/privacy", visible: true },
           { label: "Terms of Service", href: "/terms", visible: true },
           { label: "Cookie Policy", href: "/cookies", visible: true },
-          { label: "Data Security", href: "/about#trust", visible: true },
           { label: "Disclaimer", href: "/disclaimer", visible: true },
         ],
       },

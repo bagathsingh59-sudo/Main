@@ -1,7 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `about-2.html` (.sec-1-about) by scripts/orisa/port-section.py.
 // The LinkedIn link comes from Admin → Footer → social links.
-export function AboutTwoHero({ linkedinUrl = "https://www.linkedin.com/company/vaishnavi-consultant" }: { linkedinUrl?: string }) {
+/** Sectors shown in the ticker under the banner (until there are client logos). */
+export const ABOUT_SECTORS = [
+  { label: "Manufacturing" },
+  { label: "Retail" },
+  { label: "Education" },
+  { label: "Healthcare" },
+  { label: "Hospitality" },
+  { label: "IT & Services" },
+  { label: "Construction" },
+  { label: "Logistics" },
+];
+
+export function AboutTwoHero({
+  linkedinUrl = "https://www.linkedin.com/company/vaishnavi-consultant",
+  brands = ABOUT_SECTORS,
+}: {
+  linkedinUrl?: string;
+  brands?: { label: string; logo?: string }[];
+}) {
   return (
     <div className="sec-1-about pt-150 border-bottom-100 overflow-hidden">
       <div className="container">
@@ -40,6 +58,24 @@ export function AboutTwoHero({ linkedinUrl = "https://www.linkedin.com/company/v
                     <img src="/orisa/tpl/pages/img-122.webp" alt="" />
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+          {/* About 02 logo ticker. No client logos yet, so it lists the
+              sectors we serve; pass `logo` to show an image instead. */}
+          <div className="col-12 pt-80 pb-60">
+            <div className="at-brand-area border-0">
+              <div className="carouselTicker carouselTicker-left position-relative z-1">
+                <ul className="carouselTicker__list">
+                  {brands.map((b) => (
+                    <li key={b.label} className="carouselTicker__item">
+                      <div className="brand-item dark-mode-invert">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {b.logo ? <img src={b.logo} alt={b.label} /> : <span className="o-brand-word">{b.label}</span>}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>

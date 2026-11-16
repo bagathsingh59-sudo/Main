@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motionAllowed } from "../config";
 import { useOrisaMotion } from "../useOrisaMotion";
+import { startThrowable } from "../throwable";
 
 /**
  * Wrapper for sections ported from the template with port-section.py.
@@ -26,6 +27,7 @@ import { useOrisaMotion } from "../useOrisaMotion";
  *                                 .at-item-anime-2 reverse strip, .scale-img-from-to,
  *                                 .at-scroll-rotate, .scroll-move-up, pinned
  *                                 .sec-8-home-8__stage, .text-scale-anim letters
+ *      - throwable tags           [data-t-throwable-scene] (Matter.js, loaded on demand)
  *
  * The wrapped content is static server-rendered markup, so React never
  * re-renders it and the DOM changes made here are safe.
@@ -121,6 +123,33 @@ export function LegacySection({ children, id, className }: { children: ReactNode
       });
       off.push(() => preview.remove());
     }
+
+    /* ── site search form (404 page): jump to the best match ── */
+    root.querySelectorAll<HTMLFormElement>("form[data-site-search]").forEach((form) => {
+      let targets: { label: string; href: string; keywords?: string }[] = [];
+      try {
+        targets = JSON.parse(form.dataset.siteSearch ?? "[]");
+      } catch {
+        /* malformed list — search stays inert */
+      }
+      const note = document.createElement("p");
+      note.className = "o-form-note";
+      note.setAttribute("role", "status");
+      form.appendChild(note);
+      on(form, "submit", (e) => {
+        e.preventDefault();
+        const words = String(new FormData(form).get("q") ?? "").toLowerCase().split(/\s+/).filter(Boolean);
+        // A word in the page's name counts three times a word in its description.
+        const score = (t: (typeof targets)[number]) => {
+          const label = t.label.toLowerCase();
+          const rest = (t.keywords ?? "").toLowerCase();
+          return words.reduce((n, w) => n + (label.includes(w) ? 3 : 0) + (rest.includes(w) ? 1 : 0), 0);
+        };
+        const best = targets.map((t) => ({ t, s: score(t) })).sort((a, b) => b.s - a.s)[0];
+        if (best && best.s > 0) window.location.assign(best.t.href);
+        else note.textContent = "Nothing matched — try “payroll”, “GST” or “contact”.";
+      });
+    });
 
     /* ── contact form → existing lead API ──────────── */
     root.querySelectorAll<HTMLFormElement>("form.sec-4-about-form").forEach((form) => {
@@ -260,6 +289,32 @@ export function LegacySection({ children, id, className }: { children: ReactNode
             gsap.to(el, { y: -100, scrollTrigger: { trigger: el, start: "top 70%", scrub: 1 } });
           });
 
+          /* index-12 projects: pin the stack, each card slides up over the last */
+          const stack = root.querySelector<HTMLElement>(".sec-2-home-12__cards");
+          const stackCards = stack ? Array.from(stack.querySelectorAll<HTMLElement>(".card-home-12-project")) : [];
+          if (stack && stackCards.length > 1) {
+            const tallest = Math.max(...stackCards.map((c) => c.offsetHeight));
+            stackCards.forEach((card, i) => gsap.set(card, { position: "absolute", left: 0, right: 0, top: 0, margin: 0, zIndex: i + 1 }));
+            gsap.set(stack, { position: "relative", height: tallest + 50 * (stackCards.length - 1) });
+            const tl = gsap.timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: {
+                trigger: stack,
+                start: "top 96px",
+                end: () => `+=${window.innerHeight * 0.7 * (stackCards.length - 1)}`,
+                pin: true,
+                pinSpacing: true,
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
+            });
+            for (let i = 1; i < stackCards.length; i++) {
+              gsap.set(stackCards[i], { yPercent: 100 });
+              tl.to(stackCards[i], { yPercent: 0, duration: 1 }, i - 1);
+              for (let j = 0; j < i; j++) tl.to(stackCards[j], { y: (i - j) * 14, scale: 1 - (i - j) * 0.025, duration: 1 }, i - 1);
+            }
+          }
+
           /* index-8 testimonials: pin the stage, cards rise past the title */
           const stage = root.querySelector<HTMLElement>(".sec-8-home-8__stage");
           const center = stage?.querySelector<HTMLElement>(".sec-8-home-8__center");
@@ -273,6 +328,17 @@ export function LegacySection({ children, id, className }: { children: ReactNode
         });
       }, root);
     }
+
+    /* ── draggable tags that drop in (template throwable.js) ── */
+    root.querySelectorAll<HTMLElement>("[data-t-throwable-scene]").forEach((scene) => {
+      let stop: (() => void) | undefined;
+      let cancelled = false;
+      startThrowable(scene).then((fn) => (cancelled ? fn() : (stop = fn)));
+      off.push(() => {
+        cancelled = true;
+        stop?.();
+      });
+    });
 
     /* ── letters that stretch under the pointer (.text-scale-anim) ── */
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {

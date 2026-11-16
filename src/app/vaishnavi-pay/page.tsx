@@ -1,38 +1,17 @@
 import type { Metadata } from "next";
 import { OrisaLayout } from "@/components/orisa/OrisaLayout";
 import { LegacySection } from "@/components/orisa/legacy/LegacySection";
-import { VpHero } from "@/components/orisa/legacy/VpHero";
-import { VpMarquee } from "@/components/orisa/legacy/VpMarquee";
-import { VpAbout } from "@/components/orisa/legacy/VpAbout";
-import { VpModules } from "@/components/orisa/legacy/VpModules";
-import { VpBrands } from "@/components/orisa/legacy/VpBrands";
-import { VpScreens } from "@/components/orisa/legacy/VpScreens";
-import { VpRails } from "@/components/orisa/legacy/VpRails";
-import { VpReviews } from "@/components/orisa/legacy/VpReviews";
-import { VpCta } from "@/components/orisa/legacy/VpCta";
-import { VpBlog } from "@/components/orisa/legacy/VpBlog";
+import { P12Hero } from "@/components/orisa/legacy/P12Hero";
+import { P12Projects } from "@/components/orisa/legacy/P12Projects";
+import { P12Services } from "@/components/orisa/legacy/P12Services";
+import { P12Approach } from "@/components/orisa/legacy/P12Approach";
+import { P12Band } from "@/components/orisa/legacy/P12Band";
+import { P12Process } from "@/components/orisa/legacy/P12Process";
+import { P12Faq } from "@/components/orisa/legacy/P12Faq";
 import { PricingPlans } from "@/components/orisa/sections/PricingPlans";
-import { ComparisonTable } from "@/components/orisa/sections/ComparisonTable";
-import { FaqList } from "@/components/orisa/sections/FaqList";
-import { articleCards } from "@/components/orisa/fromSettings";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, faqSchema, SITE_URL, webPageSchema } from "@/utils/jsonLd";
-import { getSiteSettings } from "@/services/settings";
-import {
-  VP_COMPARE,
-  VP_FAQ,
-  VP_PRICING,
-  VP8_ABOUT,
-  VP8_AUDIENCE,
-  VP8_BLOG_FALLBACK,
-  VP8_CTA,
-  VP8_HERO,
-  VP8_MARQUEE,
-  VP8_MODULES,
-  VP8_RAILS,
-  VP8_REVIEWS,
-  VP8_SCREENS,
-} from "@/constants/vaishnaviPayContent";
+import { VP_FAQ, VP_PRICING } from "@/constants/vaishnaviPayContent";
 
 const TITLE = "VaishnaviPay — Payroll & Compliance Software for Firms";
 const DESCRIPTION =
@@ -47,13 +26,11 @@ export const metadata: Metadata = {
 };
 
 /**
- * VaishnaviPay product page — Orisa index-8 layout, in the template's
- * order, with pricing, the comparison table and FAQ before the closing CTA.
+ * VaishnaviPay product page — Orisa index-12, complete and in the
+ * template's order. The pricing block is index-12's own pricing section
+ * (PricingPlans) with the real plans from the owner console.
  */
-export default async function VaishnaviPayPage() {
-  const settings = await getSiteSettings();
-  const posts = articleCards(settings, VP8_BLOG_FALLBACK.map((p) => p.image)) ?? VP8_BLOG_FALLBACK;
-
+export default function VaishnaviPayPage() {
   return (
     <OrisaLayout>
       <JsonLd
@@ -79,41 +56,28 @@ export default async function VaishnaviPayPage() {
       />
 
       <LegacySection>
-        <VpHero {...VP8_HERO(settings.contactInfo.email)} />
-      </LegacySection>
-      <LegacySection>
-        <VpMarquee items={VP8_MARQUEE} />
-      </LegacySection>
-      <LegacySection>
-        <VpAbout {...VP8_ABOUT} />
+        <P12Hero />
       </LegacySection>
       <LegacySection id="modules">
-        <VpModules {...VP8_MODULES} />
+        <P12Projects />
+      </LegacySection>
+      <LegacySection id="features">
+        <P12Services />
       </LegacySection>
       <LegacySection>
-        <VpBrands items={VP8_AUDIENCE} />
+        <P12Approach />
       </LegacySection>
-      <LegacySection id="screens">
-        <VpScreens {...VP8_SCREENS} />
-      </LegacySection>
-      <LegacySection>
-        <VpRails {...VP8_RAILS} />
-      </LegacySection>
-      <LegacySection>
-        <VpReviews {...VP8_REVIEWS} />
-      </LegacySection>
-
       <div className="o-product">
         <PricingPlans {...VP_PRICING} />
-        <ComparisonTable {...VP_COMPARE} />
-        <FaqList {...VP_FAQ} />
       </div>
-
       <LegacySection>
-        <VpCta {...VP8_CTA} />
+        <P12Band />
       </LegacySection>
       <LegacySection>
-        <VpBlog label="Insights" title={["Latest from", "our compliance desk."]} viewAll={{ label: "All articles", href: "/insights" }} posts={posts} />
+        <P12Process />
+      </LegacySection>
+      <LegacySection id="faq">
+        <P12Faq />
       </LegacySection>
     </OrisaLayout>
   );

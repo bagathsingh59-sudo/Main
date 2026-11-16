@@ -2,18 +2,16 @@ import type { Metadata } from "next";
 import { OrisaLayout } from "@/components/orisa/OrisaLayout";
 import { LegacySection } from "@/components/orisa/legacy/LegacySection";
 import { AboutTwoHero } from "@/components/orisa/legacy/AboutTwoHero";
-import { BrandScroll } from "@/components/orisa/legacy/BrandScroll";
-import { StatsRow } from "@/components/orisa/legacy/StatsRow";
-import { JourneyBlock } from "@/components/orisa/legacy/JourneyBlock";
-import { AwardsBlock } from "@/components/orisa/legacy/AwardsBlock";
-import { TeamBlock } from "@/components/orisa/legacy/TeamBlock";
+import { AboutTwoTeam } from "@/components/orisa/legacy/AboutTwoTeam";
+import { A2Journey } from "@/components/orisa/legacy/A2Journey";
+import { A2Media } from "@/components/orisa/legacy/A2Media";
+import { A2Figures } from "@/components/orisa/legacy/A2Figures";
 import { ContactBlock } from "@/components/orisa/legacy/ContactBlock";
-import { BlogBlock } from "@/components/orisa/legacy/BlogBlock";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { breadcrumbSchema, webPageSchema } from "@/utils/jsonLd";
 import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { getSiteSettings } from "@/services/settings";
-import { blogPosts, contactForm, linkedinUrl, teamMembers } from "@/components/orisa/fromSettings";
+import { contactForm, linkedinUrl, teamMembers } from "@/components/orisa/fromSettings";
 
 const PAGE_TITLE = "About Us — 15 Years of Trusted Compliance";
 const PAGE_DESC =
@@ -37,32 +35,24 @@ export default async function AboutPage() {
         ]}
       />
 
-      {/* Orisa "About 02" hero (wordmark, social link, banner) */}
+      {/* Orisa "About 02", complete and in the template's order */}
       <LegacySection>
         <AboutTwoHero linkedinUrl={linkedinUrl(settings)} />
       </LegacySection>
-
-      {/* Orisa "About 01", every section after its hero, in the template's order */}
-      <LegacySection>
-        <StatsRow />
+      <LegacySection id="team">
+        <AboutTwoTeam members={teamMembers(settings)?.slice(0, 3)} />
       </LegacySection>
       <LegacySection id="journey">
-        <JourneyBlock />
+        <A2Journey />
       </LegacySection>
-      <LegacySection id="awards">
-        <AwardsBlock />
+      <LegacySection>
+        <A2Media />
       </LegacySection>
-      <LegacySection id="team">
-        <TeamBlock members={teamMembers(settings)} />
+      <LegacySection>
+        <A2Figures />
       </LegacySection>
       <LegacySection id="contact">
         <ContactBlock {...contactForm(settings)} />
-      </LegacySection>
-      <LegacySection>
-        <BlogBlock posts={blogPosts(settings)} />
-      </LegacySection>
-      <LegacySection>
-        <BrandScroll />
       </LegacySection>
     </OrisaLayout>
   );

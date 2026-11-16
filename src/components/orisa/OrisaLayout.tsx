@@ -5,7 +5,8 @@ import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
 import { SitePromoFloating, SitePromoPopup, SitePromoStickyBar } from "@/components/shared/SitePromo";
 import { SiteStrips } from "@/components/shared/SiteStrips";
 import { getSiteSettings, type BannerKindConfig } from "@/services/settings";
-import { FooterFour } from "./legacy/FooterFour";
+import { FooterSeven } from "./legacy/FooterSeven";
+import { MagicCursor } from "./MagicCursor";
 import { LegacySection } from "./legacy/LegacySection";
 import { OrisaHeader } from "./OrisaHeader";
 import { ORISA_MOTION, ORISA_NAV, ORISA_PALETTE, type OrisaNavLink } from "./config";
@@ -26,28 +27,32 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-export async function OrisaLayout({ children }: { children: ReactNode }) {
+export async function OrisaLayout({ children, home = false }: { children: ReactNode; /** Home page: header sits over the hero with the slide-open menu. */ home?: boolean }) {
   const settings = await getSiteSettings();
   const ci = settings.contactInfo;
   const { strip, popup, floating, stickyBar: sticky } = settings.banner;
   const logo = settings.branding.logoUrl;
   const nav = settings.navigation;
 
-  /* Admin → Navbar. Falls back to the built-in tabs when the list is empty. */
-  const adminLinks = nav.navbarLinks.filter((l) => l.visible !== false);
-  const links: OrisaNavLink[] = adminLinks.length
-    ? adminLinks.map((l) => ({ label: l.label, href: l.href, badge: ORISA_NAV.find((n) => n.href === l.href)?.badge }))
-    : [...ORISA_NAV];
+  /* The site is exactly the five pages in ORISA_NAV, in that order.
+     Admin → Navbar can rename one (matched by its URL) or hide it;
+     links to any other URL in saved settings are ignored. */
+  const links: OrisaNavLink[] = ORISA_NAV.flatMap((page) => {
+    const saved = nav.navbarLinks.find((l) => l.href === page.href);
+    if (saved?.visible === false) return [];
+    return [{ ...page, label: saved?.label.trim() || page.label }];
+  });
 
   /* Admin → Footer. */
   const visible = (links: { label: string; href: string; visible: boolean }[]) =>
     links.filter((l) => l.visible !== false).map(({ label, href }) => ({ label, href }));
   const columns = nav.footerColumns;
   const legal = columns.find((c) => /legal/i.test(c.title)) ?? columns[columns.length - 1];
-  const pillsColumn = columns.find((c) => /service/i.test(c.title)) ?? columns[0];
   const socials = nav.socialLinks
     .filter((s) => s.url.trim())
-    .map((s) => ({ label: SOCIAL_LABEL[s.platform] ?? s.platform, href: s.url }));
+    .map((s) => ({ label: SOCIAL_LABEL[s.platform] ?? s.platform, href: s.url, platform: s.platform }));
+  /* "Mon – Sat · 9:30 AM – 7:00 PM IST" → days / time */
+  const [hoursDays, ...hoursRest] = ci.hours.split(/\s*·\s*/);
 
   return (
     <SmoothScrollProvider>
@@ -72,6 +77,7 @@ export async function OrisaLayout({ children }: { children: ReactNode }) {
           }
         />
         <OrisaHeader
+          menu={home ? "toggle" : "open"}
           links={links}
           logoUrl={logo || undefined}
           meta={{
@@ -88,20 +94,22 @@ export async function OrisaLayout({ children }: { children: ReactNode }) {
           }}
         />
         <main id="main">{children}</main>
-        {/* Orisa index-4 footer */}
-        <LegacySection className="o-footer-4">
-          <FooterFour
+                {/* Orisa index-7 footer */}
+        <LegacySection className="o-footer-7">
+          <FooterSeven
+            pages={links.map(({ label, href }) => ({ label, href }))}
+            socials={socials}
+            phones={[ci.phone, ci.altPhone].filter((p) => p.trim())}
             email={ci.email}
             address={[ci.addressLine1, ci.addressLine2, `${ci.city}, ${ci.state} ${ci.pin}`].filter((l) => l.trim())}
-            phones={[ci.phone, ci.altPhone].filter((p) => p.trim())}
-            socials={socials}
-            quickLinks={links.map(({ label, href }) => ({ label, href }))}
-            moreLinks={legal ? visible(legal.links) : []}
-            pills={pillsColumn && pillsColumn !== legal ? visible(pillsColumn.links).slice(0, 4) : []}
+            hours={{ days: hoursDays, time: hoursRest.join(" · ") }}
+            cta={{ title: ["Questions about payroll", "or compliance?"], label: "Book a consultation", href: "/contact" }}
+            word="VAISHNAVI"
             copyright={nav.copyright}
-            note="[ Since 2018 ]"
+            legal={legal ? visible(legal.links) : []}
           />
         </LegacySection>
+        <MagicCursor />
       </div>
       <ScrollToTop />
 
@@ -166,7 +174,7 @@ export async function OrisaLayout({ children }: { children: ReactNode }) {
 
 const SOCIAL_LABEL: Record<string, string> = {
   linkedin: "LinkedIn",
-  twitter: "X / Twitter",
+  twitter: "X",
   instagram: "Instagram",
   youtube: "YouTube",
   facebook: "Facebook",

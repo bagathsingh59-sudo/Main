@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MainLayout } from "@/layouts/MainLayout";
+import { OrisaLayout } from "@/components/orisa/OrisaLayout";
 import { LegalStub } from "@/sections/LegalStub";
 import { JsonLd } from "@/components/shared/JsonLd";
 import { LicenseCard } from "@/components/shared/LicenseCard";
@@ -18,7 +18,7 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default function DisclaimerPage() {
   return (
-    <MainLayout>
+    <OrisaLayout>
       <JsonLd
         data={[
           webPageSchema({ path: "/disclaimer", title: PAGE_TITLE, description: PAGE_DESC }),
@@ -77,6 +77,6 @@ export default function DisclaimerPage() {
           <LicenseCard variant="full" />
         </div>
       </section>
-    </MainLayout>
+    </OrisaLayout>
   );
 }

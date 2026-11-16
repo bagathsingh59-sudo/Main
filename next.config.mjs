@@ -15,6 +15,17 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ["framer-motion", "lucide-react", "@react-three/drei"],
+    // Node-only database driver: load it from node_modules at runtime.
+    serverComponentsExternalPackages: ["pg"],
+  },
+  // Pages removed in the five-page redesign (Home, About, Services,
+  // VaishnaviPay, Contact). Permanent, so search engines move their links.
+  async redirects() {
+    return [
+      { source: "/industries", destination: "/services", permanent: true },
+      { source: "/insights", destination: "/", permanent: true },
+      { source: "/insights/:path*", destination: "/", permanent: true },
+    ];
   },
   webpack: (config) => {
     config.module.rules.push({

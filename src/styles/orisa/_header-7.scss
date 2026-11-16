@@ -1,0 +1,240 @@
+@use './utils' as *;
+
+/* ───────────────────────────────────────────────────────────
+   Orisa header-7 (index-7): logo · glass pill with the page tabs ·
+   three-line toggle · search / dark-mode / side-panel icons.
+
+   .header-7--overlay   home page: sits over the hero, white text,
+                        toggle slides the tabs open (template)
+   .header-7--solid     other pages: navy bar, tabs always open on
+                        large screens, no toggle there
+   Below 1200px the tabs are hidden and the toggle opens the side panel.
+   Rules follow the template's main.css "Header 7 (toggle inline nav)".
+   ─────────────────────────────────────────────────────────── */
+
+.header-7 {
+	--h7-fg: #fff;
+	position: relative;
+	z-index: 50;
+	color: var(--h7-fg);
+
+	&--overlay {
+		position: absolute;
+		inset: 0 0 auto;
+	}
+
+	&--solid {
+		background: #061836;
+	}
+
+	&__bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 10px var(--o-gutter, 16px);
+		min-height: 68px;
+	}
+
+	.at-header-logo a {
+		gap: 6px;
+		color: var(--h7-fg);
+	}
+
+	.at-header-logo__word {
+		color: var(--h7-fg);
+	}
+
+	&__right {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 12px;
+	}
+
+	/* Glass pill with the tabs (template: .at-main-menu.menu-light.style-1). */
+	&__nav {
+		display: flex;
+		align-items: center;
+		height: 48px;
+		padding: 0 4px;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		border-radius: 50px;
+		background: rgba(255, 255, 255, 0.18);
+		backdrop-filter: blur(2px);
+		-webkit-backdrop-filter: blur(2px);
+
+		max-width: 0;
+		opacity: 0;
+		visibility: hidden;
+		overflow: clip;
+		transform: translateX(24px);
+		margin-inline-end: -12px;
+		pointer-events: none;
+		transition:
+			max-width 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+			margin 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+			opacity 0.35s ease,
+			transform 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+			visibility 0s linear 0.55s;
+
+		@media (max-width: 1199px) {
+			display: none;
+		}
+
+		ul {
+			display: flex;
+			align-items: center;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			white-space: nowrap;
+		}
+
+		a {
+			display: inline-flex;
+			align-items: center;
+			padding: 10px 20px;
+			border-radius: 50px;
+			font-family: var(--at-ff-body);
+			font-size: 16px;
+			font-weight: 600;
+			line-height: 1;
+			letter-spacing: -0.02em;
+			color: var(--h7-fg);
+			transition: background-color 0.3s ease;
+
+			&:hover,
+			&[aria-current="page"] {
+				background: rgba(255, 255, 255, 0.2);
+			}
+		}
+	}
+
+	&.is-menu-open &__nav {
+		max-width: 900px;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		margin-inline-end: 0;
+		pointer-events: auto;
+		transition:
+			max-width 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+			margin 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+			opacity 0.4s ease 0.1s,
+			transform 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+			visibility 0s linear 0s;
+	}
+
+	/* Inner pages: the tabs are simply there — no slide-in on load. */
+	&--solid &__nav {
+		transition: none;
+	}
+
+	/* Three-line toggle (template .at-hamburger). */
+	.at-hamburger {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--h7-fg);
+		cursor: pointer;
+	}
+
+	&--solid .at-hamburger {
+		@media (min-width: 1200px) {
+			display: none;
+		}
+	}
+
+	.at-hamburger__box {
+		position: relative;
+		display: block;
+		width: 20px;
+		height: 14px;
+	}
+
+	.at-hamburger__bar {
+		position: absolute;
+		left: 0;
+		height: 2px;
+		border-radius: 2px;
+		background: currentColor;
+		transition:
+			transform 0.5s cubic-bezier(0.65, 0, 0.35, 1),
+			width 0.5s cubic-bezier(0.65, 0, 0.35, 1),
+			top 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+			opacity 0.25s ease;
+
+		&:nth-child(1) {
+			top: 0;
+			width: 100%;
+		}
+		&:nth-child(2) {
+			top: 6px;
+			width: 65%;
+		}
+		&:nth-child(3) {
+			top: 12px;
+			width: 85%;
+		}
+	}
+
+	&--overlay.is-menu-open .at-hamburger__bar {
+		&:nth-child(1) {
+			top: 6px;
+			width: 100%;
+			transform: rotate(45deg);
+		}
+		&:nth-child(2) {
+			opacity: 0;
+			transform: scaleX(0);
+		}
+		&:nth-child(3) {
+			top: 6px;
+			width: 100%;
+			transform: rotate(-45deg);
+		}
+	}
+
+	&__icons {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	&__icon-btn,
+	.dark-light-mode .toggle {
+		display: inline-grid;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 50px;
+		color: var(--h7-fg);
+		transition: background-color 0.25s ease;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.16);
+		}
+	}
+
+	@media (max-width: 575px) {
+		&__icons .dark-light-mode {
+			display: none;
+		}
+	}
+}
+
+/* Dark mode: the template's near-black bar instead of navy. */
+.orisa[data-theme="dark"] .header-7--solid {
+	background: #141414;
+}
+
+/* The logo sits on a dark bar or photo: show it in white, like the template's light logo. */
+.header-7 .at-header-logo__mark {
+	filter: brightness(0) invert(1);
+}

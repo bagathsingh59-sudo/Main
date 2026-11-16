@@ -12,7 +12,6 @@ import type { FaqListProps } from "@/components/orisa/sections/FaqList";
 import type { PricingPlansProps } from "@/components/orisa/sections/PricingPlans";
 import type { ProjectListProps } from "@/components/orisa/sections/ProjectList";
 import type { VpAboutProps } from "@/components/orisa/legacy/VpAbout";
-import type { VpBlogPost } from "@/components/orisa/legacy/VpBlog";
 import type { VpCtaProps } from "@/components/orisa/legacy/VpCta";
 import type { VpHeroProps } from "@/components/orisa/legacy/VpHero";
 import type { VpModulesProps } from "@/components/orisa/legacy/VpModules";
@@ -286,10 +285,4 @@ export const VP8_CTA: VpCtaProps = {
   },
 };
 
-/** Shown when Admin → Blog has no published posts yet. */
-export const VP8_BLOG_FALLBACK: VpBlogPost[] = [
-  { title: "Your monthly payroll compliance checklist", category: "Payroll", excerpt: "Every return, register and due date in one wage month, in the order we work through them.", author: "Vaishnavi desk", date: "", href: "/insights", image: `${TPL8}/sec-10-1.webp` },
-  { title: "PF ECR errors that stop an upload — and how to avoid them", category: "EPF", excerpt: "", author: "Vaishnavi desk", date: "", href: "/insights", image: `${TPL8}/sec-10-2.webp` },
-  { title: "Digitally signed pay slips: what they prove and what they don't", category: "Documents", excerpt: "", author: "Vaishnavi desk", date: "", href: "/insights", image: `${TPL8}/sec-10-3.webp` },
-];
 

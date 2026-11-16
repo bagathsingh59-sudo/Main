@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Card, Field, Input, PageHeader, SaveBar, Select, Textarea } from "../../../_components/Fields";
 import { ImageUpload } from "../../../_components/ImageUpload";
 import { useSettings } from "../../../_components/useSettings";
-import { TEAM_ACCENTS } from "@/services/settings";
+import { TEAM_ACCENTS } from "@/services/settings/types";
 import type { TeamMember, SiteSettings } from "@/services/settings";
 
 export function TeamMemberEditor({ memberId }: { memberId: string }) {

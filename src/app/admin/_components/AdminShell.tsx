@@ -56,21 +56,6 @@ const ICONS: Record<string, { bg: string; fg: string; path: React.ReactNode }> =
     fg: "text-blue-700 dark:text-blue-300",
     path: <><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></>,
   },
-  Founder: {
-    bg: "bg-yellow-100 dark:bg-yellow-900/40",
-    fg: "text-yellow-700 dark:text-yellow-300",
-    path: <><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></>,
-  },
-  Blog: {
-    bg: "bg-orange-100 dark:bg-orange-900/40",
-    fg: "text-orange-700 dark:text-orange-300",
-    path: <><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z" /></>,
-  },
-  Updates: {
-    bg: "bg-rose-100 dark:bg-rose-900/40",
-    fg: "text-rose-700 dark:text-rose-300",
-    path: <><path d="M12 2v6M12 16v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M16 12h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24" /></>,
-  },
   Storage: {
     bg: "bg-cyan-100 dark:bg-cyan-900/40",
     fg: "text-cyan-700 dark:text-cyan-300",
@@ -109,11 +94,8 @@ const NAV = [
   { href: "/admin/branding", label: "Branding" },
   { href: "/admin/navbar", label: "Navbar" },
   { href: "/admin/footer", label: "Footer" },
-  { href: "/admin/blog", label: "Blog" },
-  { href: "/admin/updates", label: "Updates" },
   { href: "/admin/team", label: "Team" },
   { href: "/admin/services", label: "Services" },
-  { href: "/admin/founder", label: "Founder" },
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/automation", label: "Automation" },
   { href: "/admin/email-templates", label: "Email templates" },

@@ -100,7 +100,7 @@ export function FaqEditor() {
     <div>
       <PageHeader
         title="FAQ"
-        description="Powers the FAQ section on /insights and the FAQ JSON-LD schema (Google's 'People Also Ask' eligibility). Only items with answers are published; the rest stay as drafts."
+        description="Powers the FAQ section on the Services page and the FAQ JSON-LD schema (Google's 'People Also Ask' eligibility). Only items with answers are published; the rest stay as drafts."
       />
 
       <div className="mb-6 rounded-xl border border-fuchsia-200 bg-fuchsia-50/60 px-4 py-3 text-[0.85rem] leading-relaxed text-fuchsia-900 dark:border-fuchsia-900/40 dark:bg-fuchsia-900/20 dark:text-fuchsia-200">

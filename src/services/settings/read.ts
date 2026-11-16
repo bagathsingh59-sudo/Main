@@ -1,5 +1,6 @@
 /**
- * Read site settings from Vercel Blob (single JSON file).
+ * Read site settings — from PostgreSQL when DATABASE_URL is set,
+ * otherwise from Vercel Blob or a local JSON file (SETTINGS_FILE).
  *
  * Why Blob (not Edge Config): Hobby Edge Config caps a single item at
  * ~8 KB. Our settings — once you add 168 keywords + 7 SEO pages + email
@@ -14,11 +15,15 @@
  */
 
 import { DEFAULT_SETTINGS } from "./defaults";
+import { isDbConfigured, query } from "../db";
 import { readSettingsFile, settingsFilePath } from "./fileStore";
 import { siteSettingsSchema, type SiteSettings } from "./types";
 
 /** Deterministic pathname inside the Blob store. */
 export const SETTINGS_BLOB_PATHNAME = "vc-config/site-settings.json";
+
+/** Row key of the settings document in the site_settings table. */
+export const SETTINGS_KEY = "site";
 
 /** Read once per request, with a tiny in-memory cache inside the
  * serverless function instance. Blob reads are ~50-100 ms; the cache
@@ -95,6 +100,18 @@ export interface GetSettingsOptions {
 export async function getSiteSettings(opts: GetSettingsOptions = {}): Promise<SiteSettings> {
   const now = Date.now();
   if (!opts.skipCache && cached && now - cached.at < TTL_MS) return cached.value;
+
+  if (isDbConfigured()) {
+    try {
+      const rows = await query<{ data: unknown }>("SELECT data FROM site_settings WHERE key = $1", [SETTINGS_KEY]);
+      const value = rows.length ? toSettings(rows[0].data) : DEFAULT_SETTINGS;
+      cached = { at: now, value };
+      return value;
+    } catch (err) {
+      console.error("[settings] Database read failed:", err instanceof Error ? err.message : err);
+      return DEFAULT_SETTINGS;
+    }
+  }
 
   const file = settingsFilePath();
   if (file) {

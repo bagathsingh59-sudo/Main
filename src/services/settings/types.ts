@@ -370,7 +370,7 @@ export const emailTemplatesSchema = z.object({
   autoReply: autoReplyTemplateSchema,
 });
 
-/* ── FAQ (powers the /insights FAQ section + FAQ JSON-LD) ── */
+/* ── FAQ (powers the Services page FAQ + FAQ JSON-LD) ── */
 
 export const faqItemSchema = z.object({
   question: z.string().min(5).max(280),
@@ -382,7 +382,7 @@ export const faqSettingsSchema = z.object({
   items: z.array(faqItemSchema).max(100),
 });
 
-/* ── Blog (CMS for /insights/[slug] posts) ──────────────── */
+/* ── Blog — no longer shown on the site; kept so stored data still validates ── */
 
 const SLUG_RE = /^[a-z0-9-]+$/;
 
@@ -505,7 +505,7 @@ export const servicesSettingsSchema = z.object({
 
 /* ── Founder profile (single record) ─────────────────────── */
 
-/* ── Regulatory Updates (briefings shown on /insights) ─── */
+/* ── Regulatory Updates — no longer shown; kept so stored data still validates ── */
 
 export const updateItemSchema = z.object({
   id: z.string().min(6).max(40),

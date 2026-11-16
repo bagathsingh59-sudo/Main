@@ -2,16 +2,77 @@
    Design tokens for the Orisa-based pages.
 
    Everything is a CSS variable on the `.orisa` wrapper, so:
-     • palettes are swappable   → data-palette="brand" | "orisa"
+     • palettes are swappable   → data-palette="pay" (default) | "brand" | "orisa"
      • light / dark is swappable → data-theme="light" | "dark"
    Section styles only ever read `--at-*` variables, never hex values.
    ─────────────────────────────────────────────────────────── */
 
-/* Palette "brand" — Vaishnavi navy + teal (default). */
+/* Palette "pay" — VaishnaviPay console colours (default).
+   Navy #061836 sidebar, mint #5ed79e actions, purple #7727ec brand mark,
+   cool grey #f3f5f9 page. Dark mode keeps the template's own dark greys. */
 .orisa {
 	--at-ff-body: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
 	--at-ff-heading: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
 
+	--at-common-white: #ffffff;
+	--at-common-white-rgb: 255, 255, 255;
+	--at-common-black: #061836;
+	--at-common-black-rgb: 6, 24, 54;
+
+	--at-neutral-0: #ffffff;
+	--at-neutral-0-rgb: 255, 255, 255;
+	--at-neutral-50: #f3f5f9;
+	--at-neutral-50-rgb: 243, 245, 249;
+	--at-neutral-100: #e3e8f0;
+	--at-neutral-200: #cfd7e3;
+	--at-neutral-300: #aeb9c8;
+	--at-neutral-500: #5d6f86;
+	--at-neutral-700: #182d46;
+	--at-neutral-800: #10233b;
+	--at-neutral-900: #0d1424;
+	--at-neutral-950: #061836;
+
+	--at-theme-primary: #5ed79e;
+	--at-theme-primary-rgb: 94, 215, 158;
+	/* Darker mint for small text on white (readable contrast). */
+	--at-theme-primary-text: #12945e;
+	--at-theme-accent: #7727ec;
+	--at-theme-accent-rgb: 119, 39, 236;
+	--at-theme-info: #42b5cb;
+	--at-theme-danger: #f36e72;
+	--at-btn-bg: #061836;
+	--at-btn-fg: #ffffff;
+}
+
+/* Dark mode — the template's own dark greys, VaishnaviPay mint accent. */
+.orisa[data-theme="dark"] {
+	--at-common-white: #1e1e1e;
+	--at-common-white-rgb: 30, 30, 30;
+	--at-common-black: #ffffff;
+	--at-common-black-rgb: 255, 255, 255;
+
+	--at-neutral-0: #0c0c0c;
+	--at-neutral-0-rgb: 12, 12, 12;
+	--at-neutral-50: #141414;
+	--at-neutral-50-rgb: 20, 20, 20;
+	--at-neutral-100: #212121;
+	--at-neutral-200: #2d2d2d;
+	--at-neutral-300: #404040;
+	--at-neutral-500: #b3b3b3;
+	--at-neutral-700: #535353;
+	--at-neutral-800: #eaeaea;
+	--at-neutral-900: #efefef;
+	--at-neutral-950: #f4f4f4;
+
+	--at-theme-primary: #5ed79e;
+	--at-theme-primary-rgb: 94, 215, 158;
+	--at-theme-primary-text: #5ed79e;
+	--at-btn-bg: #efefef;
+	--at-btn-fg: #0f0f0f;
+}
+
+/* Palette "brand" — earlier navy + teal (?palette=brand). */
+.orisa[data-palette="brand"] {
 	--at-common-white: #ffffff;
 	--at-common-white-rgb: 255, 255, 255;
 	--at-common-black: #0b1f3a;
@@ -36,7 +97,7 @@
 	--at-btn-fg: #fbfcff;
 }
 
-.orisa[data-theme="dark"] {
+.orisa[data-palette="brand"][data-theme="dark"] {
 	--at-common-white: #0b1f3a;
 	--at-common-white-rgb: 11, 31, 58;
 	--at-common-black: #ffffff;

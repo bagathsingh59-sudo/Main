@@ -62,7 +62,7 @@ export function NavbarEditor() {
     <div>
       <PageHeader
         title="Navbar"
-        description="Primary navigation across the top of every page. Order here = order on screen. Toggle visibility to hide without deleting."
+        description="Header tabs. The site has five pages — Home (/), About us (/about), Services (/services), VaishnaviPay (/vaishnavi-pay) and Contact us (/contact) — always shown in that order. Here you can rename a tab or hide it; links to any other URL are ignored."
       />
 
       <Card>

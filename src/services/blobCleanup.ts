@@ -17,7 +17,7 @@
  * by either function.
  */
 
-import { del, list, type ListBlobResult } from "@vercel/blob";
+import { deleteMedia, isMediaConfigured, listMedia, MEDIA_ROUTE } from "./media";
 import { getSiteSettings } from "./settings";
 
 export const TOTAL_BUDGET_BYTES = 1024 * 1024 * 1024; // 1 GB Hobby cap
@@ -44,8 +44,12 @@ interface ListResult {
 /* ─────────────────  Listing  ─────────────────────────────── */
 
 function isConfigured(): boolean {
-  return !!process.env.BLOB_READ_WRITE_TOKEN;
+  return isMediaConfigured();
 }
+
+/** Uploaded-file URLs: Vercel Blob (https://…) or the database store (/media/…). */
+const isUploadUrl = (u: string | undefined | null): u is string =>
+  !!u && typeof u === "string" && (u.startsWith("http") || u.startsWith(MEDIA_ROUTE));
 
 /**
  * List every blob under both the cleanable prefixes (branding/, blog/)
@@ -53,34 +57,9 @@ function isConfigured(): boolean {
  * exist (Hobby cap is well below that, but defensive).
  */
 async function listAll(): Promise<ListResult> {
-  if (!isConfigured()) return { blobs: [], errors: ["BLOB_READ_WRITE_TOKEN not set"] };
-  const blobs: BlobInfo[] = [];
-  const errors: string[] = [];
-
-  const prefixes = [SETTINGS_PREFIX, ...CLEANABLE_PREFIXES];
-  for (const prefix of prefixes) {
-    let cursor: string | undefined;
-    do {
-      let res: ListBlobResult;
-      try {
-        res = await list({ prefix, cursor, limit: 1000 });
-      } catch (err) {
-        errors.push(`list(${prefix}): ${err instanceof Error ? err.message : "unknown"}`);
-        break;
-      }
-      for (const b of res.blobs) {
-        blobs.push({
-          pathname: b.pathname,
-          url: b.url,
-          size: b.size,
-          uploadedAt: new Date(b.uploadedAt),
-        });
-      }
-      cursor = res.cursor;
-    } while (cursor);
-  }
-
-  return { blobs, errors };
+  if (!isConfigured()) return { blobs: [], errors: ["No media store configured (DATABASE_URL or BLOB_READ_WRITE_TOKEN)"] };
+  const { files, errors } = await listMedia([SETTINGS_PREFIX, ...CLEANABLE_PREFIXES]);
+  return { blobs: files, errors };
 }
 
 /* ─────────────────  Stats  ───────────────────────────────── */
@@ -142,7 +121,7 @@ async function collectReferencedUrls(): Promise<Set<string>> {
   const s = await getSiteSettings();
   const set = new Set<string>();
   const add = (u: string | undefined | null) => {
-    if (u && typeof u === "string" && u.startsWith("http")) set.add(u);
+    if (isUploadUrl(u)) set.add(u);
   };
 
   // Branding
@@ -159,6 +138,10 @@ async function collectReferencedUrls(): Promise<Set<string>> {
     add(post.coverImage);
     add(post.seo.ogImage);
   }
+
+  // Team photos + founder photo
+  for (const m of s.team.members) add(m.image);
+  add(s.founder.image);
 
   return set;
 }
@@ -177,7 +160,7 @@ export interface OrphanReport {
  */
 export async function listOrphans(): Promise<OrphanReport> {
   if (!isConfigured()) {
-    return { orphans: [], bytes: 0, skippedRecent: 0, errors: ["BLOB_READ_WRITE_TOKEN not set"] };
+    return { orphans: [], bytes: 0, skippedRecent: 0, errors: ["No media store configured (DATABASE_URL or BLOB_READ_WRITE_TOKEN)"] };
   }
   const refs = await collectReferencedUrls();
   const { blobs, errors } = await listAll();
@@ -221,7 +204,7 @@ export async function cleanupOrphans(): Promise<CleanupReport> {
 
   for (const o of orphans) {
     try {
-      await del(o.url);
+      await deleteMedia(o.url);
       deleted++;
       reclaimedBytes += o.size;
     } catch (err) {
@@ -258,7 +241,7 @@ async function buildReferenceMap(): Promise<Map<string, FileReference[]>> {
   const map = new Map<string, FileReference[]>();
 
   const add = (url: string | undefined | null, path: string, label: string) => {
-    if (!url || typeof url !== "string" || !url.startsWith("http")) return;
+    if (!isUploadUrl(url)) return;
     const existing = map.get(url) ?? [];
     existing.push({ path, label });
     map.set(url, existing);
@@ -284,6 +267,10 @@ async function buildReferenceMap(): Promise<Map<string, FileReference[]>> {
     add(post.seo.ogImage, `blog.posts[${i}].seo.ogImage`, `OG · ${title}`);
   }
 
+  // Team photos + founder photo
+  s.team.members.forEach((m, i) => add(m.image, `team.members[${i}].image`, `Team · ${m.name}`));
+  add(s.founder.image, "founder.image", "Founder photo");
+
   return map;
 }
 
@@ -291,7 +278,7 @@ export async function listAllWithReferences(): Promise<{
   files: BlobFileWithRefs[];
   errors: string[];
 }> {
-  if (!isConfigured()) return { files: [], errors: ["BLOB_READ_WRITE_TOKEN not set"] };
+  if (!isConfigured()) return { files: [], errors: ["No media store configured (DATABASE_URL or BLOB_READ_WRITE_TOKEN)"] };
   const refsMap = await buildReferenceMap();
   const { blobs, errors } = await listAll();
   const files: BlobFileWithRefs[] = blobs.map((b) => ({
@@ -324,7 +311,7 @@ export async function deleteUrls(urls: string[]): Promise<{
       continue;
     }
     try {
-      await del(url);
+      await deleteMedia(url);
       deleted++;
     } catch (err) {
       failed++;

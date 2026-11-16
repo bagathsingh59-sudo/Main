@@ -1,7 +1,8 @@
 /**
  * Authenticated image upload endpoint for admin brand assets.
  *
- * Stores the file in Vercel Blob and returns the public URL. The URL
+ * Stores the file (PostgreSQL when DATABASE_URL is set, else Vercel Blob)
+ * and returns its URL. The URL
  * gets pasted into a settings field (logoUrl / faviconUrl / ogImageUrl)
  * via the admin UI.
  *
@@ -15,7 +16,7 @@
 
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
+import { isMediaConfigured, putMedia } from "@/services/media";
 import { ADMIN_COOKIE, verifySession } from "@/services/adminAuth";
 import { checkQuotaFor, cleanupOrphans } from "@/services/blobCleanup";
 
@@ -43,12 +44,11 @@ export async function POST(req: Request) {
   }
 
   // ── env check ─────────────────────────────────────────
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  if (!isMediaConfigured()) {
     return NextResponse.json(
       {
         ok: false,
-        message:
-          "Vercel Blob is not configured. In Vercel: Storage → Create Blob store → connect to project, then redeploy.",
+        message: "No file storage configured: set DATABASE_URL (PostgreSQL) or BLOB_READ_WRITE_TOKEN (Vercel Blob).",
       },
       { status: 503 },
     );
@@ -105,11 +105,7 @@ export async function POST(req: Request) {
   const filename = `branding/${safePurpose}-${Date.now()}.${ext}`;
 
   try {
-    const blob = await put(filename, file, {
-      access: "public",
-      contentType: file.type,
-      addRandomSuffix: false,
-    });
+    const blob = await putMedia(filename, file, file.type);
     // Fire-and-forget cleanup — purge previous timestamped versions of
     // anything that's no longer referenced AND older than the 1-hour
     // grace window. The just-uploaded file is safe (it's <1 min old).

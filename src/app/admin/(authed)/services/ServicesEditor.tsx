@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, Field, Input, PageHeader, SaveBar, Select, Textarea } from "../../_components/Fields";
 import { useSettings } from "../../_components/useSettings";
-import { SERVICE_ICONS, TEAM_ACCENTS } from "@/services/settings";
+import { SERVICE_ICONS, TEAM_ACCENTS } from "@/services/settings/types";
 import type { ServiceItem, SiteSettings } from "@/services/settings";
 import { makeId } from "../../_components/blogUtils";
 

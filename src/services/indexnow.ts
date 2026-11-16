@@ -24,28 +24,11 @@ import { getSiteSettings } from "./settings";
  * include and reasserts their freshness whenever navigation, SEO,
  * branding or banner copy changes.
  */
-const CORE_URLS = ["/", "/about", "/services", "/industries", "/insights", "/contact"] as const;
+const CORE_URLS = ["/", "/about", "/services", "/vaishnavi-pay", "/contact"] as const;
 
-/**
- * Build the complete URL list from current settings — core pages plus
- * every published blog post and compliance update. Drafts are filtered
- * out so a notice-of-intent doesn't leak into search engines before
- * the author publishes.
- */
+/** The site's pages (Home, About, Services, VaishnaviPay, Contact). */
 async function buildUrlList(): Promise<string[]> {
-  try {
-    const settings = await getSiteSettings();
-    const blog = settings.blog.posts
-      .filter((p) => !p.isDraft && p.slug)
-      .map((p) => `/insights/${p.slug}`);
-    const updates = settings.updates.items
-      .filter((u) => !u.isDraft && u.slug)
-      .map((u) => `/insights/updates/${u.slug}`);
-    return [...CORE_URLS, ...blog, ...updates];
-  } catch {
-    // Settings read failed — still ping the core URLs.
-    return [...CORE_URLS];
-  }
+  return [...CORE_URLS];
 }
 
 // IndexNow allows up to 10,000 URLs per request — we'll never hit

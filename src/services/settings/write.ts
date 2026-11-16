@@ -1,5 +1,6 @@
 /**
- * Write site settings to Vercel Blob (single JSON file).
+ * Write site settings — to PostgreSQL when DATABASE_URL is set,
+ * otherwise to Vercel Blob or a local JSON file (SETTINGS_FILE).
  *
  * Migrated from Vercel Edge Config because Hobby Edge Config caps a
  * single item at ~8 KB. Blob has no such cap (1 GB free), already-
@@ -8,8 +9,9 @@
  */
 
 import { put } from "@vercel/blob";
+import { isDbConfigured, query } from "../db";
 import { settingsFilePath, writeSettingsFile } from "./fileStore";
-import { invalidateSettingsCache, SETTINGS_BLOB_PATHNAME } from "./read";
+import { invalidateSettingsCache, SETTINGS_BLOB_PATHNAME, SETTINGS_KEY } from "./read";
 import { siteSettingsSchema, type SiteSettings } from "./types";
 
 export type WriteResult =
@@ -24,6 +26,20 @@ export async function updateSiteSettings(next: SiteSettings): Promise<WriteResul
       reason: "validation",
       detail: parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "),
     };
+  }
+
+  if (isDbConfigured()) {
+    try {
+      await query(
+        `INSERT INTO site_settings (key, data, updated_at) VALUES ($1, $2::jsonb, now())
+         ON CONFLICT (key) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
+        [SETTINGS_KEY, JSON.stringify(parsed.data)],
+      );
+      invalidateSettingsCache();
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, reason: "api_error", detail: err instanceof Error ? err.message : "unknown" };
+    }
   }
 
   const file = settingsFilePath();
@@ -41,7 +57,7 @@ export async function updateSiteSettings(next: SiteSettings): Promise<WriteResul
     return {
       ok: false,
       reason: "not_configured",
-      detail: "Set BLOB_READ_WRITE_TOKEN (Vercel Blob) or SETTINGS_FILE (local JSON file, e.g. .data/site-settings.json).",
+      detail: "Set DATABASE_URL (PostgreSQL), BLOB_READ_WRITE_TOKEN (Vercel Blob) or SETTINGS_FILE (local JSON file).",
     };
   }
 

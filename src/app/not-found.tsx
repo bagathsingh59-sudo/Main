@@ -1,22 +1,28 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { OrisaLayout } from "@/components/orisa/OrisaLayout";
+import { LegacySection } from "@/components/orisa/legacy/LegacySection";
+import { NotFound404 } from "@/components/orisa/legacy/NotFound404";
+import { getSiteSettings } from "@/services/settings";
+import { SERVICES } from "@/constants/services";
 
-export default function NotFound() {
+/** Orisa 404 page; its search box covers the pages and every service. */
+export default async function NotFound() {
+  const settings = await getSiteSettings();
+  const services = settings.services.items.length ? settings.services.items : SERVICES;
+  const targets = [
+    { label: "Home", href: "/", keywords: "home start" },
+    { label: "About us", href: "/about", keywords: "about team journey company who" },
+    { label: "Services", href: "/services", keywords: "services pricing price cost" },
+    { label: "VaishnaviPay", href: "/vaishnavi-pay", keywords: "software app payroll software pricing plans demo" },
+    { label: "Contact us", href: "/contact", keywords: "contact call email phone address book consultation" },
+    { label: "Privacy Policy", href: "/privacy", keywords: "privacy data" },
+    { label: "Terms of Service", href: "/terms", keywords: "terms" },
+    ...services.map((s) => ({ label: s.title, href: `/services/${s.id}`, keywords: `${s.summary} ${s.points.join(" ")}` })),
+  ];
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-mist px-6 text-center">
-      <div className="max-w-md">
-        <div className="text-[0.78rem] font-bold uppercase tracking-[0.22em] text-teal-600">404</div>
-        <h1 className="mt-4 font-display text-display-lg text-navy-900">Page not found.</h1>
-        <p className="mt-4 text-[0.95rem] leading-[1.7] text-navy-900/65">
-          The page you were looking for has been moved or never existed. Let's get you back to safe ground.
-        </p>
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-          <Button href="/">Back to home</Button>
-          <Link href="/#contact" className="text-[0.92rem] font-semibold text-navy-600 hover:underline">
-            Contact us →
-          </Link>
-        </div>
-      </div>
-    </main>
+    <OrisaLayout>
+      <LegacySection>
+        <NotFound404 targets={targets} />
+      </LegacySection>
+    </OrisaLayout>
   );
 }

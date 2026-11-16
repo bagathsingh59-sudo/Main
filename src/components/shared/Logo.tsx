@@ -30,7 +30,9 @@ export function Logo({
 }: LogoProps) {
   const isDark = tone === "dark";
   const src = overrideSrc && overrideSrc.trim().length > 0 ? overrideSrc : "/brand/logo.png";
-  const isExternal = src.startsWith("http");
+  // Uploaded logos (Vercel Blob URL or database-served /media/…) skip next/image,
+  // which cannot optimise SVG uploads.
+  const isExternal = src.startsWith("http") || src.startsWith("/media/");
 
   return (
     <Link

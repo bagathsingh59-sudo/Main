@@ -1,9 +1,9 @@
 export const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "About us", href: "/about" },
   { label: "Services", href: "/services" },
-  { label: "Industries", href: "/industries" },
-  { label: "About", href: "/about" },
-  { label: "Insights", href: "/insights" },
-  { label: "Contact", href: "/contact" },
+  { label: "VaishnaviPay", href: "/vaishnavi-pay" },
+  { label: "Contact us", href: "/contact" },
 ] as const;
 
 export const FOOTER_NAV = {
@@ -17,25 +17,19 @@ export const FOOTER_NAV = {
   ],
   Company: [
     { label: "About Us", href: "/about" },
-    { label: "Founder's Message", href: "/about#founder" },
     { label: "Our Journey", href: "/about#journey" },
     { label: "Team", href: "/about#team" },
-    { label: "Awards", href: "/about#awards" },
-    { label: "Trust & Security", href: "/about#trust" },
+    { label: "Contact Us", href: "/contact" },
   ],
   Resources: [
-    { label: "Compliance Calculator", href: "/services#calculator" },
-    { label: "Blogs & Insights", href: "/insights" },
-    { label: "Latest Updates", href: "/insights#updates" },
-    { label: "Case Studies", href: "/industries#case-studies" },
-    { label: "FAQs", href: "/insights#faq" },
-    { label: "Help Centre", href: "/contact" },
+    { label: "VaishnaviPay", href: "/vaishnavi-pay" },
+    { label: "VaishnaviPay Pricing", href: "/vaishnavi-pay#pricing" },
+    { label: "FAQs", href: "/services#faq" },
   ],
   Legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
     { label: "Cookie Policy", href: "/cookies" },
-    { label: "Data Security", href: "/about#trust" },
     { label: "Disclaimer", href: "/disclaimer" },
   ],
 } as const;

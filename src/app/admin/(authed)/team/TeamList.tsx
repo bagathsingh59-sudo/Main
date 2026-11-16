@@ -5,7 +5,7 @@ import { useState } from "react";
 import { PageHeader } from "../../_components/Fields";
 import { useSettings } from "../../_components/useSettings";
 import { makeId } from "../../_components/blogUtils";
-import { TEAM_ACCENTS } from "@/services/settings";
+import { TEAM_ACCENTS } from "@/services/settings/types";
 import type { TeamMember } from "@/services/settings";
 
 export function TeamList() {

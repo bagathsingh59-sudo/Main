@@ -161,9 +161,49 @@ export async function getSiteSettings(opts: GetSettingsOptions = {}): Promise<Si
 /** Validate stored JSON; older shapes are soft-migrated, anything else falls back to defaults. */
 function toSettings(raw: unknown): SiteSettings {
   const parsed = siteSettingsSchema.safeParse(raw);
-  if (parsed.success) return parsed.data;
+  if (parsed.success) return withoutGst(parsed.data);
   const reparsed = siteSettingsSchema.safeParse(migrate(raw));
-  return reparsed.success ? reparsed.data : DEFAULT_SETTINGS;
+  return reparsed.success ? withoutGst(reparsed.data) : DEFAULT_SETTINGS;
+}
+
+/* The firm does not offer GST services. Saved settings from the previous
+   site still mention it (SEO text, form options, footer links), so strip it
+   wherever it appears; an admin save then stores the cleaned values. */
+const GST_TEXT: [RegExp, string][] = [
+  [/,\s*GST\s+and\b/gi, " and"],
+  [/\bGST,\s*/gi, ""],
+  [/\s*·\s*GST\b/gi, ""],
+  [/\s*&\s*GST\b/gi, ""],
+  [/\bGST\s*&\s*/gi, ""],
+];
+const noGstText = (text: string) => GST_TEXT.reduce((t, [re, to]) => t.replace(re, to), text);
+const mentionsGst = (text: string) => /\bGST/i.test(text);
+
+function withoutGst(s: SiteSettings): SiteSettings {
+  const pages = Object.fromEntries(
+    Object.entries(s.seo.pages).map(([key, page]) => [
+      key,
+      { ...page, title: noGstText(page.title), description: noGstText(page.description), keywords: page.keywords.filter((k) => !mentionsGst(k)) },
+    ]),
+  ) as SiteSettings["seo"]["pages"];
+  return {
+    ...s,
+    seo: {
+      ...s.seo,
+      defaultDescription: noGstText(s.seo.defaultDescription),
+      defaultKeywords: s.seo.defaultKeywords.filter((k) => !mentionsGst(k)),
+      pages,
+    },
+    services: { ...s.services, items: s.services.items.filter((i) => i.id !== "gst" && !mentionsGst(i.title)) },
+    faq: { ...s.faq, items: s.faq.items.filter((i) => !mentionsGst(i.question)) },
+    formConfig: { ...s.formConfig, services: s.formConfig.services.filter((o) => !mentionsGst(o)) },
+    navigation: {
+      ...s.navigation,
+      footerTagline: noGstText(s.navigation.footerTagline),
+      footerColumns: s.navigation.footerColumns.map((c) => ({ ...c, links: c.links.filter((l) => !mentionsGst(l.label) && !/#gst\b|\/gst\b/i.test(l.href)) })),
+      navbarLinks: s.navigation.navbarLinks.filter((l) => !mentionsGst(l.label)),
+    },
+  };
 }
 
 /** Force the next call to bypass the in-memory cache. Used after writes. */

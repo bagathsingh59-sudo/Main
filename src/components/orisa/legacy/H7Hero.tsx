@@ -30,27 +30,6 @@ export function H7Hero() {
       <div className="container-fluid p-relative">
         <div className="row g-0 align-items-stretch">
           <div className="col-lg-6 p-relative sec-1-home-7__left">
-            <div className="sec-1-home-7__coords d-flex align-items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="17"
-                viewBox="0 0 27 20"
-                fill="none"
-              >
-                <path
-                  d="M13.3203 20C5.9637 20 0 15.5228 0 10C0 4.47715 5.9637 0 13.3203 0C20.6769 0 26.6406 4.47715 26.6406 10C26.6406 15.5228 20.6769 20 13.3203 20ZM10.27 17.6674C8.98779 15.6259 8.20174 13.3742 8.02857 11H2.7465C3.27413 14.1765 6.28238 16.7747 10.27 17.6674ZM10.6971 11C10.8975 13.4388 11.8255 15.7297 13.3203 17.752C14.8151 15.7297 15.7431 13.4388 15.9435 11H10.6971ZM23.8941 11H18.6121C18.4389 13.3742 17.6529 15.6259 16.3707 17.6674C20.3582 16.7747 23.3665 14.1765 23.8941 11ZM2.7465 9H8.02857C8.20174 6.62577 8.98779 4.37407 10.27 2.33256C6.28238 3.22533 3.27413 5.8235 2.7465 9ZM10.6971 9H15.9435C15.7431 6.56122 14.8151 4.27025 13.3203 2.24799C11.8255 4.27025 10.8975 6.56122 10.6971 9ZM16.3707 2.33256C17.6529 4.37407 18.4389 6.62577 18.6121 9H23.8941C23.3665 5.8235 20.3582 3.22533 16.3707 2.33256Z"
-                  fill="currentColor"
-                />
-              </svg>
-              <span
-                className="fw-500 text-uppercase"
-                data-scramble-text="Kalaburagi · Karnataka"
-                data-scramble=""
-              >
-                Kalaburagi · Karnataka
-              </span>
-            </div>
             <div className="sec-1-home-7__tags d-flex flex-wrap gap-2" data-ripple-skip="">
               <a
                 className="sec-1-home-7__tag"
@@ -101,7 +80,7 @@ export function H7Hero() {
                 data-fade="bottom"
                 data-delay="0.4"
               >
-                <span>GST &amp; TDS</span>
+                <span>Income Tax &amp; TDS</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="9"
@@ -172,7 +151,7 @@ export function H7Hero() {
                   [ ESIC ]
                 </li>
                 <li data-start="100%" data-fade="bottom" data-delay="0.4">
-                  [ GST ]
+                  [ LABOUR LAW ]
                 </li>
               </ul>
               <div className="sec-1-home-7__headline-wrap p-relative">
@@ -213,7 +192,7 @@ export function H7Hero() {
                 data-delay="0.5"
               >
                 {
-                  " Supporting businesses with accurate and professional Payroll, EPF, ESIC, GST and Labour Compliance services that help minimise risk, reduce administrative burden and ensure complete compliance. "
+                  " Supporting businesses with accurate and professional Payroll, EPF, ESIC and Labour Compliance services that help minimise risk, reduce administrative burden and ensure complete compliance. "
                 }
               </p>
               <div className="sec-1-home-7__cta d-flex align-items-center flex-wrap gap-2 mb-60">

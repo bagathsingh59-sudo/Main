@@ -12,7 +12,6 @@ const DEFAULT_KEYWORDS = [
   "EPF Compliance",
   "ESI Compliance",
   "Payroll Management",
-  "GST Filing",
   "Labour Law Compliance",
   "Virtual CFO",
   "Statutory Filings",
@@ -61,7 +60,6 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     services: [
       "Payroll & Statutory Compliance",
       "EPF & ESI Compliance",
-      "GST Compliance",
       "Income Tax Advisory",
       "Labour Law Compliance",
       "Virtual CFO Advisory",
@@ -144,12 +142,12 @@ export const DEFAULT_SETTINGS: SiteSettings = {
       ),
       about: pageSeo(
         "About Us — Vaishnavi Consultant",
-        "Meet the team behind Vaishnavi Consultant — 25+ years of combined practitioner experience across payroll, EPF, ESI, GST, and labour compliance.",
+        "Meet the team behind Vaishnavi Consultant — 25+ years of combined practitioner experience across payroll, EPF, ESI and labour compliance.",
         ["about Vaishnavi", "compliance team", "Kalaburagi consultant"],
       ),
       services: pageSeo(
-        "Compliance Services — Payroll, EPF, ESI, GST, Labour Law",
-        "End-to-end compliance services for growing Indian businesses. Payroll, EPF, ESI, GST, TDS, income tax, labour law, and virtual CFO advisory.",
+        "Compliance Services — Payroll, EPF, ESI, Labour Law",
+        "End-to-end compliance services for growing Indian businesses. Payroll, EPF, ESI, TDS, income tax, labour law, and virtual CFO advisory.",
         ["compliance services", "payroll outsourcing", "EPF ESI registration"],
       ),
       industries: pageSeo(
@@ -190,7 +188,6 @@ export const DEFAULT_SETTINGS: SiteSettings = {
         links: [
           { label: "Payroll Management", href: "/services#payroll", visible: true },
           { label: "EPF & ESI Compliance", href: "/services#epf-esi", visible: true },
-          { label: "GST Advisory", href: "/services#gst", visible: true },
           { label: "Income Tax", href: "/services#income-tax", visible: true },
           { label: "Labour Law Compliance", href: "/services#labour-law", visible: true },
           { label: "CFO Advisory", href: "/services#cfo", visible: true },
@@ -237,7 +234,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   blog: {
     posts: [],
-    categories: ["Compliance", "EPF", "ESIC", "GST", "Payroll", "Labour Law", "Updates"],
+    categories: ["Compliance", "EPF", "ESIC", "Payroll", "Labour Law", "Updates"],
   },
 
   /* Empty content lists mean "use the bundled constants as fallback".

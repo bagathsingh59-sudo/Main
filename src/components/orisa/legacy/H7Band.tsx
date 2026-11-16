@@ -23,7 +23,7 @@ export function H7Band() {
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>
-            <li className="sec-9-home-7__item">GST returns</li>
+            <li className="sec-9-home-7__item">Income tax returns</li>
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>
@@ -67,7 +67,7 @@ export function H7Band() {
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>
-            <li className="sec-9-home-7__item">GST returns</li>
+            <li className="sec-9-home-7__item">Income tax returns</li>
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>
@@ -117,7 +117,7 @@ export function H7Band() {
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>
-            <li className="sec-9-home-7__item">GST returns</li>
+            <li className="sec-9-home-7__item">Income tax returns</li>
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>
@@ -161,7 +161,7 @@ export function H7Band() {
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>
-            <li className="sec-9-home-7__item">GST returns</li>
+            <li className="sec-9-home-7__item">Income tax returns</li>
             <li className="sec-9-home-7__sep">
               <img src="/orisa/tpl/pages/home-7/marquee-star.svg" alt="" />
             </li>

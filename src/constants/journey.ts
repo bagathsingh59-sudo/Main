@@ -23,7 +23,7 @@ export const JOURNEY: JourneyEvent[] = [
     year: "2020",
     title: "Pan-Karnataka Reach",
     description:
-      "Extended servicing to Bidar and Yadgir clusters; navigated the GST and lockdown filing waves end-to-end for every client.",
+      "Extended servicing to Bidar and Yadgir clusters; navigated the lockdown filing waves end-to-end for every client.",
   },
   {
     year: "2021",

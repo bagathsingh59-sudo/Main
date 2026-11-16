@@ -12,10 +12,8 @@ export interface MonthlyDeadline {
 
 export const MONTHLY_DEADLINES: readonly MonthlyDeadline[] = [
   { label: "TDS payment", day: 7 },
-  { label: "GSTR-1", day: 11 },
   { label: "PF ECR", day: 15 },
   { label: "ESI contribution", day: 15 },
-  { label: "GSTR-3B", day: 20 },
   { label: "Professional Tax", day: 20 },
 ];
 

@@ -161,7 +161,7 @@ export function P12Services() {
               </li>
               <li>
                 <span className="card-home-12-service__tag">
-                  GST invoices
+                  Tax invoices
                 </span>
               </li>
               <li>

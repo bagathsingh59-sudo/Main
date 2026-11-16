@@ -14,9 +14,9 @@ import { buildPageMetadataFromSettings } from "@/utils/seo";
 import { getSiteSettings } from "@/services/settings";
 import { SERVICES } from "@/constants/services";
 
-const PAGE_TITLE = "Services — Payroll, EPF, ESI, GST, TDS & Labour Law Compliance";
+const PAGE_TITLE = "Services — Payroll, EPF, ESI, TDS & Labour Law Compliance";
 const PAGE_DESC =
-  "End-to-end Payroll, EPF, ESI, GST, TDS, Labour Law and Virtual CFO services for Indian businesses. Eight modules, one accountable team.";
+  "End-to-end Payroll, EPF, ESI, TDS, Labour Law and Virtual CFO services for Indian businesses. Seven modules, one accountable team.";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("services", "/services");

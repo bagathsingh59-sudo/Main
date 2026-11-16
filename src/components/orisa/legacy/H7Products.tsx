@@ -70,7 +70,7 @@ export function H7Products() {
               <div className="fix" data-zoomin="">
                 <img
                   className="w-100 h-100 object-fit-cover"
-                  src="https://images.unsplash.com/photo-1544396821-4dd40b938ad3?auto=format&fit=crop&w=1356&h=1800&q=80&crop=faces"
+                  src="https://images.unsplash.com/photo-1659355894218-47ead670f7f5?auto=format&fit=crop&w=1356&h=1800&q=80&crop=faces"
                   alt=""
                   width="493"
                   height="582"
@@ -201,7 +201,7 @@ export function H7Products() {
                     aria-controls="collapseSec5H73"
                   >
                     <span className="sec-5-home-7__acc-title">
-                      03. GST &amp; Income Tax
+                      03. Income Tax &amp; TDS
                     </span>
                     <span
                       className="sec-5-home-7__acc-toggle"
@@ -232,11 +232,11 @@ export function H7Products() {
                 >
                   <div className="accordion-body sec-5-home-7__acc-body">
                     <p className="sec-5-home-7__acc-text mb-0">
-                      GSTR-1, 3B, 9 &amp; 9C filings with reconciliation, plus
-                      corporate ITR, TDS and advance tax for SMEs and corporates.
+                      Corporate ITR, TDS, advance tax and tax planning for SMEs
+                      and corporates.
                     </p>
                     <div className="sec-5-home-7__tags d-flex flex-wrap gap-2 pt-4">
-                      <span className="sec-5-home-7__tag">GSTR-1 &amp; 3B</span>
+                      <span className="sec-5-home-7__tag">Advance tax</span>
                       <span className="sec-5-home-7__tag">TDS returns</span>
                       <span className="sec-5-home-7__tag">ITR filing</span>
                     </div>
@@ -327,7 +327,7 @@ export function H7Products() {
             </p>
             <p data-t-throwable-el="">
               <span className="client-box client-box--brand-h7 o-capsule-word">
-                {"GST"}
+                {"Minimum Wages"}
               </span>
             </p>
             <p data-t-throwable-el="">

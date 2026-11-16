@@ -4,7 +4,7 @@ export const COMPANY = {
   legalName: "Vaishnavi Consultant",
   tagline: "Compliance with Confidence.",
   description:
-    "Supporting businesses with accurate and professional Payroll, EPF, ESIC, GST and Labour Compliance services that help minimise risk, maintain accuracy, reduce administrative burden, and ensure complete compliance and operational peace of mind.",
+    "Supporting businesses with accurate and professional Payroll, EPF, ESIC and Labour Compliance services that help minimise risk, maintain accuracy, reduce administrative burden, and ensure complete compliance and operational peace of mind.",
   foundedYear: 2018,
   /**
    * Registrations marked TODO are pending — we ship the rest of the site and

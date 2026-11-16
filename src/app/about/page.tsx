@@ -15,7 +15,7 @@ import { contactForm, linkedinUrl, teamMembers } from "@/components/orisa/fromSe
 
 const PAGE_TITLE = "About Us — Vaishnavi Consultant";
 const PAGE_DESC =
-  "Meet the team behind Vaishnavi Consultant — 25+ years of combined practitioner experience across payroll, EPF, ESI, GST, and labour compliance.";
+  "Meet the team behind Vaishnavi Consultant — 25+ years of combined practitioner experience across payroll, EPF, ESI and labour compliance.";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadataFromSettings("about", "/about");

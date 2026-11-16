@@ -10,7 +10,7 @@ export function H7Ticker() {
             <div className="sec-7-home-7__media">
               <div className="fix" data-zoomin="">
                 <img
-                  src="https://images.unsplash.com/photo-1577199001468-44c049e7603f?auto=format&fit=crop&w=1600&h=1600&q=80"
+                  src="https://images.unsplash.com/photo-1754531976828-69e42ce4e0d9?auto=format&fit=crop&w=1600&h=1600&q=80"
                   alt=""
                   width="798"
                   height="798"

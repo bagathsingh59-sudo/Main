@@ -35,13 +35,13 @@ export const FAQS: FAQ[] = [
     id: "f6",
     question: "What is your pricing model?",
     answer:
-      "Pricing is modular — pick the services you need. Payroll starts at ₹49 per employee per month, EPF/ESI compliance at ₹15,000 / quarter, and GST filings from ₹2,500 / month. Custom enterprise plans available.",
+      "Pricing is modular — pick the services you need. Payroll starts at ₹49 per employee per month, EPF/ESI compliance at ₹15,000 / quarter. Custom enterprise plans available.",
   },
   {
     id: "f7",
-    question: "Do you support GST notices and assessment hearings?",
+    question: "Do you support PF, ESI and income-tax notices?",
     answer:
-      "Yes — notice handling, drafting replies, and physical/virtual hearing representation by our tax counsel are included in our GST Compliance and Income Tax Advisory plans.",
+      "Yes — notice handling, drafting replies, and physical/virtual hearing representation by our tax counsel are included in our EPF & ESI Compliance and Income Tax Advisory plans.",
   },
   {
     id: "f8",

@@ -14,7 +14,7 @@ import { getSiteSettings } from "@/services/settings";
  *   - The brand mark is embedded as a base64 PNG so the actual Vaishnavi logo
  *     appears in every social share preview.
  */
-export const alt = "Vaishnavi Consultant — Payroll, EPF, ESIC, GST & Labour Compliance";
+export const alt = "Vaishnavi Consultant — Payroll, EPF, ESIC & Labour Compliance";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -107,7 +107,7 @@ export default async function OG() {
                 textTransform: "uppercase",
               }}
             >
-              Tax · Payroll · EPF · ESI · GST
+              Payroll · EPF · ESI · Labour Law
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default async function OG() {
               color: "#ffffff",
             }}
           >
-            Payroll, EPF, ESIC &amp; GST compliance, done right.
+            Payroll, EPF, ESIC &amp; labour compliance, done right.
           </div>
           <div
             style={{

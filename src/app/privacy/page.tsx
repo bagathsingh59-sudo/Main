@@ -7,7 +7,7 @@ import { buildPageMetadata } from "@/utils/seo";
 
 const PAGE_TITLE = "Privacy Policy — Vaishnavi Consultant";
 const PAGE_DESC =
-  "How Vaishnavi Consultant collects, stores, processes and safeguards client data across our Payroll, EPF, ESIC, GST and TDS compliance practice.";
+  "How Vaishnavi Consultant collects, stores, processes and safeguards client data across our Payroll, EPF, ESIC, TDS and labour compliance practice.";
 
 export const metadata: Metadata = buildPageMetadata({
   title: PAGE_TITLE,
@@ -34,12 +34,12 @@ export default function PrivacyPage() {
           {
             heading: "1. Data we collect",
             body:
-              "Identifiers and contact details you provide, business details for compliance engagements (PAN, GSTIN, TAN, employee master data, salary structures), and standard analytics signals to operate this website (page views, device class, region). We never sell client data.",
+              "Identifiers and contact details you provide, business details for compliance engagements (PAN, TAN, employee master data, salary structures), and standard analytics signals to operate this website (page views, device class, region). We never sell client data.",
           },
           {
             heading: "2. Why we collect it",
             body:
-              "To deliver the compliance services you engage us for, to respond to enquiries, to issue invoices and statutory documents, and to comply with applicable Indian law (IT Act, GST, EPF, ESIC, labour codes).",
+              "To deliver the compliance services you engage us for, to respond to enquiries, to issue invoices and statutory documents, and to comply with applicable Indian law (IT Act, EPF, ESIC, labour codes).",
           },
           {
             heading: "3. Where it lives",

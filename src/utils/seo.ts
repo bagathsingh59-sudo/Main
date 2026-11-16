@@ -12,7 +12,6 @@ const DEFAULT_KEYWORDS = [
   "EPF Compliance",
   "ESI Compliance",
   "Payroll Management Kalaburagi",
-  "GST Filing",
   "Labour Law Compliance",
   "Virtual CFO",
   "Statutory Filings",

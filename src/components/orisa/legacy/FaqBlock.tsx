@@ -20,8 +20,8 @@ export const DEFAULT_FAQ: FaqBlockItem[] = [
     "answer": "Yes. We collect the data from your previous consultant, reconcile past filings and take over without interrupting any ongoing return."
   },
   {
-    "question": "Do you handle GST notices and assessments?",
-    "answer": "Yes. Drafting replies to notices and representing you at hearings are part of our GST and income-tax services."
+    "question": "Do you handle PF and ESI notices and inspections?",
+    "answer": "Yes. Drafting replies to notices and supporting you during inspections are part of our EPF & ESI compliance service."
   }
 ];
 

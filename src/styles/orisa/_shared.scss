@@ -624,17 +624,9 @@
 	font-size: clamp(2.5rem, 6.2vw, 9.5rem);
 }
 
-/* Stock photos in brand duotone (filter defined once in OrisaLayout).
-   The hero ripple box is filtered as a whole so its WebGL canvas matches. */
-.orisa .o-duo img:not([src$=".svg"]) {
-	filter: url(#o-duotone);
-}
 /* Hero: the consultant cut-out (transparent background) stands on the
    panel's own mint, in full colour, shown whole and anchored to the bottom.
    The ripple canvas reads the same object-fit/position. */
-.orisa .o-duo .o-ripple-box img {
-	filter: none;
-}
 .orisa .o-legacy .sec-1-home-7__img.o-hero-cutout {
 	object-fit: contain;
 	object-position: 50% 100%;

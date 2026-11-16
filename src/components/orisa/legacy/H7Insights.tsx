@@ -72,7 +72,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/payroll">
                 <img
                   className="blog-card__img22"
-                  src="https://images.unsplash.com/photo-1729077537326-91749c1c9197?auto=format&fit=crop&w=1500&h=1000&q=80"
+                  src="https://images.unsplash.com/photo-1668713701571-1d1cbcefe7bd?auto=format&fit=crop&w=1500&h=1000&q=80"
                   alt=""
                 />
               </a>
@@ -96,7 +96,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/epf-esi">
                 <img
                   className="blog-card__img22"
-                  src="https://images.unsplash.com/photo-1748944079305-8d2a86e7ad32?auto=format&fit=crop&w=1200&h=1200&q=80"
+                  src="https://images.unsplash.com/photo-1741591646534-5aa244610566?auto=format&fit=crop&w=1200&h=1200&q=80"
                   alt=""
                 />
               </a>
@@ -117,22 +117,22 @@ export function H7Insights() {
             data-category=""
           >
             <div className="blog-card__thumb hover-effect-1">
-              <a className="blog-card__img-link" href="/services/gst">
+              <a className="blog-card__img-link" href="/services/income-tax">
                 <img
                   className="blog-card__img22"
-                  src="https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1500&h=1000&q=80"
+                  src="https://images.unsplash.com/photo-1758518730250-9fde74eb4757?auto=format&fit=crop&w=1500&h=1000&q=80"
                   alt=""
                 />
               </a>
             </div>
             <div className="blog-card__content">
               <h2 className="h6 blog-card__title">
-                <a className="blog-card__title-link" href="/services/gst">
-                  {"GSTR-1, GSTR-3B and TDS: what is due when"}
+                <a className="blog-card__title-link" href="/services/income-tax">
+                  {"TDS returns and advance tax: what is due when"}
                 </a>
               </h2>
               <p className="blog-card__meta">
-                <span className="blog-card__meta-text">{"GST & TDS · Compliance guide"}</span>
+                <span className="blog-card__meta-text">{"Income tax & TDS · Compliance guide"}</span>
               </p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/labour-law">
                 <img
                   className="blog-card__img22"
-                  src="https://images.unsplash.com/photo-1761753088381-9fcaa087edae?auto=format&fit=crop&w=1200&h=1200&q=80"
+                  src="https://images.unsplash.com/photo-1758518727653-5650fd9e146c?auto=format&fit=crop&w=1200&h=1200&q=80"
                   alt=""
                 />
               </a>

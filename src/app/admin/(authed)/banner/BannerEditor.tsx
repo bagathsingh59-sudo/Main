@@ -378,7 +378,7 @@ function StepTwoConfigure({
               onChange={(e) => patch({ message: e.target.value })}
               placeholder={
                 isStrip
-                  ? "GST annual return deadline — book a consultation before 30 Sept."
+                  ? "PF ECR due on the 15th — book a consultation before the deadline."
                   : "Free 45-minute compliance audit for businesses with 20+ employees."
               }
               maxLength={400}

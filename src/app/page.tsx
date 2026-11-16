@@ -41,31 +41,31 @@ export default async function HomePage() {
             path: "/",
             title: "Vaishnavi Consultant — Tax & Compliance Consulting",
             description:
-              "Supporting businesses with accurate and professional Payroll, EPF, ESIC, GST and Labour Compliance services that help minimise risk, maintain accuracy, reduce administrative burden, and ensure complete compliance and operational peace of mind.",
+              "Supporting businesses with accurate and professional Payroll, EPF, ESIC and Labour Compliance services that help minimise risk, maintain accuracy, reduce administrative burden, and ensure complete compliance and operational peace of mind.",
           }),
           breadcrumbSchema([{ name: "Home", path: "/" }]),
           serviceListSchema(services.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
         ]}
       />
-      <LegacySection className="o-duo">
+      <LegacySection>
         <H7Hero />
       </LegacySection>
-      <LegacySection className="o-duo">
+      <LegacySection>
         <H7Intro />
       </LegacySection>
-      <LegacySection className="o-duo">
+      <LegacySection>
         <H7Strip />
       </LegacySection>
-      <LegacySection className="o-duo">
+      <LegacySection>
         <H7Partner contact={contactDetails(settings)} />
       </LegacySection>
-      <LegacySection className="o-duo" id="services">
+      <LegacySection id="services">
         <H7Products />
       </LegacySection>
-      <LegacySection className="o-duo">
+      <LegacySection>
         <H7Process />
       </LegacySection>
-      <LegacySection className="o-duo">
+      <LegacySection>
         <H7Ticker />
       </LegacySection>
       <LegacySection id="team">
@@ -74,7 +74,7 @@ export default async function HomePage() {
       <LegacySection>
         <H7Band />
       </LegacySection>
-      <LegacySection className="o-duo" id="guides">
+      <LegacySection id="guides">
         <H7Insights />
       </LegacySection>
       <LegacySection id="contact">

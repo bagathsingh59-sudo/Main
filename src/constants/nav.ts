@@ -10,7 +10,6 @@ export const FOOTER_NAV = {
   Services: [
     { label: "Payroll Management", href: "/services#payroll" },
     { label: "EPF & ESI Compliance", href: "/services#epf-esi" },
-    { label: "GST Advisory", href: "/services#gst" },
     { label: "Income Tax", href: "/services#income-tax" },
     { label: "Labour Law Compliance", href: "/services#labour-law" },
     { label: "CFO Advisory", href: "/services#cfo" },

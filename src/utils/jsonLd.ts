@@ -63,7 +63,6 @@ export const organizationSchema = (overrides: SchemaOverrides = {}): JsonLdSchem
       "Payroll management",
       "EPF compliance",
       "ESI compliance",
-      "GST returns",
       "Labour law compliance",
       "Statutory filings",
       "Virtual CFO advisory",

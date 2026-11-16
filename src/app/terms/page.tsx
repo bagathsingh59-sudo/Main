@@ -34,7 +34,7 @@ export default function TermsPage() {
           {
             heading: "1. Service scope",
             body:
-              "Vaishnavi Consultant provides Payroll Management, EPF & ESIC compliance, GST returns, TDS, Income Tax, Labour Law and Virtual CFO advisory services. The specific scope, deliverables and timelines for any engagement are documented in a separate Statement of Work signed by both parties.",
+              "Vaishnavi Consultant provides Payroll Management, EPF & ESIC compliance, TDS, Income Tax, Labour Law and Virtual CFO advisory services. The specific scope, deliverables and timelines for any engagement are documented in a separate Statement of Work signed by both parties.",
           },
           {
             heading: "2. Information you share",
@@ -44,7 +44,7 @@ export default function TermsPage() {
           {
             heading: "3. Our obligations",
             body:
-              "We act with reasonable professional care, follow applicable Indian standards (CA Act, ICAI guidelines, Income Tax / GST / EPF / ESIC regulations) and meet the SLAs documented in your engagement.",
+              "We act with reasonable professional care, follow applicable Indian standards (CA Act, ICAI guidelines, Income Tax / EPF / ESIC / labour regulations) and meet the SLAs documented in your engagement.",
           },
           {
             heading: "4. Fees & payment",

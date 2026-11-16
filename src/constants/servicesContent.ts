@@ -31,15 +31,7 @@ export const SERVICE_PRICING: PricingPlansProps = {
       popular: true,
       features: ["Monthly ECR upload", "ESI contributions & returns", "UAN / KYC handling", "Audit & inspection support"],
     },
-    {
-      name: "GST",
-      monthly: "₹2,500",
-      yearly: "₹2,500",
-      period: "/month",
-      description: "Monthly and annual GST returns with reconciliation.",
-      cta: { label: "Get a quote", href: "/contact" },
-      features: ["GSTR-1 & 3B", "Reconciliation", "GSTR-9 / 9C", "Notice response"],
-    },
+
   ],
   custom: {
     title: "Rather do it yourself?",

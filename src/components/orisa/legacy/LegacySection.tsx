@@ -147,7 +147,7 @@ export function LegacySection({ children, id, className }: { children: ReactNode
         };
         const best = targets.map((t) => ({ t, s: score(t) })).sort((a, b) => b.s - a.s)[0];
         if (best && best.s > 0) window.location.assign(best.t.href);
-        else note.textContent = "Nothing matched — try “payroll”, “GST” or “contact”.";
+        else note.textContent = "Nothing matched — try “payroll”, “PF” or “contact”.";
       });
     });
 

@@ -332,8 +332,8 @@ export function RippleCanvas({ hostSelector, resolution = 400, perturbance = 0.0
         wake();
       };
 
-      const onMove = (e: PointerEvent) => dropAt(e, 0.03, 0.01);
-      const onDown = (e: PointerEvent) => dropAt(e, 0.09, 0.14);
+      const onMove = (e: PointerEvent) => dropAt(e, 0.012, 0.012);
+      const onDown = (e: PointerEvent) => dropAt(e, 0.03, 0.12);
       host.addEventListener("pointermove", onMove);
       host.addEventListener("pointerdown", onDown);
 

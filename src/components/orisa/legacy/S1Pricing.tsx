@@ -216,18 +216,18 @@ export function S1Pricing({ contact = DEFAULT_CONTACT }: { contact?: SiteContact
                 <div className="home-2-pricing-card bg-neutral-50">
                   <div className="home-2-pricing-card__body">
                     <h3 className="h4 home-2-pricing-card__title">
-                      GST
+                      Labour Law
                     </h3>
                     <div className="home-2-pricing-card__price">
                       <span className="home-2-pricing-card__price-value text-price-scale">
-                        ₹2,500
+                        Custom
                       </span>
                       <span className="home-2-pricing-card__price-period">
-                        /month
+                        /quote
                       </span>
                     </div>
                     <p className="home-2-pricing-card__desc">
-                      Monthly and annual GST returns with reconciliation.
+                      S&amp;E, PT, LWF, bonus and gratuity — registrations, returns and renewals.
                     </p>
                     <a className="at-btn px-5" href="#">
                       <span>
@@ -255,7 +255,7 @@ export function S1Pricing({ contact = DEFAULT_CONTACT }: { contact?: SiteContact
                           <path d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM8 5V8H5V10H8V13H10V10H13V8H10V5H8Z" fill="currentColor" />
                         </svg>
                       </span>
-                      {" GSTR-1 & 3B "}
+                      {" Shops & Establishments "}
                     </li>
                     <li>
                       <span className="home-2-pricing-card__feature-icon dark-mode-invert">
@@ -263,7 +263,7 @@ export function S1Pricing({ contact = DEFAULT_CONTACT }: { contact?: SiteContact
                           <path d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM8 5V8H5V10H8V13H10V10H13V8H10V5H8Z" fill="currentColor" />
                         </svg>
                       </span>
-                      {" Reconciliation "}
+                      {" Professional tax "}
                     </li>
                     <li>
                       <span className="home-2-pricing-card__feature-icon dark-mode-invert">
@@ -271,7 +271,7 @@ export function S1Pricing({ contact = DEFAULT_CONTACT }: { contact?: SiteContact
                           <path d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM8 5V8H5V10H8V13H10V10H13V8H10V5H8Z" fill="currentColor" />
                         </svg>
                       </span>
-                      {" GSTR-9 / 9C "}
+                      {" LWF returns "}
                     </li>
                     <li>
                       <span className="home-2-pricing-card__feature-icon dark-mode-invert">
@@ -279,7 +279,7 @@ export function S1Pricing({ contact = DEFAULT_CONTACT }: { contact?: SiteContact
                           <path d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM8 5V8H5V10H8V13H10V10H13V8H10V5H8Z" fill="currentColor" />
                         </svg>
                       </span>
-                      {" Notice response "}
+                      {" Bonus & gratuity "}
                     </li>
                     <li>
                       <span className="home-2-pricing-card__feature-icon dark-mode-invert">
@@ -287,7 +287,7 @@ export function S1Pricing({ contact = DEFAULT_CONTACT }: { contact?: SiteContact
                           <path d="M9 0C13.9706 0 18 4.02944 18 9C18 13.9706 13.9706 18 9 18C4.02944 18 0 13.9706 0 9C0 4.02944 4.02944 0 9 0ZM8 5V8H5V10H8V13H10V10H13V8H10V5H8Z" fill="currentColor" />
                         </svg>
                       </span>
-                      {" E-way bills "}
+                      {" Inspection support "}
                     </li>
                   </ul>
                 </div>

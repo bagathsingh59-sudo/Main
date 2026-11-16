@@ -57,7 +57,7 @@ export default async function ContactPage() {
           phases={[
             { when: "Step 1", title: "Pick a slot", text: "A live calendar — only times we are actually free show up.", deliverables: ["45-minute call", "Senior consultant"] },
             { when: "Step 2", title: "Auto-confirmed", text: "A Google Meet invite reaches your inbox the moment you confirm.", deliverables: ["Meet link", "Reminders"] },
-            { when: "Step 3", title: "We do the prep", text: "A short questionnaire arrives so the call starts where it matters.", deliverables: ["Health-check", "PF · ESI · GST · TDS"] },
+            { when: "Step 3", title: "We do the prep", text: "A short questionnaire arrives so the call starts where it matters.", deliverables: ["Health-check", "PF · ESI · PT · TDS"] },
             { when: "After", title: "A clear plan", text: "Indicative pricing and a migration plan. No sales pitch, no follow-up unless you ask.", deliverables: ["Pricing", "Migration plan"] },
           ]}
         />

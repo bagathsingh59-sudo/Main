@@ -27,8 +27,8 @@ export const TEAM: TeamMember[] = [
   {
     id: "partner-gst",
     name: "CA Meera Krishnamurthy",
-    role: "Partner — GST & Indirect Tax",
-    bio: "LLB, FCA. Argued ITAT cases worth ₹400Cr+. Authored two reference texts on GST refund mechanisms.",
+    role: "Partner — Income Tax",
+    bio: "LLB, FCA. Argued ITAT cases worth ₹400Cr+. Authored two reference texts on TDS.",
     initials: "MK",
     accent: "from-navy-600 to-teal-500",
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=480&q=80&auto=format&fit=crop",

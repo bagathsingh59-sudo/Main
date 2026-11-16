@@ -35,7 +35,7 @@ export default function DisclaimerPage() {
           {
             heading: "Not professional advice",
             body:
-              "Content published on this site — blogs, case studies, regulatory updates and explainers — is curated by our team for educational purposes. Tax, payroll, GST and labour-law facts change frequently. Always engage qualified professional advice before acting on anything you read here.",
+              "Content published on this site — blogs, case studies, regulatory updates and explainers — is curated by our team for educational purposes. Tax, payroll and labour-law facts change frequently. Always engage qualified professional advice before acting on anything you read here.",
           },
           {
             heading: "Marketing examples",

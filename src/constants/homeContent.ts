@@ -27,7 +27,7 @@ export const HOME_ABOUT: AboutIntroProps = {
   images: [`${IMG}/sec-2-img-1.webp`, `${IMG}/sec-2-img-2.webp`],
   caption: {
     title: "Compliance Expertise",
-    text: "With 25+ years of combined practice across Payroll, EPF, ESIC, GST and labour law, we give every client a named consultant, a four-eye review on each filing and a reply within one working day.",
+    text: "With 25+ years of combined practice across Payroll, EPF, ESIC and labour law, we give every client a named consultant, a four-eye review on each filing and a reply within one working day.",
   },
   stats: [
     { icon: `${IMG}/sec-2-shape-1.webp`, tag: "▲ Since 2018", count: 250, suffix: "+", caption: "Businesses served across three cities." },
@@ -67,18 +67,7 @@ export const HOME_SERVICES: ProjectListProps = {
         { term: "INCLUDES", value: "ECR & ESI returns" },
       ],
     },
-    {
-      kicker: "MONTHLY / ANNUAL  —  TAX",
-      title: "GST Compliance",
-      image: `${IMG}/sec-3-img-3.webp`,
-      href: "/services#gst",
-      description: "GSTR-1, 3B, 9 and 9C filings with reconciliation, input-credit optimisation and refund handling.",
-      specs: [
-        { term: "CATEGORY", value: "Indirect tax" },
-        { term: "FREQUENCY", value: "Monthly & annual" },
-        { term: "INCLUDES", value: "Reconciliation" },
-      ],
-    },
+
     {
       kicker: "ONGOING  —  LABOUR LAW",
       title: "Labour Law Compliance",

@@ -25,14 +25,7 @@ export const SERVICES: Service[] = [
     points: ["Multi-state registrations", "Returns & renewals", "Notice handling", "Audit-ready records"],
     accent: "from-navy-500 to-navy-700",
   },
-  {
-    id: "gst",
-    icon: "Receipt",
-    title: "GST Compliance",
-    summary: "GSTR-1, 3B, 9 & 9C filings with reconciliation, ITC optimisation, and refund handling.",
-    points: ["Auto reconciliation", "GSTR-9 / 9C", "Refund & LUT", "Notice response"],
-    accent: "from-teal-600 to-navy-600",
-  },
+
   {
     id: "income-tax",
     icon: "FileText",

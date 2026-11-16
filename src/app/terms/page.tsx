@@ -28,6 +28,7 @@ export default function TermsPage() {
         ]}
       />
       <LegalStub
+        effectiveDate="16 November 2026"
         title="Terms of Service"
         intro="These terms govern your use of vaishnaviconsultant.com and any subsequent compliance engagement with Vaishnavi Consultant."
         sections={[
@@ -44,12 +45,12 @@ export default function TermsPage() {
           {
             heading: "3. Our obligations",
             body:
-              "We act with reasonable professional care, follow applicable Indian standards (CA Act, ICAI guidelines, Income Tax / EPF / ESIC / labour regulations) and meet the SLAs documented in your engagement.",
+              "We act with reasonable professional care, follow applicable Indian laws and regulations (Income Tax, EPF, ESIC and labour laws) and meet the SLAs documented in your engagement.",
           },
           {
             heading: "4. Fees & payment",
             body:
-              "Fees are billed per the Statement of Work — monthly retainer, project-based or hourly. Invoices are due within 14 days of issue. GST is charged at applicable rates.",
+              "Fees are billed per the Statement of Work — monthly retainer, project-based or hourly. Invoices are due within 14 days of issue. Applicable taxes are charged as per law.",
           },
           {
             heading: "5. Limitation of liability",

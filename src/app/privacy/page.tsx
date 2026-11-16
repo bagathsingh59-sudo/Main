@@ -28,6 +28,7 @@ export default function PrivacyPage() {
         ]}
       />
       <LegalStub
+        effectiveDate="16 November 2026"
         title="Privacy Policy"
         intro="Your payroll, financial and statutory data carry enormous regulatory weight. This policy explains the categories of data we collect, why, how long we retain it, and how you can ask us to delete or transfer it."
         sections={[
@@ -44,7 +45,7 @@ export default function PrivacyPage() {
           {
             heading: "3. Where it lives",
             body:
-              "All primary and disaster-recovery storage sits in Indian data-centre regions. Encryption in transit (TLS 1.3) and at rest (AES-256). Access is role-based and least-privilege; every change is logged.",
+              "Data is stored with established cloud providers and is encrypted in transit (HTTPS) and at rest. Access is limited to the team members working on your engagement, and we keep records of changes to client data.",
           },
           {
             heading: "4. Your rights",
@@ -54,7 +55,7 @@ export default function PrivacyPage() {
           {
             heading: "5. Cookies & analytics",
             body:
-              "We use Vercel Web Analytics and Google Analytics 4 to understand site usage in aggregate. Cookies are limited to functional, analytics and consent management — never advertising or cross-site tracking.",
+              "We use Vercel Web Analytics and Google Analytics 4 to understand site usage in aggregate. Cookies are limited to functional and analytics purposes — never advertising or cross-site tracking.",
           },
         ]}
       />

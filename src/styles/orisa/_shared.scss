@@ -679,3 +679,28 @@
 		height: auto;
 	}
 }
+
+/* Footer-7 link columns (services, company, resources). */
+.o-legacy .footer-7__columns {
+	padding: 56px 0 8px;
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+	margin-top: 40px;
+}
+.o-legacy .footer-7__col-title {
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--at-theme-primary, #5ed79e);
+}
+.o-legacy .footer-7__col-link {
+	color: rgba(255, 255, 255, 0.78);
+	font-size: 16px;
+	text-decoration: none;
+	transition: color 0.2s ease;
+
+	&:hover,
+	&:focus-visible {
+		color: #fff;
+	}
+}

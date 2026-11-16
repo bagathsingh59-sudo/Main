@@ -24,6 +24,8 @@ export interface FooterSevenProps {
   word: string;
   copyright: string;
   legal: FooterSevenLink[];
+  /** Extra link columns (service pages, company sections, resources). */
+  columns?: { title: string; links: (FooterSevenLink & { download?: string })[] }[];
 }
 
 const SOCIAL_ICON: Record<string, JSX.Element> = {
@@ -119,6 +121,7 @@ export function FooterSeven({
   word,
   copyright,
   legal,
+  columns = [],
 }: FooterSevenProps) {
   const delay = (i: number) => String(Math.round((0.1 + i * 0.1) * 10) / 10);
   return (
@@ -153,6 +156,32 @@ export function FooterSeven({
             ))}
           </nav>
         </div>
+        {columns.length > 0 && (
+          <nav className="footer-7__columns" aria-label="Site links">
+            <div className="row g-4">
+              {columns.map((col) => (
+                <div key={col.title} className="col-lg-3 col-sm-6">
+                  <p className="footer-7__col-title mb-3">{col.title}</p>
+                  <ul className="list-unstyled mb-0">
+                    {col.links.map((l) => (
+                      <li key={l.href} className="mb-2">
+                        {l.download || /^https?:|\.pdf$/.test(l.href) ? (
+                          <a className="footer-7__col-link" href={l.href} download={l.download} target="_blank" rel="noopener noreferrer">
+                            {l.label}
+                          </a>
+                        ) : (
+                          <Link className="footer-7__col-link" href={l.href}>
+                            {l.label}
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </nav>
+        )}
         <div className="footer-7__mid">
           <div className="row g-5">
             <div className="col-xxl-3 col-lg-4 col-md-6">

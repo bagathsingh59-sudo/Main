@@ -10,6 +10,8 @@ import { MagicCursor } from "./MagicCursor";
 import { LegacySection } from "./legacy/LegacySection";
 import { OrisaHeader } from "./OrisaHeader";
 import { ORISA_MOTION, ORISA_NAV, ORISA_PALETTE, type OrisaNavLink } from "./config";
+import { SERVICES } from "@/constants/services";
+import { LICENSE } from "@/constants/license";
 import "@/styles/orisa/index.scss";
 import "@/styles/orisa/legacy.css";
 
@@ -51,6 +53,36 @@ export async function OrisaLayout({ children, home = false }: { children: ReactN
   const socials = nav.socialLinks
     .filter((s) => s.url.trim())
     .map((s) => ({ label: SOCIAL_LABEL[s.platform] ?? s.platform, href: s.url, platform: s.platform }));
+  /* Footer link columns: every service page, the company sections and
+     resources kept from the previous site. Legal links stay in the bottom
+     bar; the old "Data Security" link (an About section that no longer
+     exists) now opens the Privacy Policy, which covers it. */
+  const services = settings.services.items.length ? settings.services.items : SERVICES;
+  const footerColumns = [
+    { title: "Services", links: services.map((s) => ({ label: s.title, href: `/services/${encodeURIComponent(s.id)}` })) },
+    {
+      title: "Company",
+      links: [
+        { label: "About us", href: "/about" },
+        { label: "Our team", href: "/about#team" },
+        { label: "Our journey", href: "/about#journey" },
+        { label: "VaishnaviPay", href: "/vaishnavi-pay" },
+        { label: "Contact us", href: "/contact" },
+      ],
+    },
+    {
+      title: "Resources",
+      links: [
+        { label: "FAQs", href: "/services#faq" },
+        { label: "Pricing", href: "/services#pricing" },
+        { label: "Book a free consultation", href: "/contact#book" },
+        { label: "Govt. registration certificate", href: LICENSE.pdfUrl, download: LICENSE.pdfFilename },
+        { label: "VaishnaviPay FAQs", href: "/vaishnavi-pay#faq" },
+      ],
+    },
+  ];
+  const legalLinks = (legal ? visible(legal.links) : []).map((l) => (l.href.startsWith("/about#trust") ? { ...l, href: "/privacy" } : l));
+
   /* "Mon – Sat · 9:30 AM – 7:00 PM IST" → days / time */
   const [hoursDays, ...hoursRest] = ci.hours.split(/\s*·\s*/);
 
@@ -106,7 +138,8 @@ export async function OrisaLayout({ children, home = false }: { children: ReactN
             cta={{ title: ["Questions about payroll", "or compliance?"], label: "Book a consultation", href: "/contact" }}
             word="VAISHNAVI CONSULTANT"
             copyright={nav.copyright}
-            legal={legal ? visible(legal.links) : []}
+            legal={legalLinks}
+            columns={footerColumns}
           />
         </LegacySection>
         <MagicCursor />

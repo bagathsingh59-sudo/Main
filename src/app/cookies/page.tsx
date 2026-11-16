@@ -28,6 +28,7 @@ export default function CookiesPage() {
         ]}
       />
       <LegalStub
+        effectiveDate="16 November 2026"
         title="Cookie Policy"
         intro="We use a small number of cookies and similar storage technologies. This page explains what each one is for and how to disable them."
         sections={[

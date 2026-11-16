@@ -29,13 +29,14 @@ export default function DisclaimerPage() {
         ]}
       />
       <LegalStub
+        effectiveDate="16 November 2026"
         title="Disclaimer"
         intro="Information on this website is provided for general guidance only. It does not constitute professional tax, legal or accounting advice."
         sections={[
           {
             heading: "Not professional advice",
             body:
-              "Content published on this site — blogs, case studies, regulatory updates and explainers — is curated by our team for educational purposes. Tax, payroll and labour-law facts change frequently. Always engage qualified professional advice before acting on anything you read here.",
+              "Content published on this site — guides, FAQs and explainers — is curated by our team for educational purposes. Tax, payroll and labour-law facts change frequently. Always engage qualified professional advice before acting on anything you read here.",
           },
           {
             heading: "Marketing examples",

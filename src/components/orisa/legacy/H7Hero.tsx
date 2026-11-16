@@ -22,7 +22,7 @@ export function H7Hero() {
       </div>
       <div className="sec-1-home-7__img-wrap" data-ripple-host data-cursor="Touch">
         <div className="o-ripple-box" data-zoomin="">
-          <img className="sec-1-home-7__img" crossOrigin="anonymous" src="https://images.unsplash.com/photo-1771244678811-50c22f17c791?auto=format&fit=crop&w=1218&h=1600&q=80&crop=faces" alt="Vaishnavi Consultant" />
+          <img className="sec-1-home-7__img" crossOrigin="anonymous" src="https://images.unsplash.com/photo-1741183394946-91cae01fb0db?auto=format&fit=crop&w=1218&h=1600&q=80&crop=faces" alt="Vaishnavi Consultant" />
           {/* Water ripple under the pointer (no scroll movement on this image). */}
           <RippleCanvas hostSelector="[data-ripple-host]" />
         </div>

@@ -47,25 +47,25 @@ export default async function HomePage() {
           serviceListSchema(services.map((s) => ({ id: s.id, title: s.title, summary: s.summary }))),
         ]}
       />
-      <LegacySection>
+      <LegacySection className="o-duo">
         <H7Hero />
       </LegacySection>
-      <LegacySection>
+      <LegacySection className="o-duo">
         <H7Intro />
       </LegacySection>
-      <LegacySection>
+      <LegacySection className="o-duo">
         <H7Strip />
       </LegacySection>
-      <LegacySection>
+      <LegacySection className="o-duo">
         <H7Partner contact={contactDetails(settings)} />
       </LegacySection>
-      <LegacySection id="services">
+      <LegacySection className="o-duo" id="services">
         <H7Products />
       </LegacySection>
-      <LegacySection>
+      <LegacySection className="o-duo">
         <H7Process />
       </LegacySection>
-      <LegacySection>
+      <LegacySection className="o-duo">
         <H7Ticker />
       </LegacySection>
       <LegacySection id="team">
@@ -74,7 +74,7 @@ export default async function HomePage() {
       <LegacySection>
         <H7Band />
       </LegacySection>
-      <LegacySection id="guides">
+      <LegacySection className="o-duo" id="guides">
         <H7Insights />
       </LegacySection>
       <LegacySection id="contact">

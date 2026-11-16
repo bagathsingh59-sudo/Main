@@ -623,3 +623,15 @@
 .orisa .o-footer-7 .footer-7__word {
 	font-size: clamp(2.5rem, 6.2vw, 9.5rem);
 }
+
+/* Stock photos in brand duotone (filter defined once in OrisaLayout).
+   The hero ripple box is filtered as a whole so its WebGL canvas matches. */
+.orisa .o-duo img:not([src$=".svg"]) {
+	filter: url(#o-duotone);
+}
+.orisa .o-duo .o-ripple-box {
+	filter: url(#o-duotone);
+}
+.orisa .o-duo .o-ripple-box img {
+	filter: none;
+}

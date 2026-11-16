@@ -72,7 +72,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/payroll">
                 <img
                   className="blog-card__img22"
-                  src="https://images.unsplash.com/photo-1626266061368-46a8f578ddd6?auto=format&fit=crop&w=1500&h=1000&q=80"
+                  src="https://images.unsplash.com/photo-1729077537326-91749c1c9197?auto=format&fit=crop&w=1500&h=1000&q=80"
                   alt=""
                 />
               </a>
@@ -96,7 +96,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/epf-esi">
                 <img
                   className="blog-card__img22"
-                  src="https://images.unsplash.com/photo-1741183394946-91cae01fb0db?auto=format&fit=crop&w=1200&h=1200&q=80"
+                  src="https://images.unsplash.com/photo-1748944079305-8d2a86e7ad32?auto=format&fit=crop&w=1200&h=1200&q=80"
                   alt=""
                 />
               </a>

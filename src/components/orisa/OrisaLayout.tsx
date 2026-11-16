@@ -110,6 +110,18 @@ export async function OrisaLayout({ children, home = false }: { children: ReactN
           />
         </LegacySection>
         <MagicCursor />
+        {/* Brand duotone (navy shadows → mint mids → near-white highlights)
+            used by `.o-duo` sections so stock photos match the palette. */}
+        <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: "absolute" }}>
+          <filter id="o-duotone" colorInterpolationFilters="sRGB">
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncR type="table" tableValues="0.024 0.369 0.96" />
+              <feFuncG type="table" tableValues="0.094 0.843 0.99" />
+              <feFuncB type="table" tableValues="0.212 0.62 0.97" />
+            </feComponentTransfer>
+          </filter>
+        </svg>
       </div>
       <ScrollToTop />
 

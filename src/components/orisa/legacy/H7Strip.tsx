@@ -10,24 +10,6 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?auto=format&fit=crop&w=1540&h=1120&q=80"
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="swiper-slide">
-            <div className="about-me-slider-thumb at-item-anime marque">
-              <img
-                className="w-100 rounded-4"
-                src="https://images.unsplash.com/photo-1622675363311-3e1904dc1885?auto=format&fit=crop&w=1540&h=1120&q=80"
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="swiper-slide">
-            <div className="about-me-slider-thumb at-item-anime marque">
-              <img
-                className="w-100 rounded-4"
                 src="https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
@@ -37,7 +19,7 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="https://images.unsplash.com/photo-1781246212288-7fa538344718?auto=format&fit=crop&w=1540&h=1120&q=80"
+                src="https://images.unsplash.com/photo-1630309904321-4f320230bced?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
             </div>
@@ -46,7 +28,25 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="https://images.unsplash.com/photo-1709880945165-d2208c6ad2ec?auto=format&fit=crop&w=1540&h=1120&q=80"
+                src="https://images.unsplash.com/photo-1768158989131-64cbff67f292?auto=format&fit=crop&w=1540&h=1120&q=80"
+                alt=""
+              />
+            </div>
+          </div>
+          <div className="swiper-slide">
+            <div className="about-me-slider-thumb at-item-anime marque">
+              <img
+                className="w-100 rounded-4"
+                src="https://images.unsplash.com/photo-1565371767810-ef913a6c8315?auto=format&fit=crop&w=1540&h=1120&q=80"
+                alt=""
+              />
+            </div>
+          </div>
+          <div className="swiper-slide">
+            <div className="about-me-slider-thumb at-item-anime marque">
+              <img
+                className="w-100 rounded-4"
+                src="https://images.unsplash.com/photo-1564846824194-346b7871b855?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
             </div>

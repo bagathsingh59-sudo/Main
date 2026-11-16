@@ -120,7 +120,7 @@ export function H7Process() {
               </div>
               <div className="sec-6-home-7__card-media">
                 <img
-                  src="https://images.unsplash.com/photo-1758876203026-99a024dc43b9?auto=format&fit=crop&w=1220&h=740&q=80"
+                  src="https://images.unsplash.com/photo-1629141821139-ac3cc2f27a60?auto=format&fit=crop&w=1220&h=740&q=80"
                   alt="Strategy Design"
                 />
               </div>
@@ -145,7 +145,7 @@ export function H7Process() {
               </div>
               <div className="sec-6-home-7__card-media">
                 <img
-                  src="https://images.unsplash.com/photo-1681164315051-add1906a9b07?auto=format&fit=crop&w=1220&h=740&q=80"
+                  src="https://images.unsplash.com/photo-1569235186275-626cb53b83ce?auto=format&fit=crop&w=1220&h=740&q=80"
                   alt="System Onboarding"
                 />
               </div>

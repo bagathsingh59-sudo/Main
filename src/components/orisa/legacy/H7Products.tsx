@@ -70,7 +70,7 @@ export function H7Products() {
               <div className="fix" data-zoomin="">
                 <img
                   className="w-100 h-100 object-fit-cover"
-                  src="https://images.unsplash.com/photo-1659355894218-47ead670f7f5?auto=format&fit=crop&w=1356&h=1800&q=80&crop=faces"
+                  src="https://images.unsplash.com/photo-1544396821-4dd40b938ad3?auto=format&fit=crop&w=1356&h=1800&q=80&crop=faces"
                   alt=""
                   width="493"
                   height="582"

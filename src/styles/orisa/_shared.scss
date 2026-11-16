@@ -483,12 +483,20 @@
 		align-items: center;
 		justify-content: center;
 		border-radius: 50%;
-		background: #fff;
-		mix-blend-mode: difference;
+		/* Navy on light backgrounds, white on dark (MagicCursor toggles
+		   .is-on-dark); a faint opposite ring keeps it visible on photos. */
+		background: #061836;
+		box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+		transition: background-color 0.2s ease, box-shadow 0.2s ease;
 		pointer-events: none;
 
+		&.is-on-dark {
+			background: #fff;
+			box-shadow: 0 0 0 1.5px rgba(6, 24, 54, 0.35);
+		}
+
 		&.is-bubble {
-			mix-blend-mode: normal;
+			box-shadow: none;
 			background: rgba(var(--at-theme-primary-rgb), 0.92);
 			backdrop-filter: blur(14px);
 			-webkit-backdrop-filter: blur(14px);

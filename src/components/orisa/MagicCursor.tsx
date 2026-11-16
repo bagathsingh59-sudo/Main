@@ -61,10 +61,19 @@ export function MagicCursor() {
       }
     };
 
+    /* Dot colour follows what is under the pointer: navy over light
+       backgrounds, white over dark ones (checked at most once a frame). */
+    let toneFrame = 0;
+    const updateTone = () => {
+      toneFrame = 0;
+      const el = document.elementFromPoint(mouse.x, mouse.y);
+      ball.classList.toggle("is-on-dark", isDarkUnder(el));
+    };
     const onMove = (e: PointerEvent) => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
       wrap.style.opacity = "1";
+      if (!toneFrame) toneFrame = requestAnimationFrame(updateTone);
     };
     const onOver = (e: PointerEvent) => {
       const target = e.target as Element | null;
@@ -80,6 +89,7 @@ export function MagicCursor() {
     document.documentElement.addEventListener("pointerleave", onLeave);
 
     return () => {
+      cancelAnimationFrame(toneFrame);
       gsap.ticker.remove(follow);
       document.removeEventListener("pointermove", onMove);
       document.removeEventListener("pointerover", onOver);
@@ -95,4 +105,19 @@ export function MagicCursor() {
       </div>
     </div>
   );
+}
+
+/** True when the first opaque background behind `el` is dark (or a photo). */
+function isDarkUnder(el: Element | null): boolean {
+  for (let node: Element | null = el; node; node = node.parentElement) {
+    if (node instanceof HTMLImageElement || node instanceof HTMLVideoElement || node instanceof HTMLCanvasElement) return true;
+    const style = getComputedStyle(node);
+    if (style.backgroundImage !== "none" && /url\(/.test(style.backgroundImage)) return true;
+    const m = style.backgroundColor.match(/rgba?\(([^)]+)\)/);
+    if (!m) continue;
+    const [r, g, b, a = 1] = m[1].split(/[ ,/]+/).filter(Boolean).map(Number);
+    if (a < 0.5) continue;
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b < 140;
+  }
+  return false;
 }

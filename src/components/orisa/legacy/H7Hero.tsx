@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // Ported from Orisa `/Users/thakurankushsingh/Downloads/orisahtml-410/orisahtml-410/Orisa_v4.1.0_Unzip-First/1.Orisa_HTML_template/index-7.html` (.sec-1-home-7) by scripts/orisa/port-section.py.
 // Vaishnavi copy; hero image is a template placeholder until the final photo is chosen.
-import { RippleCanvas } from "../RippleCanvas";
 
 export function H7Hero() {
   return (
@@ -20,17 +19,15 @@ export function H7Hero() {
           alt=""
         />
       </div>
-      <div className="sec-1-home-7__img-wrap" data-ripple-host data-cursor="Touch">
+      <div className="sec-1-home-7__img-wrap">
         <div className="o-ripple-box" data-zoomin="">
           <img className="sec-1-home-7__img o-hero-cutout" src="/orisa/home/hero-consultant.webp" width={1086} height={1448} alt="Vaishnavi Consultant compliance consultant holding a folder of documents" />
-          {/* Water ripple under the pointer (no scroll movement on this image). */}
-          <RippleCanvas hostSelector=".sec-1-home-7" />
         </div>
       </div>
       <div className="container-fluid p-relative">
         <div className="row g-0 align-items-stretch">
           <div className="col-lg-6 p-relative sec-1-home-7__left">
-            <div className="sec-1-home-7__tags d-flex flex-wrap gap-2" data-ripple-skip="">
+            <div className="sec-1-home-7__tags d-flex flex-wrap gap-2">
               <a
                 className="sec-1-home-7__tag"
                 href="/services"

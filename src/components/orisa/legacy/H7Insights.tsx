@@ -72,7 +72,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/payroll">
                 <img
                   className="blog-card__img22"
-                  src="/orisa/tpl/pages/home-7/insight-1-retro.webp"
+                  src="https://images.unsplash.com/photo-1626266061368-46a8f578ddd6?auto=format&fit=crop&w=1500&h=1000&q=80"
                   alt=""
                 />
               </a>
@@ -96,7 +96,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/epf-esi">
                 <img
                   className="blog-card__img22"
-                  src="/orisa/tpl/pages/home-7/insight-2-office.webp"
+                  src="https://images.unsplash.com/photo-1741183394946-91cae01fb0db?auto=format&fit=crop&w=1200&h=1200&q=80"
                   alt=""
                 />
               </a>
@@ -120,7 +120,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/gst">
                 <img
                   className="blog-card__img22"
-                  src="/orisa/tpl/pages/home-7/insight-3-fabric.webp"
+                  src="https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1500&h=1000&q=80"
                   alt=""
                 />
               </a>
@@ -144,7 +144,7 @@ export function H7Insights() {
               <a className="blog-card__img-link" href="/services/labour-law">
                 <img
                   className="blog-card__img22"
-                  src="/orisa/tpl/pages/home-7/insight-4-conference.webp"
+                  src="https://images.unsplash.com/photo-1761753088381-9fcaa087edae?auto=format&fit=crop&w=1200&h=1200&q=80"
                   alt=""
                 />
               </a>

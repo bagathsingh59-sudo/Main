@@ -51,7 +51,7 @@ export function H7Intro() {
             <div className="sec-2-home-7__cell sec-2-home-7__cell--img sec-2-home-7__col-1">
               <div className="sec-2-home-7__img-wrap">
                 <div className="thumb fix" data-zoomin="">
-                  <img src="/orisa/tpl/pages/home-7/sec2-img-1.webp" alt="" />
+                  <img src="https://images.unsplash.com/photo-1741707040272-2f11cea5ff4c?auto=format&fit=crop&w=1080&h=1316&q=80" alt="" />
                 </div>
               </div>
             </div>
@@ -101,7 +101,7 @@ export function H7Intro() {
             <div className="sec-2-home-7__cell sec-2-home-7__cell--img sec-2-home-7__col-2">
               <div className="sec-2-home-7__img-wrap ms-2">
                 <div className="thumb fix" data-zoomin="">
-                  <img src="/orisa/tpl/pages/home-7/sec2-img-2.webp" alt="" />
+                  <img src="https://images.unsplash.com/photo-1737729991003-521d47240eb3?auto=format&fit=crop&w=1080&h=1316&q=80&crop=faces" alt="" />
                 </div>
               </div>
             </div>
@@ -167,7 +167,7 @@ export function H7Intro() {
             <div className="sec-2-home-7__cell sec-2-home-7__cell--img sec-2-home-7__col-3">
               <div className="sec-2-home-7__img-wrap ms-2">
                 <div className="thumb fix" data-zoomin="">
-                  <img src="/orisa/tpl/pages/home-7/sec2-img-3.webp" alt="" />
+                  <img src="https://images.unsplash.com/photo-1770627000564-3feb36aecbcd?auto=format&fit=crop&w=1080&h=1316&q=80&crop=faces" alt="" />
                 </div>
               </div>
             </div>

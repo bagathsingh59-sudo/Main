@@ -35,7 +35,7 @@ export function H7Partner({ contact = DEFAULT_CONTACT }: { contact?: SiteContact
             >
               <img
                 className="sec-4-home-7__img fix"
-                src="/orisa/tpl/pages/home-7/sec-4-helmet.webp"
+                src="https://images.unsplash.com/photo-1787724779349-18ba0352c154?auto=format&fit=crop&w=1440&h=1800&q=80&crop=faces"
                 alt=""
                 width="377"
                 height="471"

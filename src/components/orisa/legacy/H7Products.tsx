@@ -70,7 +70,7 @@ export function H7Products() {
               <div className="fix" data-zoomin="">
                 <img
                   className="w-100 h-100 object-fit-cover"
-                  src="/orisa/tpl/pages/home-7/sec-5-founder.webp"
+                  src="https://images.unsplash.com/photo-1659355894218-47ead670f7f5?auto=format&fit=crop&w=1356&h=1800&q=80&crop=faces"
                   alt=""
                   width="493"
                   height="582"

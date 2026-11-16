@@ -10,7 +10,7 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="/orisa/tpl/pages/img-48.webp"
+                src="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
             </div>
@@ -19,7 +19,7 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="/orisa/tpl/pages/img-45.webp"
+                src="https://images.unsplash.com/photo-1622675363311-3e1904dc1885?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
             </div>
@@ -28,7 +28,7 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="/orisa/tpl/pages/img-46.webp"
+                src="https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
             </div>
@@ -37,7 +37,7 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="/orisa/tpl/pages/img-47.webp"
+                src="https://images.unsplash.com/photo-1781246212288-7fa538344718?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
             </div>
@@ -46,7 +46,7 @@ export function H7Strip() {
             <div className="about-me-slider-thumb at-item-anime marque">
               <img
                 className="w-100 rounded-4"
-                src="/orisa/tpl/pages/img-49.webp"
+                src="https://images.unsplash.com/photo-1709880945165-d2208c6ad2ec?auto=format&fit=crop&w=1540&h=1120&q=80"
                 alt=""
               />
             </div>

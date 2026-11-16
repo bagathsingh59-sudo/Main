@@ -22,7 +22,7 @@ export function H7Hero() {
       </div>
       <div className="sec-1-home-7__img-wrap" data-ripple-host data-cursor="Touch">
         <div className="o-ripple-box" data-zoomin="">
-          <img className="sec-1-home-7__img" src="/orisa/tpl/pages/home-7/hero-vr.webp" alt="Vaishnavi Consultant" />
+          <img className="sec-1-home-7__img" crossOrigin="anonymous" src="https://images.unsplash.com/photo-1771244678811-50c22f17c791?auto=format&fit=crop&w=1218&h=1600&q=80&crop=faces" alt="Vaishnavi Consultant" />
           {/* Water ripple under the pointer (no scroll movement on this image). */}
           <RippleCanvas hostSelector="[data-ripple-host]" />
         </div>
@@ -253,7 +253,7 @@ export function H7Hero() {
                     data-fade="bottom"
                     data-delay="0.1"
                   >
-                    <img src="/orisa/tpl/pages/home-7/avatar-1.webp" alt="" />
+                    <img src="https://images.unsplash.com/photo-1770626899426-baed57609a30?auto=format&fit=crop&w=120&h=120&q=80&crop=faces" alt="" />
                   </span>
                   <span
                     className="sec-1-home-7__avatar"
@@ -261,7 +261,7 @@ export function H7Hero() {
                     data-fade="bottom"
                     data-delay="0.2"
                   >
-                    <img src="/orisa/tpl/pages/home-7/avatar-2.webp" alt="" />
+                    <img src="https://images.unsplash.com/photo-1602133183746-98aebe4e7dff?auto=format&fit=crop&w=120&h=120&q=80&crop=faces" alt="" />
                   </span>
                   <span
                     className="sec-1-home-7__avatar"
@@ -269,7 +269,7 @@ export function H7Hero() {
                     data-fade="bottom"
                     data-delay="0.3"
                   >
-                    <img src="/orisa/tpl/pages/home-7/avatar-3.webp" alt="" />
+                    <img src="https://images.unsplash.com/photo-1737573477556-ac3ed2db618c?auto=format&fit=crop&w=120&h=120&q=80&crop=faces" alt="" />
                   </span>
                   <span
                     className="sec-1-home-7__avatar"
@@ -277,7 +277,7 @@ export function H7Hero() {
                     data-fade="bottom"
                     data-delay="0.4"
                   >
-                    <img src="/orisa/tpl/pages/home-7/avatar-4.webp" alt="" />
+                    <img src="https://images.unsplash.com/photo-1770627000564-3feb36aecbcd?auto=format&fit=crop&w=120&h=120&q=80&crop=faces" alt="" />
                   </span>
                   <span
                     className="sec-1-home-7__avatar"
@@ -285,7 +285,7 @@ export function H7Hero() {
                     data-fade="bottom"
                     data-delay="0.5"
                   >
-                    <img src="/orisa/tpl/pages/home-7/avatar-5.webp" alt="" />
+                    <img src="https://images.unsplash.com/photo-1654262609484-76d1a8f3b016?auto=format&fit=crop&w=120&h=120&q=80&crop=faces" alt="" />
                   </span>
                 </div>
                 <p

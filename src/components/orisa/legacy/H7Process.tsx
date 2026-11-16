@@ -97,7 +97,7 @@ export function H7Process() {
                 </p>
               </div>
               <div className="sec-6-home-7__card-media">
-                <img src="/orisa/tpl/pages/home-7/step-1.webp" alt="" />
+                <img src="https://images.unsplash.com/photo-1772588627327-1eeddcf73c11?auto=format&fit=crop&w=1220&h=740&q=80" alt="" />
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@ export function H7Process() {
               </div>
               <div className="sec-6-home-7__card-media">
                 <img
-                  src="/orisa/tpl/pages/home-7/step-2.webp"
+                  src="https://images.unsplash.com/photo-1758876203026-99a024dc43b9?auto=format&fit=crop&w=1220&h=740&q=80"
                   alt="Strategy Design"
                 />
               </div>
@@ -145,7 +145,7 @@ export function H7Process() {
               </div>
               <div className="sec-6-home-7__card-media">
                 <img
-                  src="/orisa/tpl/pages/home-7/step-3.webp"
+                  src="https://images.unsplash.com/photo-1681164315051-add1906a9b07?auto=format&fit=crop&w=1220&h=740&q=80"
                   alt="System Onboarding"
                 />
               </div>
@@ -169,7 +169,7 @@ export function H7Process() {
                 </p>
               </div>
               <div className="sec-6-home-7__card-media">
-                <img src="/orisa/tpl/pages/home-7/step-4.webp" alt="" />
+                <img src="https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&w=1220&h=740&q=80" alt="" />
               </div>
             </div>
           </div>

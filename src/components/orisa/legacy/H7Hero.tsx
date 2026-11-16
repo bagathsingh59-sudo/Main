@@ -24,7 +24,7 @@ export function H7Hero() {
         <div className="o-ripple-box" data-zoomin="">
           <img className="sec-1-home-7__img o-hero-cutout" src="/orisa/home/hero-consultant.webp" width={1086} height={1448} alt="Vaishnavi Consultant compliance consultant holding a folder of documents" />
           {/* Water ripple under the pointer (no scroll movement on this image). */}
-          <RippleCanvas hostSelector="[data-ripple-host]" />
+          <RippleCanvas hostSelector=".sec-1-home-7" />
         </div>
       </div>
       <div className="container-fluid p-relative">
@@ -51,7 +51,7 @@ export function H7Hero() {
                 Kalaburagi · Karnataka
               </span>
             </div>
-            <div className="sec-1-home-7__tags d-flex flex-wrap gap-2">
+            <div className="sec-1-home-7__tags d-flex flex-wrap gap-2" data-ripple-skip="">
               <a
                 className="sec-1-home-7__tag"
                 href="/services"

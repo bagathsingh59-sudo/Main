@@ -629,18 +629,15 @@
 .orisa .o-duo img:not([src$=".svg"]) {
 	filter: url(#o-duotone);
 }
-/* Hero: the consultant cut-out stays in full colour on a mint panel
-   (centred so it lines up with the ripple canvas). */
+/* Hero: the consultant cut-out (transparent background) stands on the
+   panel's own mint, in full colour, shown whole and anchored to the bottom.
+   The ripple canvas reads the same object-fit/position. */
 .orisa .o-duo .o-ripple-box img {
 	filter: none;
 }
-.o-legacy .sec-1-home-7__img-wrap .o-ripple-box {
-	background:
-		radial-gradient(120% 80% at 50% 30%, #8be6bb 0%, transparent 70%),
-		linear-gradient(170deg, #6fdca9 0%, #5ed79e 55%, #3fbf86 100%);
-}
-.o-legacy .sec-1-home-7__img.o-hero-cutout {
-	object-position: center center;
+.orisa .o-legacy .sec-1-home-7__img.o-hero-cutout {
+	object-fit: contain;
+	object-position: 50% 100%;
 }
 
 /* Location label sits on the consultant's navy jacket, clear of his face. */
@@ -657,14 +654,28 @@
 	.orisa .o-legacy .sec-1-home-7__img-wrap {
 		max-width: 100%;
 	}
-	.orisa .o-legacy .sec-1-home-7__img.o-hero-cutout {
-		object-fit: contain;
-		object-position: center bottom;
-	}
 	.orisa .o-legacy .sec-1-home-7__img-wrap .o-ripple-box canvas {
 		display: none;
 	}
 	.orisa .o-legacy .sec-1-home-7__coords {
 		display: none !important;
+	}
+}
+
+/* Desktop: the ripple box covers the whole green half of the hero (so the
+   water effect works anywhere on it); the consultant keeps his place in it. */
+@media (min-width: 992px) {
+	.orisa .o-legacy .sec-1-home-7__img-wrap {
+		max-width: 50%;
+		margin-top: 0;
+	}
+	.orisa .o-legacy .sec-1-home-7__img.o-hero-cutout {
+		position: absolute;
+		top: 80px;
+		right: 10%;
+		bottom: 0;
+		left: 0;
+		width: auto;
+		height: auto;
 	}
 }

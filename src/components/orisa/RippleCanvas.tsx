@@ -106,7 +106,21 @@ varying vec2 backgroundCoord;
 void main() {
   vec2 offset = -texture2D(samplerRipples, ripplesCoord).ba;
   float specular = pow(max(0.0, dot(offset, normalize(vec2(-0.6, 1.0)))), 4.0);
-  gl_FragColor = texture2D(samplerBackground, backgroundCoord + offset * perturbance) + specular;
+  vec2 coord = backgroundCoord + offset * perturbance;
+  vec4 color = texture2D(samplerBackground, coord);
+  bool outside = coord.x < 0.0 || coord.x > 1.0 || coord.y < 0.0 || coord.y > 1.0;
+  // Transparent parts (outside the picture, or a cut-out's background) show
+  // the page behind; the water draws soft light / dark rings over it, and
+  // stays fully clear when still.
+  float light = dot(offset, normalize(vec2(-0.6, 1.0)));
+  vec4 ring = light > 0.0
+    ? vec4(1.0, 1.0, 1.0, min(0.6, light * 5.0 + specular))
+    : vec4(0.024, 0.094, 0.212, min(0.35, -light * 3.0));
+  if (outside || color.a < 0.02) {
+    gl_FragColor = ring;
+  } else {
+    gl_FragColor = color + specular;
+  }
 }`;
 
 /** Seconds of stillness after which the loop stops (ripples have decayed). */
@@ -227,17 +241,33 @@ export function RippleCanvas({ hostSelector, resolution = 400, perturbance = 0.0
         canvas.width = Math.round(width * dpr);
         canvas.height = Math.round(height * dpr);
 
-        // object-fit: cover — which part of the image is visible.
+        // Which part of the image the box shows — follows the <img>'s own
+        // object-fit (cover or contain) and object-position.
+        // Where the picture is drawn inside the box: the <img> element's own
+        // position (it may be smaller than the box) plus its object-fit
+        // (cover or contain) and object-position.
+        const style = getComputedStyle(img);
+        const boxRect = box.getBoundingClientRect();
+        const imgRect = img.getBoundingClientRect();
+        // The box may be mid zoom-in (CSS transform): measure in its own units.
+        const k = boxRect.width / width || 1;
+        const ew = imgRect.width / k || width;
+        const eh = imgRect.height / k || height;
         const imageRatio = img.naturalWidth / img.naturalHeight;
-        const boxRatio = width / height;
-        let x = 1;
-        let y = 1;
-        if (boxRatio > imageRatio) y = imageRatio / boxRatio;
-        else x = boxRatio / imageRatio;
+        const scale =
+          style.objectFit === "contain"
+            ? Math.min(ew / img.naturalWidth, eh / img.naturalHeight)
+            : Math.max(ew / img.naturalWidth, eh / img.naturalHeight);
+        const cw = img.naturalWidth * scale || ew;
+        const ch = cw / imageRatio || eh;
+        const [px, py] = style.objectPosition.split(" ").map((v) => (v.endsWith("%") ? parseFloat(v) / 100 : 0.5));
+        const cx = (imgRect.left - boxRect.left) / k + (ew - cw) * (px ?? 0.5);
+        const cy = (imgRect.top - boxRect.top) / k + (eh - ch) * (py ?? 0.5);
         const longest = Math.max(width, height);
         gl.useProgram(render.id);
-        gl.uniform2f(render.loc.topLeft, (1 - x) / 2, (1 - y) / 2);
-        gl.uniform2f(render.loc.bottomRight, (1 + x) / 2, (1 + y) / 2);
+        // Box corners in image texture space (outside 0..1 = transparent).
+        gl.uniform2f(render.loc.topLeft, -cx / cw, -cy / ch);
+        gl.uniform2f(render.loc.bottomRight, (width - cx) / cw, (height - cy) / ch);
         gl.uniform2f(render.loc.containerRatio, width / longest, height / longest);
       };
 
@@ -281,9 +311,12 @@ export function RippleCanvas({ hostSelector, resolution = 400, perturbance = 0.0
       };
 
       const dropAt = (e: PointerEvent, radius: number, strength: number) => {
+        // Links, buttons and the service tabs keep their own hover.
+        if ((e.target as Element | null)?.closest?.("a, button, [data-ripple-skip]")) return;
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
+        if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
         const longest = Math.max(width, height);
         gl.viewport(0, 0, resolution, resolution);
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[0]);
